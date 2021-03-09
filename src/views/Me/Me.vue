@@ -6,7 +6,14 @@
 
 <script>
 export default {
-  name:"Me"
+  data() {
+    return {
+      msg: '我是me组件'
+    }
+  },
+  created() {
+    console.log(this.msg)
+  }
 }
 </script>
 
