@@ -14,7 +14,7 @@ export default {
 
 <style scoped>
   .navBar{
-    position: flex;
+    display: flex;
     height: 44px;
     line-height: 44px;
     text-align: center;
