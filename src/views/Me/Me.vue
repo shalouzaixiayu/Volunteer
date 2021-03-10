@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 头部区域 -->
     <div :class="[!isLogin?'unloginbac':'', 'header']">
       <div class="hadlogin" v-if="isLogin">
         <div class="bigimg">
@@ -15,6 +16,7 @@
         <span class="text">未登录</span>
       </div>
     </div>
+    <!-- 我的区域 -->
     <div class="my common">
       <h4>我的</h4>
       <div class="feel box" @click="showHandle">
@@ -34,6 +36,7 @@
         <span class="right">></span>
       </div>
     </div>
+    <!-- 退出登录区域 -->
     <div class="out common" v-if="isLogin">
       <h4>设置</h4>
       <div class="box">
@@ -41,6 +44,7 @@
         <span class="right">></span>
       </div>
     </div>
+    <!-- 后台模式区域 -->
     <div class="admin common" v-if="isAdmin">
       <h4>后台</h4>
       <div class="loginadm box">
@@ -48,6 +52,7 @@
         <span class="right">进入 ></span>
       </div>
     </div>
+    <!-- 弹出吐司层区域 -->
     <div class="toastcontainer" v-show="isShow" @click="toastOut">
       <div ref="toast" class="toast">123</div>
     </div>
@@ -64,14 +69,17 @@ export default {
     }
   },
   methods: {
+    // 跳转登录页面方法
     goLogin() {
       this.$router.push('/login')
       // this.isLogin = true
       // this.isAdmin = false
     },
+    // 弹出吐司层方法
     showHandle() {
       this.isShow = true
     },
+    // 关闭吐司层区域
     toastOut(e) {
       if(e.target == this.$refs.toast) {
         return
