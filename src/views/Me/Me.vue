@@ -180,6 +180,7 @@ export default {
         return
       }
       this.imageList = [...this.imageList, ...this.imgList]
+      console.log(this.imageList)
       window.sessionStorage.setItem('imageList', this.imageList)
       this.imgList = []
       this.success('上传成功')
