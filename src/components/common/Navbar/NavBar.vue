@@ -19,6 +19,7 @@ export default {
     line-height: 44px;
     text-align: center;
     background-color: #c82519;  
+    opacity: .8;
     color:#fff;
     justify-content: center;
   }

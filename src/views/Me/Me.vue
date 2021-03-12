@@ -71,7 +71,7 @@ export default {
   methods: {
     // 跳转登录页面方法
     goLogin() {
-      this.$router.push('/login')
+      this.$router.push({name:"Login"})
       // this.isLogin = true
       // this.isAdmin = false
     },
