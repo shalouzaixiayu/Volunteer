@@ -1,7 +1,11 @@
 <template>
   <div class="content">
     <!-- 返回区域 -->
-    <div class="back" @click="backHandle">&lt;</div>
+    <nav-bar class="backbox">
+      <template #left>
+        <span class="back" @click="backHandle">&lt;</span>
+      </template>
+    </nav-bar>
     <!-- 登录区域 -->
     <template v-if="!isRegister">
       <div class="formcontainer">
@@ -49,7 +53,7 @@
         <div>
           <div class="item username">
             <i class="iconfont icon-yonghuming"></i>
-            <input type="text" placeholder="请输入3-6位用户名" @blur="blurHandle('username')" v-model="userName">
+            <input type="text" placeholder="请输入3-10位用户名" @blur="blurHandle('username')" v-model="userName">
           </div>
           <div class="error">{{usernameError}}</div>
         </div>
@@ -100,13 +104,15 @@
       </div>
     </template>
     <!-- 成功吐司 -->
-    <div class="success" v-show="isSuccess">{{successString}}</div>
+    <s-toast v-show="isSuccess">{{successString}}</s-toast>
   </div>
 </template>
 
 <script>
-
+import NavBar from '../../components/common/Navbar/NavBar.vue'
+import SToast from '../../components/common/Toast/SToast.vue' 
 export default {
+  components: { NavBar, SToast },
   name:"ActiveDetail",
   data() {
     return {
@@ -267,7 +273,7 @@ export default {
           }
           var regs3 = /^[a-zA-Z0-9_]{3,6}$/
           if(!regs3.test(this.userName)) {
-            this.usernameError = '用户名长度为3-6位'
+            this.usernameError = '用户名长度为3-10位'
             this.userName = ''
             return
           }
@@ -302,26 +308,13 @@ export default {
     background-color: rgb(243, 240, 240);
     z-index: 10;
   }
-  .success{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 53px;
-    padding: 5px;
-    background-color: #fff;
-    box-shadow: 0 0 3px #ccc;
-    border-radius: 5px;
-    font-weight: bold;
-    color: #04BE02;
+  .backbox{
+    background-color: rgb(243, 240, 240);
   }
   .back{
-    height: 40px;
-    line-height: 60px;
     text-align: left;
-    padding-left: 16px;
     font-size: 26px;
-    cursor: pointer;
-    margin-bottom: 56px;
+    color: #000;
   }
   .formcontainer{
     padding: 32px;
@@ -364,7 +357,8 @@ export default {
     margin-right: 5px;
     flex: 3;
     border: 1px solid #ccc;
-    padding-left: 20px;
+    padding-left: 24px;
+    border-radius: 7px;
   }
   .formcontainer .checkcode input{
     width: 50%;
