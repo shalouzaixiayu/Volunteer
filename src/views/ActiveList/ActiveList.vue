@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {requestActiveList} from '../../network/activeRequest';
+// import {requestActiveList} from '../../network/activeRequest';
 import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 export default {
   name: "ActiveList",
@@ -26,7 +26,7 @@ export default {
     this.showNote = true;
   },
   created() {
-    requestActiveList(1, 20).then(res => console.log(res))
+    // requestActiveList(1, 20).then(res => console.log(res))
   },
   data() {
     return {

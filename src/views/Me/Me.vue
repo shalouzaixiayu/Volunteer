@@ -1,8 +1,8 @@
 <template>
   <div class="content">
     <!-- 头部区域 -->
-    <div :class="[!isLogin?'unloginbac':'', 'header']">
-      <div class="hadlogin" v-if="isLogin">
+    <div :class="[!$store.state.isLogin?'unloginbac':'', 'header']">
+      <div class="hadlogin" v-if="$store.state.isLogin">
         <div class="bigimg">
           <img src="../../../src/assets/img/userimg.jpg" alt="">
         </div>
@@ -42,7 +42,7 @@
       </div>
     </div>
     <!-- 退出登录区域 -->
-    <div class="out common" v-if="isLogin">
+    <div class="out common" v-if="$store.state.isLogin" @click="logOut">
       <h4>设置</h4>
       <div class="box">
         <span class="left">退出登录</span>
@@ -97,7 +97,7 @@ export default {
   components: { SToast },
   data() {
     return {
-      isLogin: false,
+      // isLogin: false,
       isAdmin: true,
       isShow: false,
       isBindPhone: true,
@@ -213,17 +213,26 @@ export default {
       setTimeout(() => {
         this.isSuccess = false
       },1000)
+    },
+
+
+
+    // 退出登录
+    logOut() {
+      this.$store.commit('switchLoginStatus')
+      window.sessionStorage.setItem('login', '')
     }
   },
   created() {
-    const flag = window.sessionStorage.getItem('login')
+    this.$store.commit('loginStatus')
+    // const flag = window.sessionStorage.getItem('login')
     // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
-    const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []
-    console.log(imgList)
+    // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []
+    // console.log(imgList)
     // this.imageList = imgList
-    if(flag) {
-      this.isLogin = true
-    }
+    // if(flag) {
+    //   this.isLogin = true
+    // }
   }
 }
 </script>

@@ -146,10 +146,14 @@ export default {
     backHandle() {
       this.$router.go(-1)
     },
+
+
     // 验证码聚焦
     focusHandle() {
       this.checkIsFocus = true
     },
+
+
     // 登录
     loginHandle() {
       if(+this.checkNum !== this.random) {
@@ -164,9 +168,12 @@ export default {
         this.isSuccess = false
       },1000)
       window.sessionStorage.setItem('login', 'ok')
+      this.$store.commit('switchLoginStatus')
       console.log(this.userNum, this.passWord)
       this.$router.go(-1)
     },
+
+
     // 切换至注册区域
     goRegister() {
       this.isRegister = true
@@ -175,10 +182,14 @@ export default {
       this.checkIsFocus = false
       this.getRandom()
     },
+
+
     // 选择学院班级
     chooseGradeList() {
       this.showGradeList = this.isDepartment =  true
     },
+
+
     // 选择学院
     chooseDepartment(value) {
       this.gradeString = ''
@@ -194,6 +205,8 @@ export default {
       this.isDepartment = false
       this.isClass = true
     },
+
+
     // 选择班级
     chooseClass(value) {
       this.gradeString += value
@@ -201,6 +214,8 @@ export default {
       this.isChoose = true
       this.gradeError = ''
     },
+
+
     // 注册操作
     registerHandle() {
       if(this.gradeString == '系部') {
@@ -222,10 +237,14 @@ export default {
         this.isSuccess = false
       },1000)
     },
+
+
     // 获取随机验证码
     getRandom() {
       this.random =  parseInt(Math.random()*8999 + 1000)
     },
+
+
     // 表单失焦预验证
     blurHandle(value) {
       switch (value) {
@@ -289,6 +308,8 @@ export default {
           break;
       }
     },
+
+    
     // 获取新的验证码
     newRandom() {
       this.getRandom()
