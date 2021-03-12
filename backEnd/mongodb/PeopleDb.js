@@ -72,7 +72,7 @@ function generatePeople(num = 3, callback) {
         _id: i,
         name: `学生Test:${i+1}`,
         password: '123456',
-        sId: 'LT00000001',
+        sId: `18010201030${i+1}`,
         faculty: "计算机信息工程",
         class: "计科三班"
       })

@@ -4,7 +4,7 @@ const peopleDb = require('../mongodb/PeopleDb')
 
 // 关于我的页面的接口请求操作
 
-Merouter.get('/', (req, res, next) => {
+Merouter.get('/aq', (req, res, next) => {
   res.send("Hello world")
 })
 

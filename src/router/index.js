@@ -27,7 +27,7 @@ const routes = [
     name:"ActiveList",
     component: ActiveList,
     meta:{
-      title:"活动大厅",
+      title:"活动令",
       isActive: true
     }
   },
@@ -69,7 +69,7 @@ const routes = [
   },
   {
     path:"/login",
-    name:"login",
+    name:"Login",
     component: Login,
     meta:{
       title:"登录",
