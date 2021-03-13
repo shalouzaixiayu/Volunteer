@@ -53,28 +53,86 @@ function getActiveList(page, count, callback) {
         '$lt': (parseInt(page) + 1) * count,
       }
     }).sort({
-      id: -1
+      timer: -1
     }).then(data => {
-      console.log(data)
       obj.status = true,
-      obj.msg = 'success',
-      obj.length = data.length,
-      obj.data = data,
-      obj.page = page,
-      obj.count = count,
-      callback(obj)
+        obj.msg = 'success',
+        obj.length = data.length,
+        obj.data = data,
+        obj.page = page,
+        obj.count = count,
+        callback(obj)
+    })
+    .catch(err => {
+      obj.status = false,
+        obj.msg = err,
+        obj.length = 0,
+        obj.data = null,
+        obj.page = page,
+        obj.count = count,
+        callback(obj)
+    })
+}
+/**
+ *
+ *
+ * @param {*} reTitle  String title by re
+ * @param {*} maxCount  
+ * @param {*} callback
+ */
+function searchActiveByTitle(reTitle, maxCount, callback) {
+  const obj = {}
+  active.find({
+      title: {
+        $regex: eval(`/.*${reTitle}.*/ig`)
+      }
+    })
+    .sort({timer:-1})
+    .limit(parseInt(maxCount))
+    .then(data => {
+      obj.status = true,
+        obj.msg = 'success',
+        obj.data = data,
+        obj.reTitle = reTitle,
+        obj.maxCount = maxCount,
+        callback(obj)
     })
     .catch(err => {
       obj.status = false,
       obj.msg = err,
-      obj.length = 0,
       obj.data = null,
-      obj.page = page,
-      obj.count = count,
+      obj.reTitle = reTitle,
+      obj.maxCount = maxCount,
       callback(obj)
     })
+}
+/**
+ *
+ *
+ * @param {*} id
+ * @param {*} callback  promise
+ */
+function searchActiveById(id, callback){
+  const obj = {}
+  active.find({
+    id,
+  })
+  .then(data => {
+    obj.status = true
+    obj.msg = "success"
+    obj.data = data
+    callback(obj)
+  })
+  .catch(err => {
+    obj.status = false
+    obj.msg = err
+    obj.data = null 
+    callback(obj)
+  })
 }
 
 module.exports = {
   getActiveList,
+  searchActiveByTitle,
+  searchActiveById,
 }

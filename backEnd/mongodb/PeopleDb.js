@@ -100,7 +100,7 @@ function register(people, callback) {
   let obj = {
     data: null,
     msg: "",
-    code: 0
+    status: false
   }
   people.find({
     name: people.name
@@ -113,7 +113,7 @@ function register(people, callback) {
   if (obj.msg === "success") {
     addPeople(people, (data) => {
       obj.data = data
-      obj.code = 1
+      obj.status = true
     })
     callback(obj)
   } else {
@@ -127,41 +127,51 @@ function login(people, callback) {
   let obj = {
     data: null,
     msg: "",
-    code: 0
+    status: false
   }
   people.findOne({
-    // name: people.name,
-    sId: people.sId,
-    password: people.password,
-  }).then(data => {
-    if (data) {
+      // name: people.name,
+      sId: people.sId,
+      password: people.password,
+    }).then(data => {
       obj.data = data
       obj.msg = "success"
-      obj.code = 1
+      obj.status = true
       callback(obj)
-    } else {
+    })
+    .catch(err => {
       obj.msg = "未查找到该用户, 请仔细检查一下!"
+      obj.err = err
+      obj.data = null
+      obj.status = false
       callback(obj)
-    }
-  })
+    })
 
-  // people.findOne({
-  //   phone: people.phone,
-  //   password: people.password,
-  //   sId: people.sId
-  // }).then(data => data ? msg.phone = true : false)
 }
 // 删除志愿者信息
 function deletePeople(people, callback) {
-  const _id = people.id
-  const sId = people.sId
-  const name = people.name
-
-  people.findOneAndRemove({
+  const {
     _id,
     sId,
     name
-  }).then(data => callback(data))
+  } = people
+  const obj = {}
+  people.findOneAndRemove({
+      _id,
+      sId,
+      name
+    }).then(data => {
+      obj.status = true
+      obj.message = "success"
+      obj.data = data
+      callback(obj)
+    })
+    .catch(err => {
+      obj.status = false
+      obj.message = err
+      obj.data = null
+      callback(obj)
+    })
 }
 
 // 绑定手机号

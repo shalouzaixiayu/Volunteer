@@ -14,10 +14,10 @@ export default {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    top: 10px;
+    top: 40px;
     padding: 5px;
     background-color: #fff;
-    box-shadow: 0 0 3px #ccc;
+    /* box-shadow: 0 0 3px #ccc; */
     border-radius: 5px;
     font-weight: bold;
     color: #04BE02;

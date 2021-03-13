@@ -2,13 +2,6 @@ import {
   requestAxios
 } from './index'
 
-// 测试请求
-export function test() {
-  return requestAxios({
-    url: '/aq',
-    method: 'GET',
-  })
-}
 
 export function requestAllPeople() {
   return requestAxios({
@@ -17,7 +10,15 @@ export function requestAllPeople() {
   })
 }
 
-export function requestPeople(_id, sId) {
+/**
+ *
+ *
+ * @export
+ * @param {*} _id  people  表 id
+ * @param {*} sId  people 学号 sId
+ * @returns
+ */
+export function requestPeopleById(_id, sId) {
   return requestAxios({
     url: '/onePeople',
     method: 'GET',
@@ -31,10 +32,7 @@ export function requestPeople(_id, sId) {
  *
  *
  * @export
- * @param {*} obj
- *  example : obj {
-      sId, password
-    }
+ * @param {*} obj  学号 sId  && password
  * @returns
  */
 export function login(obj) {
@@ -50,8 +48,7 @@ export function login(obj) {
  *
  *
  * @export
- * @param {*} obj
- * obj : {name, sId, class, faculty, password }
+ * @param {*} obj {name, sId, class, faculty, password }
  *
  */
 export function register(obj) {
@@ -62,5 +59,4 @@ export function register(obj) {
       obj
     }
   })
-
 }
