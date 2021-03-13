@@ -228,6 +228,9 @@ export default {
         return
       }
       console.log(this.userName, this.userNum, this.gradeString, this.passWord, this.confirmPassWord)
+      const random = Math.floor(Math.random()*5)
+      window.sessionStorage.setItem('picIndex', random)
+      console.log(this.$store.state.headPicList[random])
       this.userNum = this.passWord = this.checkNum = this.userName = this.confirmPassWord = this.numError = this.passWordError = this.checkError = this.usernameError = this.gradeError = this.confirmPassWordError =  ''
       this.gradeString = '系部'
       this.isRegister = false

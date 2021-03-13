@@ -4,15 +4,15 @@
     <div :class="[!$store.state.isLogin?'unloginbac':'', 'header']">
       <div class="hadlogin" v-if="$store.state.isLogin">
         <div class="bigimg">
-          <img src="../../../src/assets/img/userimg.jpg" alt="">
+          <img :src="$store.state.headPicList[picIndex]" alt="">
         </div>
         <div class="info">
-          <img src="../../../src/assets/img/userimg.jpg" alt="">
+          <img :src="$store.state.headPicList[picIndex]" alt="">
           <span class="text">180102010201</span>
         </div>
       </div>
       <div class="unlogin" @click="goLogin" v-else>
-        <img src="../../../src/assets/img/unlogin.jpg" alt="">
+        <img src="../../../src/assets/img/headPics/unlogin.jpg" alt="">
         <span class="text">未登录</span>
       </div>
     </div>
@@ -20,8 +20,9 @@
     <!-- 我的区域 -->
     <div class="my common">
       <h4>我的</h4>
-      <div class="feel box" @click="showHandle('feel')">
-        <span class="left">我的心得</span>
+      <div class="signature box" @click="showHandle('signature')">
+        <span class="left">个性签名</span>
+        <span class="content">{{$store.state.isLogin?signature:''}}</span>
         <span class="right">></span>
       </div>
       <div class="score box" @click="showHandle('score')">
@@ -32,11 +33,15 @@
         <span class="left">我的图片</span>
         <span class="right">></span>
       </div>
-      <div class="record box" @click="showHandle('record')">
-        <span class="left">我的记录</span>
+      <div class="comment box" @click="showHandle('comment')">
+        <span class="left">我的评论</span>
         <span class="right">></span>
       </div>
-      <div class="record box" @click="showHandle('phone')">
+      <div class="study box" @click="showHandle('study')">
+        <span class="left">我的学习</span>
+        <span class="right">></span>
+      </div>
+      <div class="phone box" @click="showHandle('phone')">
         <span class="left">绑定手机</span>
         <span class="right">></span>
       </div>
@@ -50,7 +55,7 @@
       </div>
     </div>
     <!-- 后台模式区域 -->
-    <div class="admin common" v-if="isAdmin">
+    <div class="admin common" v-if="isAdmin" @click="goAdmin">
       <h4>后台</h4>
       <div class="loginadm box">
         <span class="left">后台模式</span>
@@ -58,30 +63,137 @@
       </div>
     </div>
     <!-- 弹出吐司层区域 -->
-    <div ref="toastcontainer" class="toastcontainer" v-show="isShow" @click="toastOut">
-      <div class="toast">
-        <!-- 绑定手机号区域 -->
-        <div v-show="isBindPhone" class="bindphone common">
-          <h4>手机号绑定</h4>
-          <input type="text" class="commoninput" placeholder="请输入手机号" v-model="phone">
-          <p class="commonp">{{error}}</p>
-          <button class="commonbutton" @click="bindPhoneHandle">绑定</button>
-        </div>
-        <!-- 上传图片区域 -->
-        <div class="loadimg common" v-show="isLoadImg">
-          <h4>上传图片</h4>
-          <input type="file" class="commoninput" placeholder="请上传图片" multiple @change="loadImghandle">
-          <p class="commonp">{{error}}</p>
-          <button class="commonbutton" @click="subLoadImg">上传</button>
-          <ul>
-            <li v-for="(item, i) in imageList" :key="i" @click="previewImg(i)">
-              <img :src="item" alt="">
-              <span @click="delImg(i)">x</span>
-            </li>
-          </ul>
-        </div>
+    <b-toast class="toast">
+      <!-- 绑定手机号区域 -->
+      <div v-show="isBindPhone&&$store.state.isLogin" class="bindphone common">
+        <h4>手机号绑定</h4>
+        <input type="text" class="commoninput" placeholder="请输入手机号" v-model="phone">
+        <p class="commonp">{{error}}</p>
+        <button class="commonbutton" @click="bindPhoneHandle">绑定</button>
       </div>
-    </div>
+      <!-- 上传图片区域 -->
+      <div class="loadimg common" v-show="isLoadImg&&$store.state.isLogin&&$store.state.isLogin">
+        <h4>上传图片</h4>
+        <input type="file" class="commoninput" placeholder="请上传图片" multiple @change="loadImghandle">
+        <p class="commonp">{{error}}</p>
+        <button class="commonbutton" @click="subLoadImg">上传</button>
+        <ul>
+          <li v-for="(item, i) in imageList" :key="i" @click="previewImg(i)">
+            <img :src="item" alt="">
+            <span @click.stop="delImg(i)">x</span>
+          </li>
+        </ul>
+      </div>
+      <!-- 我的评论区域 -->
+      <div class="comment common" v-show="isComment&&$store.state.isLogin">
+        <h4>我的评论</h4>
+        <ul>
+          <li>
+            <span class="left">我是真的很帅</span>
+            <span class="right">2021-03-12</span>
+          </li>
+          <li><span class="left">帅啊</span>
+            <span class="right">2021-03-12</span></li>
+          <li><span class="left">okokl</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">wahahahahah</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">一半一半</span>
+            <span class="right">2021-03-12</span></li>
+            <li>
+            <span class="left">我是真的很帅</span>
+            <span class="right">2021-03-12</span>
+          </li>
+          <li><span class="left">帅啊</span>
+            <span class="right">2021-03-12</span></li>
+          <li><span class="left">okokl</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">wahahahahah</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">一半一半</span>
+            <span class="right">2021-03-12</span></li><li>
+            <span class="left">我是真的很帅</span>
+            <span class="right">2021-03-12</span>
+          </li>
+          <li><span class="left">帅啊</span>
+            <span class="right">2021-03-12</span></li>
+          <li><span class="left">okokl</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">wahahahahah</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">一半一半</span>
+            <span class="right">2021-03-12</span></li><li>
+            <span class="left">我是真的很帅</span>
+            <span class="right">2021-03-12</span>
+          </li>
+          <li><span class="left">帅啊</span>
+            <span class="right">2021-03-12</span></li>
+          <li><span class="left">okokl</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">wahahahahah</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">一半一半</span>
+            <span class="right">2021-03-12</span></li>
+        </ul>
+      </div>
+      <!-- 我的签名 -->
+      <div class="signature common" v-show="isSignature&&$store.state.isLogin">
+        <h4>编辑签名</h4>
+        <input type="text" class="commoninput" placeholder="请输入签名" v-model="signature">
+        <button class="commonbutton" @click="pushSignature" >发布</button>
+      </div>
+      <!-- 我的学习 -->
+      <div class="comment common" v-show="isStudy&&$store.state.isLogin">
+        <h4>我的学习</h4>
+        <ul>
+          <li>
+            <span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span>
+          </li>
+          <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+          <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">学习学习学习学习学习学习学习学习学习学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li>
+            <span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span>
+          </li>
+          <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+          <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">学习学习学习学习学习学习学习学习学习学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li>
+            <span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span>
+          </li>
+          <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+          <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+            <li><span class="left">学习学习学习学习学习学习学习学习学习学习学习学习</span>
+            <span class="right">2021-03-12</span></li>
+        </ul>
+      </div>
+      <!-- 我的积分 -->
+      <div class="score common" v-show="isScore&&$store.state.isLogin">
+        <h4>我的积分</h4>
+        <p>当前积分为：3</p>
+      </div>
+      <!-- 未登录提示 -->
+      <div class="unlogin" v-show="!$store.state.isLogin">
+        你还未登录，请先登录
+      </div>
+    </b-toast>
     <!-- 通知小吐司层 -->
     <s-toast v-show="isSuccess">{{successStr}}</s-toast>
     <!-- 图片预览区域 -->
@@ -93,24 +205,28 @@
 
 <script>
 import SToast from '../../components/common/Toast/SToast.vue'
+import BToast from '../../components/common/Toast/BToast.vue'
 export default {
-  components: { SToast },
+  components: { SToast, BToast },
   data() {
     return {
-      // isLogin: false,
       isAdmin: true,
-      isShow: false,
       isBindPhone: true,
       isLoadImg: false,
       phone: '',
       error: '',
       imgList: [],
-      // imageList最终渲染的图片列表
-      imageList: [],
+      imageList: [],   // imageList最终渲染的图片列表
       successStr: '',
       isSuccess: false,
       isPreviewImg: false,
-      previewImgUrl: ''
+      previewImgUrl: '',
+      picIndex:0,
+      isComment: false,
+      isSignature: false,
+      signature: '我是免费的小劳动力',
+      isStudy: false,
+      isScore: false
     }
   },
   methods: {
@@ -125,24 +241,23 @@ export default {
     // 弹出吐司层方法
     showHandle(type) {
       // 初始化响应数据
-      this.isShow = true
-      this.isBindPhone = this.isLoadImg =  false
+      this.$store.commit('changeToastStatus')
+      this.isBindPhone = this.isLoadImg = this.isComment = this.isSignature = this.isStudy = this.isScore = false
       this.error = this.phone = ''
       switch (type) {
         case 'phone':this.isBindPhone = true
           break;
         case 'imgs':this.isLoadImg = true
           break;
+        case 'comment':this.isComment = true
+          break;
+        case 'signature': this.isSignature = true
+          break
+        case 'study': this.isStudy = true
+          break
+        case 'score': this.isScore = true
+          break
       }
-    },
-
-
-    // 关闭吐司层区域
-    toastOut(e) {
-      if(e.target !== this.$refs.toastcontainer) {
-        return
-      }
-      this.isShow = false
     },
 
 
@@ -157,8 +272,8 @@ export default {
       }
       console.log(this.phone)
       this.success('注册成功')
-      this.isShow = this.isBindPhone = false
-      this.phone = this.phoneError =  ''
+      this.isBindPhone = false
+      this.$store.commit('changeToastStatus')
     },
 
 
@@ -206,6 +321,13 @@ export default {
     },
 
 
+    // 发布签名
+    pushSignature() {
+      this.success('发布成功')
+      this.$store.commit('changeToastStatus')
+    },
+
+
     // 成功弹框函数
     success(value) {
       this.successStr = value
@@ -216,23 +338,25 @@ export default {
     },
 
 
-
     // 退出登录
     logOut() {
       this.$store.commit('switchLoginStatus')
       window.sessionStorage.setItem('login', '')
+      window.sessionStorage.setItem('picIndex', '')
+    },
+
+
+    // 后台模式
+    goAdmin() {
     }
   },
   created() {
     this.$store.commit('loginStatus')
-    // const flag = window.sessionStorage.getItem('login')
+    this.picIndex = +window.sessionStorage.getItem('picIndex') || this.picIndex
     // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
     // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []
     // console.log(imgList)
     // this.imageList = imgList
-    // if(flag) {
-    //   this.isLogin = true
-    // }
   }
 }
 </script>
@@ -254,7 +378,7 @@ export default {
     margin-bottom: 20px;
   }
   .unloginbac {
-    background-color: rgb(11, 139, 139);
+    background-color: #a90000;
   }
   .header .hadlogin .bigimg img{
     width: 100%;
@@ -296,7 +420,16 @@ export default {
   }
   .common{
     margin: 8px;
-    margin-bottom: 20px;
+  }
+  .common .signature.box .content{
+    flex: 1;
+    margin: 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .common.score p{
+    text-align: center;
   }
   .common .box{
     display: flex;
@@ -321,71 +454,51 @@ export default {
   .out .box .left{
     font-size: 14px;
   }
-  .toastcontainer{
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 93vh;
-    background-color: rgba(0, 0, 0, .3);
-  }
-  .toastcontainer .toast{
-    width: 80%;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 18%;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 15px #ccc;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  .toastcontainer .toast .common{
-    margin-top: 27px;
+  .toast .common{
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
     font-size: 16px;
   }
-  .toastcontainer .toast .common .commoninput{
+  .toast .common .commoninput{
     padding: 15px 15px 15px 20px;
     background-color: rgb(236, 233, 233);
     border-radius: 5px;
     box-shadow: 0 0 5px #fff inset;
   }
-  .toastcontainer .toast .common .commonp{
+  .toast .common .commonp{
     color: red;
     margin-top: 9px;
     font-size: 12px;
     height: 12px;
   }
-  .toastcontainer .toast .common .commonbutton{
+  .toast .common .commonbutton{
     padding: 15px;
     margin-top: 22px;
     background-color: #04BE02;
     border-radius: 5px;
     color: #fff;
   }
-  .toastcontainer .toast .common h4{
+  .toast .common h4{
     color: #999;
     text-align: center;
     margin-bottom: 34px;
   }
-  .toastcontainer .toast .loadimg ul{
+  .toast .loadimg ul{
     display: flex;
     margin-top: 41px;
     flex-wrap: wrap;
   }
-  .toastcontainer .toast .loadimg ul li{
+  .toast .loadimg ul li{
     position: relative;
     margin-right: 12px;
   }
-  .toastcontainer .toast .loadimg ul li img{
+  .toast .loadimg ul li img{
     width: 45px;
     height: 45px;
     border-radius: 3px;
   }
-  .toastcontainer .toast .loadimg ul li span{
+  .toast .loadimg ul li span{
     text-align: center;
     width: 12px;
     height: 12px;
@@ -396,5 +509,38 @@ export default {
     top: -2px;
     background-color: red;
     color: #fff;
+  }
+  .toast .comment.common{
+    margin-top: 0;
+  }
+  .toast .comment.common h4{
+    margin-bottom: 18px;
+  }
+  .toast .comment ul{
+    max-height: 306px;
+    overflow: scroll;
+    padding-right: 6px;
+  }
+  .toast .comment li{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .toast .comment li .left{
+    flex: 1;
+    font-size: 14px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 20px;
+  }
+  .toast .comment li .right{
+    margin-right: 10px;
+  }
+  .toast .unlogin{
+    text-align: center;
+    color: red;
   }
 </style>
