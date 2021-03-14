@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <div class="home">
     <!-- 导航 -->
     <home-nav-bar/>
+    
+    <img class="bg2" src="@/assets/img/homeSlider.jpg"  alt="">
     
   </div>
 </template>
@@ -15,5 +17,12 @@ export default {
 </script>
 
 <style scoped>
-
+  .home{
+    width: 100vw;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  .bg2{
+    width:100%;
+  }
 </style>

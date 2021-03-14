@@ -5,10 +5,6 @@ mongoose.connect('mongodb://localhost:27017/Volunteer', {
 })
 
 const PeoScheme = new mongoose.Schema({
-  _id: {
-    type: Number,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -72,7 +68,6 @@ function generatePeople(num = 5, callback) {
   // 生成五个学生数据
   for (let i = 0; i < num; i++) {
     new people({
-        _id: i,
         name: `学生Test:${i+1}`,
         password: '123456',
         sId: `18010201030${i+1}`,
@@ -93,12 +88,14 @@ function getPeopleNumber(callback) {
 }
 
 // 添加一个志愿者
-function addPeople(info, callback) {
-  let lastIndex = people.find().length
-  info._id = lastIndex
+function addPeople(info, callback) {  
   // 注册修改  isVolunteer 值 让它成为志愿者
   info.isVolunteer = true
-  new people(info).save().then(data => callback(data))
+  new people(info).save().then(data => 
+    {
+      callback(data)
+    })
+    .catch(error => console.log(error + 'ssssssssssss'))
 }
 
 // 注册志愿者信息
@@ -110,22 +107,25 @@ function register(info, callback) {
     status: false
   }
   people.find({
-    name: info.name
-  }).then(data => data.length >= 1 ? obj.msg = "用户名已存在" : "success")
-
-  people.find({
-    sId: info.sId
-  }).then(data => data.length >= 1 ? obj.msg = "学号已存在" : "success")
-
-  if (obj.msg === "success") {
-    addPeople(info, (data) => {
-      obj.data = data
-      obj.status = true
+      $or: [{
+          name: info.name
+        },
+        {
+          sId: info.sId
+        }
+      ]
+    }).then(data => {
+      if (data.length === 0) {
+        obj.msg = "success" 
+        addPeople(info, (data) => {
+          obj.data = data
+          obj.status = true
+          callback(obj)
+        })
+      }
+      obj.msg = "用户名或学号已存在"
+      callback(obj)
     })
-    callback(obj)
-  } else {
-    callback(obj)
-  }
 }
 
 // 登陆
@@ -195,11 +195,11 @@ function bindNumber(id, phone, callback) {
     if (data.length >= 1) {
       obj.status = true
       obj.message = 'success',
-      obj.data = data
+        obj.data = data
     } else {
       obj.status = false
       obj.message = "未找到该用户信息!",
-      obj.data = null
+        obj.data = null
     }
     callback(obj)
   })
@@ -213,22 +213,33 @@ function bindAutograph(id, msg, callback) {
   const obj = {}
 
   people.findOneAndUpdate({
-      _id,
-    }, {
-      bindAutograph: msg,
-    }).then(data => {
-      if (data.length >= 1) {
-        obj.status = true
-        obj.message = 'success',
+    _id,
+  }, {
+    bindAutograph: msg,
+  }).then(data => {
+    if (data.length >= 1) {
+      obj.status = true
+      obj.message = 'success',
         obj.data = data
-      } else {
-        obj.status = false
-        obj.message = "未找到该用户信息!",
+    } else {
+      obj.status = false
+      obj.message = "未找到该用户信息!",
         obj.data = null
-      }
-      callback(obj)
-    })
-  }
+    }
+    callback(obj)
+  })
+}
+
+// 获取个人积分信息
+function getPoint(_id, callback){
+  people.find({
+    _id,
+  }).then(data => {
+    callback(data)
+  })
+}
+
+// getPoint('604db78ba9b8012e204f291d', data => console.log(data))
 
 // 更改积分
 function bindPoint(id, point, callback) {
@@ -236,21 +247,21 @@ function bindPoint(id, point, callback) {
   const obj = {}
 
   people.findOneAndUpdate({
-      _id,
-    }, {
-      point: point,
-    }).then(data => {
-      if (data.length >= 1) {
-        obj.status = true
-        obj.message = 'success',
+    _id,
+  }, {
+    point: point,
+  }).then(data => {
+    if (data.length >= 1) {
+      obj.status = true
+      obj.message = 'success',
         obj.data = data
-      } else {
-        obj.status = false
-        obj.message = "未找到该用户信息!",
+    } else {
+      obj.status = false
+      obj.message = "未找到该用户信息!",
         obj.data = null
-      }
-      callback(obj)
-    })
+    }
+    callback(obj)
+  })
 }
 
 
@@ -261,11 +272,11 @@ function getAllPeople(callback) {
   const obj = {}
   people.find()
     .then(data => {
-        obj.data = data
-        obj.status = true
-        obj.length = data.length
-        obj.meg = "success"
-        callback(data)
+      obj.data = data
+      obj.status = true
+      obj.length = data.length
+      obj.meg = "success"
+      callback(data)
     })
 }
 /**
@@ -285,11 +296,11 @@ function searchByIdAndSid(id, sId, callback) {
       if (data.length >= 1) {
         obj.status = true
         obj.message = 'success',
-        obj.data = data
+          obj.data = data
       } else {
         obj.status = false
         obj.message = "未找到该用户信息!",
-        obj.data = null
+          obj.data = null
       }
       callback(obj)
     })

@@ -27,14 +27,14 @@ Merouter.post('/login', (req, res, next) => {
 // 注册 post 
 Merouter.post('/register', (req, res, next) => {
   let info = req.body.obj
-  PeopleDb.register(info, obj => {
+  peopleDb.register(info, obj => {
     res.send(JSON.stringify(obj))
   })
 })
 
 // 查找所有人
 Merouter.get('/allPeople', (req, res, next) => {
-  PeopleDb.getAllPeople(data => res.send(JSON.stringify(data)))
+  peopleDb.getAllPeople(data => res.send(JSON.stringify(data)))
 })
 
 // 查找一个人 根据 id  和 学号
@@ -71,7 +71,7 @@ Merouter.get('/bind/:type/:id', (req, res, next) => {
     case 6:
       peopleDb.bindNumber(id, payload, data => res.send(JSON.stringify(data)))
       break;
-    default: console.log(payload, type, id)
+    default: console.log(payload)
   }
 })
 

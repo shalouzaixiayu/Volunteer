@@ -13,7 +13,7 @@
       </p>
     </div>
     <!-- 点赞 -->
-    <div class="like">
+    <div class="like" @click="handleEvent('like')">
       <span>{{ likeMsg }}</span>
     </div>
     <!-- 评论 -->
@@ -27,8 +27,16 @@
       ></textarea>
     </div>
     <!-- 提交 -->
-    <div class="like">
-      <span>提交评论</span>
+    <div class="like" @click="handleEvent('com')">
+      <span>{{sendMsg}}</span>
+    </div>
+
+    <!-- 跳转登陆 -->
+    <div class="small" v-show="showSmall">
+      <span class="tp">你还没登录哟！</span>
+      <div class="like" @click="goLogin">
+        <span>点击登录</span>
+      </div>
     </div>
     <div class="addSreenHeight"></div>
   </div>
@@ -48,12 +56,37 @@ export default {
   data() {
     return {
       likeMsg: "向他们学习",
+      sendMsg: '提交评论',
       comMsg: "",
+      showSmall: false,
     };
   },
   computed: {
     defaultImg() {
       return require("../../../assets/img/defaultImg.jpg");
+    },
+  },
+  methods: {
+    handleEvent(type) {
+      if (!this.$store.state.isLogin) {
+        this.showSmall = !this.showSmall;
+        setTimeout(() => {
+          this.showSmall = !this.showSmall;
+        }, 2000);
+      } else {
+        console.log('现在是类型为' + type);
+        if (type === 'like'){
+          this.likeMsg = '我已经学习'
+          // 添加学习记录 加分
+        }else if(type === 'com'){
+          this.sendMsg = '成功提交'
+          // 添加评论记录  加分
+        }
+      }
+    },
+    goLogin() {
+      // 跳转登陆  传入id
+      this.$router.push({ name: "Login", query: { id: this.detailObj.id } });
     },
   },
 };
@@ -115,5 +148,31 @@ export default {
 .comment textarea {
   border: 1px solid #ccc;
   resize: none;
+}
+.small {
+  z-index: 99;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 40%;
+  padding: 5px;
+  background-color: rgba(1, 1, 1, 0.1);
+  border-radius: 5px;
+  height: 100px;
+  width: 200px;
+  text-align: center;
+  margin-top: 10px;
+}
+.small span {
+  color: #000;
+  font-size: 14px;
+  font-weight: 450;
+}
+.small .tp {
+  display: inline-block;
+  margin-top: 15px;
+}
+.small .like span {
+  color: #fff;
 }
 </style>

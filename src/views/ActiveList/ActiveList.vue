@@ -23,8 +23,6 @@
         <span>下一页</span>
       </div>
     </footer>
-
-
     
   </div>
 </template>
