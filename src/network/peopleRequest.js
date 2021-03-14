@@ -39,7 +39,7 @@ export function login(obj) {
   return requestAxios({
     url: "/login",
     method: "POST",
-    params: {
+    data: {   // post请求
       obj
     }
   })
@@ -55,7 +55,7 @@ export function register(obj) {
   return requestAxios({
     url: '/register',
     method: 'POST',
-    params: {
+    data: {
       obj
     }
   })

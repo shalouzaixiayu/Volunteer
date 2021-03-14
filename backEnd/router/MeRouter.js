@@ -18,7 +18,7 @@ Merouter.get('/test', (req, res, next) => {
 })
 // 登陆 Post
 Merouter.post('/login', (req, res, next) => {
-  let info = req.body
+  const info = req.body.obj
   peopleDb.login(info, obj => {
     res.send(JSON.stringify(obj))
   })
@@ -26,7 +26,7 @@ Merouter.post('/login', (req, res, next) => {
 
 // 注册 post 
 Merouter.post('/register', (req, res, next) => {
-  let info = req.body
+  let info = req.body.obj
   PeopleDb.register(info, obj => {
     res.send(JSON.stringify(obj))
   })
@@ -71,7 +71,7 @@ Merouter.get('/bind/:type/:id', (req, res, next) => {
     case 6:
       peopleDb.bindNumber(id, payload, data => res.send(JSON.stringify(data)))
       break;
-    default: console.log(payload)
+    default: console.log(payload, type, id)
   }
 })
 

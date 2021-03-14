@@ -1,8 +1,10 @@
  const express = require('express')
- const bodyParser = require('body-parser')
  const app = express()
+ const bodyParser = require('body-parser')
+
  const Merouter = require('./router/MeRouter') // 处理我的页面
  const activeRouter = require('./router/ActiveRouter') // 处理活动列表
+
 
  const port = 3000
 
@@ -30,8 +32,9 @@
    }
  });
 
- app.use(activeRouter)
  app.use(Merouter)
+ app.use(activeRouter)
+
 
  app.listen(port, () => {
    console.log(`Listening on http://localhost:${port}`)
