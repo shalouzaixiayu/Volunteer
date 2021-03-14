@@ -111,6 +111,7 @@
 <script>
 import NavBar from '../../components/common/Navbar/NavBar.vue'
 import SToast from '../../components/common/Toast/SToast.vue' 
+import { login } from '../../network/peopleRequest.js'
 export default {
   components: { NavBar, SToast },
   name:"ActiveDetail",
@@ -170,6 +171,10 @@ export default {
       window.sessionStorage.setItem('login', 'ok')
       this.$store.commit('switchLoginStatus')
       console.log(this.userNum, this.passWord)
+      // 登录请求
+      login({sId: this.userNum, password: this.passWord}).then(data => {
+        console.log(data)
+      })
       this.$router.go(-1)
     },
 
@@ -227,6 +232,8 @@ export default {
         this.confirmPassWord = ''
         return
       }
+      // 注册组件
+      // register({name: this.userName, sId: +this.userNum})
       console.log(this.userName, this.userNum, this.gradeString, this.passWord, this.confirmPassWord)
       const random = Math.floor(Math.random()*5)
       window.sessionStorage.setItem('picIndex', random)

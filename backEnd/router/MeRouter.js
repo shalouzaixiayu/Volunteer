@@ -7,8 +7,8 @@ const peopleDb = require('../mongodb/PeopleDb')
 // 先生成一些数据
 Merouter.get('/test', (req, res, next) => {
   peopleDb.getPeopleNumber(data => {
-    if (data.length < 3) {
-      peopleDb.generatePeople(3, data => res.send(JSON.stringify(data)))
+    if (data.length < 5) {
+      peopleDb.generatePeople(5, data => res.send(JSON.stringify(data)))
     } else {
       peopleDb.getAllPeople(data => {
         res.send(JSON.stringify(data))

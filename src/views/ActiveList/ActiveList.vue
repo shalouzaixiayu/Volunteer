@@ -27,14 +27,11 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import Search from "../../components/common/Search/Search";
 
 import { requestActiveList } from "../../network/activeRequest";
 
-=======
 // import {requestActiveList} from '../../network/activeRequest';
->>>>>>> dev
 import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
 
@@ -63,12 +60,9 @@ export default {
 
   },
   created() {
-<<<<<<< HEAD
     // 请求活动列表
     this.RequestActiveList(this.currentPage, this.currentCount);
-=======
     // requestActiveList(1, 20).then(res => console.log(res))
->>>>>>> dev
   },
   updated() {
     setTimeout(() => (this.showNote = false), 6500);
