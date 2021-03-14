@@ -8,7 +8,7 @@
         </div>
         <div class="info">
           <img :src="$store.state.headPicList[picIndex]" alt="图片加载错误">
-          <span class="text">180102010201</span>
+          <span class="text">{{$store.state.obj.sId}}</span>
         </div>
       </div>
       <div class="unlogin" @click="goLogin" v-else>
@@ -341,7 +341,7 @@ export default {
     // 退出登录
     logOut() {
       this.$store.commit('switchLoginStatus')
-      window.sessionStorage.setItem('login', '')
+      window.sessionStorage.setItem('userInfo', '')
       window.sessionStorage.setItem('picIndex', '')
     },
 
@@ -351,7 +351,9 @@ export default {
     }
   },
   created() {
-    this.$store.commit('loginStatus')
+    const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
+    console.log(obj)
+    this.$store.commit('loginStatus', obj)
     this.picIndex = +window.sessionStorage.getItem('picIndex') || this.picIndex
     // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
     // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []

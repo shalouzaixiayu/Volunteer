@@ -26,7 +26,7 @@ export default {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 93vh;
+    height: 94vh;
     background-color: rgba(0, 0, 0, .3);
   }
   .toastcontainer .toast{
