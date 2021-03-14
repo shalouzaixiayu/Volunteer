@@ -17,7 +17,7 @@ export default {
   },
   created() {
     bindTypeAndGet(this.$findType.image, 11110, '你好啊')
-    login({sId:180102010301, password:123456}).then(res => console.log(res))
+    login({sId:180102010301, password:1234}).then(res => console.log(res))
   }
 }
 </script>

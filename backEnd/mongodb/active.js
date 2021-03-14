@@ -55,13 +55,18 @@ function getActiveList(page, count, callback) {
     }).sort({
       timer: -1
     }).then(data => {
-      obj.status = true,
-        obj.msg = 'success',
-        obj.length = data.length,
-        obj.data = data,
-        obj.page = page,
-        obj.count = count,
-        callback(obj)
+      if (!data) {
+        obj.status = true,
+          obj.msg = 'success',
+          obj.length = data.length,
+          obj.data = data,
+          obj.page = page,
+          obj.count = count,
+          callback(obj)
+      } else {
+        throw Error
+      }
+
     })
     .catch(err => {
       obj.status = false,
@@ -87,23 +92,30 @@ function searchActiveByTitle(reTitle, maxCount, callback) {
         $regex: eval(`/.*${reTitle}.*/ig`)
       }
     })
-    .sort({timer:-1})
+    .sort({
+      timer: -1
+    })
     .limit(parseInt(maxCount))
     .then(data => {
-      obj.status = true,
-        obj.msg = 'success',
-        obj.data = data,
-        obj.reTitle = reTitle,
-        obj.maxCount = maxCount,
-        callback(obj)
+      if (!data) {
+        obj.status = true,
+          obj.msg = 'success',
+          obj.data = data,
+          obj.reTitle = reTitle,
+          obj.maxCount = maxCount,
+          callback(obj)
+      } else {
+        throw Error
+      }
+
     })
     .catch(err => {
       obj.status = false,
-      obj.msg = err,
-      obj.data = null,
-      obj.reTitle = reTitle,
-      obj.maxCount = maxCount,
-      callback(obj)
+        obj.msg = err,
+        obj.data = null,
+        obj.reTitle = reTitle,
+        obj.maxCount = maxCount,
+        callback(obj)
     })
 }
 /**
@@ -112,23 +124,28 @@ function searchActiveByTitle(reTitle, maxCount, callback) {
  * @param {*} id
  * @param {*} callback  promise
  */
-function searchActiveById(id, callback){
+function searchActiveById(id, callback) {
   const obj = {}
   active.find({
-    id,
-  })
-  .then(data => {
-    obj.status = true
-    obj.msg = "success"
-    obj.data = data
-    callback(obj)
-  })
-  .catch(err => {
-    obj.status = false
-    obj.msg = err
-    obj.data = null 
-    callback(obj)
-  })
+      id,
+    })
+    .then(data => {
+      if (!data) {
+        obj.status = true
+        obj.msg = "success"
+        obj.data = data
+        callback(obj)
+      } else {
+        throw Error
+      }
+
+    })
+    .catch(err => {
+      obj.status = false
+      obj.msg = err
+      obj.data = null
+      callback(obj)
+    })
 }
 
 module.exports = {

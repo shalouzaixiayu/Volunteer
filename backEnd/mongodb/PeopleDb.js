@@ -142,10 +142,14 @@ function login(info, callback) {
       sId: info.sId,
       password: info.password,
     }).then(data => {
-      obj.data = data
-      obj.msg = "success"
-      obj.status = true
-      callback(obj)
+      if (!data) {
+        obj.data = data
+        obj.msg = "success"
+        obj.status = true
+        callback(obj)
+      } else {
+        throw Error
+      }
     })
     .catch(err => {
       obj.msg = "未查找到该用户, 请仔细检查一下!"
@@ -169,10 +173,14 @@ function deletePeople(info, callback) {
       sId,
       name
     }).then(data => {
-      obj.status = true
-      obj.message = "success"
-      obj.data = data
-      callback(obj)
+      if (!data) {
+        obj.status = true
+        obj.message = "success"
+        obj.data = data
+        callback(obj)
+      } else {
+        throw Error
+      }
     })
     .catch(err => {
       obj.status = false
@@ -192,10 +200,15 @@ function bindNumber(id, phone, callback) {
     }, {
       phone,
     }).then(data => {
-      obj.status = true
-      obj.message = 'success',
-        obj.data = data
-      callback(obj)
+      if (!data) {
+        obj.status = true
+        obj.message = 'success',
+          obj.data = data
+        callback(obj)
+      } else {
+        throw Error
+      }
+
     })
     .catch(err => {
       obj.status = false
@@ -216,10 +229,14 @@ function bindAutograph(id, msg, callback) {
     }, {
       bindAutograph: msg,
     }).then(data => {
-      obj.status = true
-      obj.message = 'success',
-        obj.data = data
-      callback(obj)
+      if (!data) {
+        obj.status = true
+        obj.message = 'success',
+          obj.data = data
+        callback(obj)
+      } else {
+        throw Error
+      }
     })
     .catch(err => {
       obj.status = false
@@ -239,10 +256,14 @@ function bindPoint(id, point, callback) {
     }, {
       point: point,
     }).then(data => {
-      obj.status = true
-      obj.message = 'success',
-        obj.data = data
-      callback(obj)
+      if (!data) {
+        obj.status = true
+        obj.message = 'success',
+          obj.data = data
+        callback(obj)
+      } else {
+        throw Error
+      }
     })
     .catch(err => {
       obj.status = false
@@ -260,11 +281,15 @@ function getAllPeople(callback) {
   const obj = {}
   people.find()
     .then(data => {
-      obj.data = data
-      obj.status = true
-      obj.length = data.length
-      obj.meg = "success"
-      callback(data)
+      if (!data) {
+        obj.data = data
+        obj.status = true
+        obj.length = data.length
+        obj.meg = "success"
+        callback(data)
+      } else {
+        throw Error
+      }
     })
     .catch(err => {
       obj.data = null
@@ -288,10 +313,14 @@ function searchByIdAndSid(id, sId, callback) {
       sId: sId
     })
     .then(data => {
-      obj.data = data
-      obj.status = true
-      obj.msg = 'success'
-      callback(obj)
+      if (!data) {
+        obj.data = data
+        obj.status = true
+        obj.msg = 'success'
+        callback(obj)
+      } else {
+        throw Error
+      }
     })
     .catch(err => {
       obj.data = null
