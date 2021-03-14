@@ -4,10 +4,10 @@
     <div :class="[!$store.state.isLogin?'unloginbac':'', 'header']">
       <div class="hadlogin" v-if="$store.state.isLogin">
         <div class="bigimg">
-          <img :src="$store.state.headPicList[picIndex]" alt="">
+          <img :src="$store.state.headPicList[picIndex]" alt="图片加载错误">
         </div>
         <div class="info">
-          <img :src="$store.state.headPicList[picIndex]" alt="">
+          <img :src="$store.state.headPicList[picIndex]" alt="图片加载错误">
           <span class="text">180102010201</span>
         </div>
       </div>

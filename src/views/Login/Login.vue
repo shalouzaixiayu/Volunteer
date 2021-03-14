@@ -163,18 +163,21 @@ export default {
         this.getRandom()
         return
       }
-      this.successString = '登录成功'
-      this.isSuccess = true
-      setTimeout(() => {
-        this.isSuccess = false
-      },1000)
+      // 登录请求
+      login({sId: this.userNum, password: this.passWord}).then(res => {
+        const { list, msg } = res.data 
+        console.log(list, msg)
+        // 账号不存在
+        if(msg !== 'success') {
+          this.success('该账号不存在或密码有误')
+          return
+        }
+        // 登录成功保存数据
+      })
+      this.success('登录成功')
       window.sessionStorage.setItem('login', 'ok')
       this.$store.commit('switchLoginStatus')
       console.log(this.userNum, this.passWord)
-      // 登录请求
-      login({sId: this.userNum, password: this.passWord}).then(data => {
-        console.log(data)
-      })
       this.$router.go(-1)
     },
 
@@ -241,7 +244,13 @@ export default {
       this.userNum = this.passWord = this.checkNum = this.userName = this.confirmPassWord = this.numError = this.passWordError = this.checkError = this.usernameError = this.gradeError = this.confirmPassWordError =  ''
       this.gradeString = '系部'
       this.isRegister = false
-      this.successString = '注册成功'
+      this.success('注册成功')
+    },
+
+
+    // success成功吐司
+    success(value) {
+      this.successString = value
       this.isSuccess = true
       setTimeout(() => {
         this.isSuccess = false
@@ -300,7 +309,7 @@ export default {
             this.userName = ''
             return
           }
-          var regs3 = /^[a-zA-Z0-9_]{3,6}$/
+          var regs3 = /^[a-zA-Z0-9_]{3,10}$/
           if(!regs3.test(this.userName)) {
             this.usernameError = '用户名长度为3-10位'
             this.userName = ''
