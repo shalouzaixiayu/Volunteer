@@ -56,9 +56,9 @@ const PeoScheme = new mongoose.Schema({
     type: Boolean,
     default: false, // 是否失信 报名没去参加  bad
   },
-  bindAutograph:{
-    type:String,
-    default: '',  // 个性签名
+  bindAutograph: {
+    type: String,
+    default: '', // 个性签名
   },
   createTime: {
     type: Date,
@@ -68,8 +68,8 @@ const PeoScheme = new mongoose.Schema({
 
 const people = new mongoose.model('People', PeoScheme)
 
-function generatePeople(num = 3, callback) {
-  // 生成三个学生数据
+function generatePeople(num = 5, callback) {
+  // 生成五个学生数据
   for (let i = 0; i < num; i++) {
     new people({
         _id: i,
@@ -79,6 +79,7 @@ function generatePeople(num = 3, callback) {
         faculty: "计算机信息工程",
         class: "计科三班",
         isVolunteer: true, //  注册人为真
+        point: 10 * (i + 1) + i
       })
       .save()
       .then(data => {
@@ -187,21 +188,21 @@ function bindNumber(id, phone, callback) {
   const obj = {}
 
   people.findOneAndUpdate({
-    _id,
-  }, {
-    phone,
-  }).then(data => {
-    obj.status = true
-    obj.message = 'success',
-    obj.data = data
-    callback(obj)
-  })
-  .catch(err => {
-    obj.status = false
-    obj.message = err,
-    obj.data = null
-    callback(obj)
-  })
+      _id,
+    }, {
+      phone,
+    }).then(data => {
+      obj.status = true
+      obj.message = 'success',
+        obj.data = data
+      callback(obj)
+    })
+    .catch(err => {
+      obj.status = false
+      obj.message = err,
+        obj.data = null
+      callback(obj)
+    })
 }
 
 
@@ -211,21 +212,21 @@ function bindAutograph(id, msg, callback) {
   const obj = {}
 
   people.findOneAndUpdate({
-    _id,
-  }, {
-    bindAutograph:msg,
-  }).then(data => {
-    obj.status = true
-    obj.message = 'success',
-    obj.data = data
-    callback(obj)
-  })
-  .catch(err => {
-    obj.status = false
-    obj.message = err,
-    obj.data = null
-    callback(obj)
-  })
+      _id,
+    }, {
+      bindAutograph: msg,
+    }).then(data => {
+      obj.status = true
+      obj.message = 'success',
+        obj.data = data
+      callback(obj)
+    })
+    .catch(err => {
+      obj.status = false
+      obj.message = err,
+        obj.data = null
+      callback(obj)
+    })
 }
 
 // 更改积分
@@ -234,21 +235,21 @@ function bindPoint(id, point, callback) {
   const obj = {}
 
   people.findOneAndUpdate({
-    _id,
-  }, {
-    point:point,
-  }).then(data => {
-    obj.status = true
-    obj.message = 'success',
-    obj.data = data
-    callback(obj)
-  })
-  .catch(err => {
-    obj.status = false
-    obj.message = err,
-    obj.data = null
-    callback(obj)
-  })
+      _id,
+    }, {
+      point: point,
+    }).then(data => {
+      obj.status = true
+      obj.message = 'success',
+        obj.data = data
+      callback(obj)
+    })
+    .catch(err => {
+      obj.status = false
+      obj.message = err,
+        obj.data = null
+      callback(obj)
+    })
 }
 
 

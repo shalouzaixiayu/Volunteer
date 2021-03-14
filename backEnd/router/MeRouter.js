@@ -7,8 +7,8 @@ const peopleDb = require('../mongodb/PeopleDb')
 // 先生成一些数据
 Merouter.get('/test', (req, res, next) => {
   peopleDb.getPeopleNumber(data => {
-    if (data.length < 3) {
-      peopleDb.generatePeople(3, data => res.send(JSON.stringify(data)))
+    if (data.length < 5) {
+      peopleDb.generatePeople(5, data => res.send(JSON.stringify(data)))
     } else {
       peopleDb.getAllPeople(data => {
         res.send(JSON.stringify(data))
@@ -61,8 +61,6 @@ Merouter.get('/onePeople', (req, res, next) => {
 Merouter.get('/bind/:type/:id', (req, res, next) => {
   const {type, id} =  req.params   // 拿到 匹配路由值
   const {payload} = req.query  //  拿到其他值
-  console.log(info)
-  console.log(query)
   switch (type){
     case 1:
       peopleDb.bindAutograph(id, payload, data => res.send(JSON.stringify(data)))
@@ -73,6 +71,7 @@ Merouter.get('/bind/:type/:id', (req, res, next) => {
     case 6:
       peopleDb.bindNumber(id, payload, data => res.send(JSON.stringify(data)))
       break;
+    default: console.log(payload)
   }
 })
 
