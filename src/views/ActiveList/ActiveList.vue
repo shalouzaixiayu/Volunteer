@@ -1,7 +1,7 @@
 <template>
   <div class="actives">
     <!-- 导航 -->
-    <active-navbar />
+    <active-navbar  @goBack2Before="goBack2Before"/>
     <!-- 注释 -->
     <div class="note" v-show="showNote">
       <transition appear name="note">
@@ -23,6 +23,9 @@
         <span>下一页</span>
       </div>
     </footer>
+
+
+    
   </div>
 </template>
 
@@ -78,6 +81,9 @@ export default {
       if (obj.status && obj.type == "active") {
         this.activeList = obj.data.data;
       }
+    },
+    goBack2Before(){
+      this.RequestActiveList(this.currentPage, this.currentCount);
     },
     // 上一页 && 下一页
     changeThisPage(page) {
