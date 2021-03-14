@@ -515,6 +515,7 @@ export default {
   }
   .toast .comment.common h4{
     margin-bottom: 18px;
+
   }
   .toast .comment ul{
     max-height: 306px;

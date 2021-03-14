@@ -60,3 +60,35 @@ export function register(obj) {
     }
   })
 }
+
+// 下面是一个对象， 都是一样的功能 直接浓缩
+// const findType = {
+//   autograph: '/bind/1', // 个性签名
+//   point: '/bind/2', // 积分
+//   image: '/bind/3', // 图片
+//   comment: '/bind/4', // 评论
+//   study: '/bind/5', //学习记录
+//   phone: '/bind/6', // 绑定手机
+// }
+
+// 使用 this.$findType  调用对象对应的玩意
+/**
+ *
+ *
+ * @export
+ * @param {*} findType  根据 功能返回对应的 this.$findType 的路由映射
+ * @param {*} id     待修改的 id
+ * @param {*} payload   待修改的新值  负载
+ * @returns
+ */
+export function bindTypeAndGet(findType, id, payload){
+  return requestAxios({
+    url: `${findType}/${id}`,
+    method: 'GET',
+    params: {
+      payload
+    }
+  })
+}
+
+

@@ -2,6 +2,9 @@
   <div>
     <!-- 导航 -->
     <nav-bar>
+      <template #left> 
+        <span class="lt" @click="goback">&lt;</span>
+      </template>
       <template #center>
         <span>{{ msg }}</span>
       </template>
@@ -20,9 +23,19 @@ export default {
     msg(){
       return this.$route.meta.title;
     }  
+  },
+  methods: {
+    goback(){
+      this.$emit("goBack2Before")
+    }  
   }
 };
 </script>
 
-<style>
+<style scoped>
+.lt{
+    font-size: 30px;
+    font-weight: 300;
+    margin-left:-25px;
+  } 
 </style>

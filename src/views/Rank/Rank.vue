@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { test } from '../../network/peopleRequest.js'
+import { bindType, login } from '../../network/peopleRequest.js'
 
 export default {
   name:"Rank",
@@ -16,7 +16,8 @@ export default {
     }
   },
   created() {
-    test().then(data => this.msg = data.data)
+    bindType(this.$findType.image, 11110, '你好啊')
+    login({sId:180102010301, password:123456}).then(res => console.log(res))
   }
 }
 </script>

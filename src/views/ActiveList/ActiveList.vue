@@ -1,7 +1,7 @@
 <template>
   <div class="actives">
     <!-- 导航 -->
-    <active-navbar />
+    <active-navbar  @goBack2Before="goBack2Before"/>
     <!-- 注释 -->
     <div class="note" v-show="showNote">
       <transition appear name="note">
@@ -23,18 +23,16 @@
         <span>下一页</span>
       </div>
     </footer>
+
+
   </div>
 </template>
 
 <script>
-<<<<<<< HEAD
 import Search from "../../components/common/Search/Search";
 
 import { requestActiveList } from "../../network/activeRequest";
 
-=======
-// import {requestActiveList} from '../../network/activeRequest';
->>>>>>> dev
 import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
 
@@ -63,12 +61,8 @@ export default {
 
   },
   created() {
-<<<<<<< HEAD
     // 请求活动列表
     this.RequestActiveList(this.currentPage, this.currentCount);
-=======
-    // requestActiveList(1, 20).then(res => console.log(res))
->>>>>>> dev
   },
   updated() {
     setTimeout(() => (this.showNote = false), 6500);
@@ -84,6 +78,9 @@ export default {
       if (obj.status && obj.type == "active") {
         this.activeList = obj.data.data;
       }
+    },
+    goBack2Before(){
+      this.RequestActiveList(this.currentPage, this.currentCount);
     },
     // 上一页 && 下一页
     changeThisPage(page) {
