@@ -55,18 +55,13 @@ function getActiveList(page, count, callback) {
     }).sort({
       timer: -1
     }).then(data => {
-      if (!data) {
-        obj.status = true,
-          obj.msg = 'success',
-          obj.length = data.length,
-          obj.data = data,
-          obj.page = page,
-          obj.count = count,
-          callback(obj)
-      } else {
-        throw Error
-      }
-
+      obj.status = true,
+        obj.msg = 'success',
+        obj.length = data.length,
+        obj.data = data,
+        obj.page = page,
+        obj.count = count,
+        callback(obj)
     })
     .catch(err => {
       obj.status = false,
@@ -97,59 +92,53 @@ function searchActiveByTitle(reTitle, maxCount, callback) {
     })
     .limit(parseInt(maxCount))
     .then(data => {
-      if (!data) {
-        obj.status = true,
-          obj.msg = 'success',
-          obj.data = data,
+        if (data.length >= 1) {
+          obj.status = true,
+            obj.msg = 'success',
+            obj.data = data,
+            obj.reTitle = reTitle,
+            obj.maxCount = maxCount,
+            callback(obj)
+        }
+        })
+      .catch(err => {
+        obj.status = false,
+          obj.msg = err,
+          obj.data = null,
           obj.reTitle = reTitle,
           obj.maxCount = maxCount,
           callback(obj)
-      } else {
-        throw Error
-      }
-
-    })
-    .catch(err => {
-      obj.status = false,
-        obj.msg = err,
-        obj.data = null,
-        obj.reTitle = reTitle,
-        obj.maxCount = maxCount,
+      })
+    }
+  /**
+   *
+   *
+   * @param {*} id
+   * @param {*} callback  promise
+   */
+  function searchActiveById(id, callback) {
+    const obj = {}
+    active.find({
+        id,
+      })
+      .then(data => {
+        if (data.length >= 1) {
+          obj.status = true
+          obj.msg = "success"
+          obj.data = data
+          callback(obj)
+        }
+      })
+      .catch(err => {
+        obj.status = false
+        obj.msg = err
+        obj.data = null
         callback(obj)
-    })
-}
-/**
- *
- *
- * @param {*} id
- * @param {*} callback  promise
- */
-function searchActiveById(id, callback) {
-  const obj = {}
-  active.find({
-      id,
-    })
-    .then(data => {
-      if (!data) {
-        obj.status = true
-        obj.msg = "success"
-        obj.data = data
-        callback(obj)
-      } else {
-        throw Error
-      }
+      })
+  }
 
-    })
-    .catch(err => {
-      obj.status = false
-      obj.msg = err
-      obj.data = null
-      callback(obj)
-    })
-}
-
-module.exports = {
-  getActiveList,
-  searchActiveByTitle,
-  searchActiveById,
-}
+  module.exports = {
+    getActiveList,
+    searchActiveByTitle,
+    searchActiveById,
+  }

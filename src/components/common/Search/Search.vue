@@ -25,6 +25,7 @@ export default {
       this.type = type;
     },
     isSearch() {
+      // 根据不同场景使用type
       if (this.type === "active" && this.search) {
         searchActiveByTitle(this.search, 50).then((data) => {
           this.obj = data
