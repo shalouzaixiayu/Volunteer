@@ -111,7 +111,7 @@
 <script>
 import NavBar from '../../components/common/Navbar/NavBar.vue'
 import SToast from '../../components/common/Toast/SToast.vue' 
-import { login, register } from '../../network/peopleRequest.js'
+import { login, register, } from '../../network/peopleRequest.js' //bindTypeAndGet
 export default {
   components: { NavBar, SToast },
   name:"ActiveDetail",
@@ -232,20 +232,21 @@ export default {
         this.confirmPassWord = ''
         return
       }
-      console.log(this.gradeString.split('学院')[1], this.gradeString.split('学院')[1])
-      console.log(this.userName, this.userNum, this.gradeString, this.passWord)
+      console.log(this.gradeString.split('学院')[1], this.gradeString.split('学院')[0])
+      console.log(this.userName, this.userNum,this.gradeString.split('学院')[1], this.gradeString.split('学院')[0], this.passWord)
       // 注册组件
       register({name: this.userName, sId: this.userNum, class: this.gradeString.split('学院')[1], faculty: this.gradeString.split('学院')[0], password: this.passWord})
       .then(res => {
         console.log(res)
+        const random = Math.floor(Math.random()*5)
+        window.sessionStorage.setItem('picIndex', random)
+        console.log(this.$store.state.headPicList[random])
+        // bindTypeAndGet(this.$findType.image, res.id, this.$store.state.headPicList[random])
+        this.userNum = this.passWord = this.checkNum = this.userName = this.confirmPassWord = this.numError = this.passWordError = this.checkError = this.usernameError = this.gradeError = this.confirmPassWordError =  ''
+        this.gradeString = '系部'
+        this.isRegister = false
+        this.success('注册成功')
       })
-      const random = Math.floor(Math.random()*5)
-      window.sessionStorage.setItem('picIndex', random)
-      console.log(this.$store.state.headPicList[random])
-      this.userNum = this.passWord = this.checkNum = this.userName = this.confirmPassWord = this.numError = this.passWordError = this.checkError = this.usernameError = this.gradeError = this.confirmPassWordError =  ''
-      this.gradeString = '系部'
-      this.isRegister = false
-      this.success('注册成功')
     },
 
 

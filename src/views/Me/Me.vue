@@ -4,10 +4,10 @@
     <div :class="[!$store.state.isLogin?'unloginbac':'', 'header']">
       <div class="hadlogin" v-if="$store.state.isLogin">
         <div class="bigimg">
-          <img :src="$store.state.headPicList[picIndex]" alt="图片加载错误">
+          <img :src="$store.state.obj.headImg||$store.state.headPicList[picIndex]" alt="图片加载错误">
         </div>
         <div class="info">
-          <img :src="$store.state.headPicList[picIndex]" alt="图片加载错误">
+          <img :src="$store.state.obj.headImg||$store.state.headPicList[picIndex]" alt="图片加载错误">
           <span class="text">{{$store.state.obj.sId}}</span>
         </div>
       </div>
@@ -187,7 +187,7 @@
       <!-- 我的积分 -->
       <div class="score common" v-show="isScore&&$store.state.isLogin">
         <h4>我的积分</h4>
-        <p>当前积分为：3</p>
+        <p>当前积分为：{{$store.state.obj.point}}</p>
       </div>
       <!-- 未登录提示 -->
       <div class="unlogin" v-show="!$store.state.isLogin">
@@ -352,8 +352,8 @@ export default {
   },
   created() {
     const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
-    console.log(obj)
     this.$store.commit('loginStatus', obj)
+    console.log(this.$store.state.obj)
     this.picIndex = +window.sessionStorage.getItem('picIndex') || this.picIndex
     // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
     // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []
