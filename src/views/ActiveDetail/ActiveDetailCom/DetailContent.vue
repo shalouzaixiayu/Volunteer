@@ -1,15 +1,23 @@
 <template>
   <div class="detail">
-    <h1>{{ detailObj.title }}</h1>
+    <h1>{{ detailObj.title || sliderProps.title}}</h1>
     <div class="info">
-      <span class="sponsor">{{ detailObj.sponsor }}</span>
-      <span class="timer">{{ detailObj.timer }}</span>
+      <span class="sponsor">{{ detailObj.sponsor || sliderProps.sponsor }}</span>
+      <span class="timer">{{ detailObj.timer  || sliderProps.timer}}</span>
     </div>
 
     <div class="content">
-      <p v-for="(p, pIndex) in detailObj.content" :key="pIndex">
+      <p v-show="sliderProps.id > 0"  
+        v-for= "(p, pIndex) in sliderProps.content"
+        :key="pIndex">
+        {{p}}
+      <img :src="sliderProps.image[pIndex] || defaultImg" v-show="pIndex < 2" />
+      </p>
+
+
+      <p v-for="(p, pIndex) in detailObj.content" :key="pIndex" v-show="detailObj.id >0">
         {{ p }}
-        <img :src="detailObj.image[pIndex] || defaultImg" v-show="pIndex < 3" />
+        <img :src="detailObj.image[pIndex] || defaultImg" v-show="pIndex < 2" />
       </p>
     </div>
     <!-- 点赞 -->
@@ -28,7 +36,7 @@
     </div>
     <!-- 提交 -->
     <div class="like" @click="handleEvent('com')">
-      <span>{{sendMsg}}</span>
+      <span>{{ sendMsg }}</span>
     </div>
 
     <!-- 跳转登陆 -->
@@ -43,6 +51,8 @@
 </template>
 
 <script>
+import { searchActiveById } from "../../../network/activeRequest.js";
+
 export default {
   name: "DetailContent",
   props: {
@@ -56,9 +66,10 @@ export default {
   data() {
     return {
       likeMsg: "向他们学习",
-      sendMsg: '提交评论',
+      sendMsg: "提交评论",
       comMsg: "",
       showSmall: false,
+      sliderProps: {}, // 轮播跳转对象
     };
   },
   computed: {
@@ -74,12 +85,12 @@ export default {
           this.showSmall = !this.showSmall;
         }, 2000);
       } else {
-        console.log('现在是类型为' + type);
-        if (type === 'like'){
-          this.likeMsg = '我已经学习'
+        console.log("现在是类型为" + type);
+        if (type === "like") {
+          this.likeMsg = "我已经学习";
           // 添加学习记录 加分
-        }else if(type === 'com'){
-          this.sendMsg = '成功提交'
+        } else if (type === "com") {
+          this.sendMsg = "成功提交";
           // 添加评论记录  加分
         }
       }
@@ -88,7 +99,17 @@ export default {
       // 跳转登陆  传入id
       this.$router.push({ name: "Login", query: { id: this.detailObj.id } });
     },
+    // 请求轮播跳转对象
+    getSliderProps() {
+      const sliderId = this.$route.query.id;
+      searchActiveById(sliderId).then((res) => {
+         this.sliderProps ={...res.data.data[0]} 
+      });
+    },  
   },
+  created() {
+    this.getSliderProps()
+  }
 };
 </script>
 
