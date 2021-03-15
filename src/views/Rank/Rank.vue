@@ -6,28 +6,23 @@
     </nav-bar>
     <div class="container">
       <!-- 前三名 -->
-      <rank-head :list="list"></rank-head>
+      <rank-head :list="sList"></rank-head>
       <!-- 四名之后 -->
       <div class="main">
-        <rank-item
-          v-for="(item, i) in list"
-          :key="item.id"
-          :obj="item"
-          :i="i"
-          v-show="i > 2"
-        ></rank-item>
+        <template v-for="(item, i) in sList" :key="item.id">
+          <rank-item
+            :obj="item"
+            :i="i"
+            v-if="i > 2"
+          ></rank-item>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  bindTypeAndGet,
-  login,
-  register,
-} from "../../network/peopleRequest.js";
-
+import { requestAllPeople } from "../../network/peopleRequest.js";
 import RankHead from "./RankHeader.vue";
 import RankItem from "./RankItem.vue";
 import NavBar from "../../components/common/Navbar/NavBar.vue";
@@ -36,40 +31,48 @@ export default {
   name: "Rank",
   data() {
     return {
-      list: [
-        { name: "张三", point: 20, id: 1 },
-        { name: "李四", point: 29, id: 2 },
-        { name: "王五", point: 23, id: 3 },
-        { name: "赵六", point: 22, id: 4 },
-        { name: "aaa", point: 27, id: 5 },
-        { name: "bbb", point: 9, id: 6 },
-        { name: "ccc", point: 10, id: 7 },
-        { name: "ddd", point: 5, id: 8 },
-        { name: "eee", point: 17, id: 9 },
-        { name: "fff", point: 14, id: 10 },
+      sList: [],
+      imgList: [
+        'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1475169296,1277034405&fm=26&gp=0.jpg',
+        'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1531131778,2524913106&fm=26&gp=0.jpg',
+        'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2551985090,2793423744&fm=26&gp=0.jpg',
+        'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2592144766,1647119108&fm=26&gp=0.jpg',
+        'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2985396230,2457625401&fm=26&gp=0.jpg',
+        'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2858934627,3429261099&fm=26&gp=0.jpg'
       ],
     };
   },
   methods: {
     // 排名方法
-    filter() {
-      this.list.sort(function (a, b) {
+    listSort(arr) {
+      arr.sort(function (a, b) {
         return b.point - a.point;
-      });
-      // console.log(this.list);
+      })
     },
+
+
+
+    // 给前五个学生添加头像
+    addImgAds(arr) {
+      let i = 0
+      arr.forEach(item => {
+        if(item.headImg) {
+          return
+        }
+        item.headImg = this.imgList[i++]
+      })
+      return arr
+    }
   },
   created() {
-    bindTypeAndGet(this.$findType.image, 11110, "你好啊");
-    login({ sId: "180102010302", password: "123456" });
-    register({
-      name: "王大帅",
-      sId: "180102010306",
-      class: "计科三班",
-      faculty: "计算机信息工程",
-      password: "123445",
-    }).then((res) => console.log(res));
-    this.filter();
+    // bindTypeAndGet(this.$findType.image, 11110, "你好啊")
+    // 请求所有对象
+    requestAllPeople().then(res => {
+      const {data} = res
+      this.addImgAds(data)
+      this.sList = data
+      this.listSort(this.sList);
+    })
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <div class="item">
     <span class="index">{{i+1}}</span>
     <div class="img">
-      <img src="../../../src/assets/img/headPics/userimg.jpg" alt="">
+      <img :src="obj.headImg||'../../../src/assets/img/headPics/userimg.jpg'" alt="">
     </div>
     <div class="name">{{obj.name}}</div>
     <div class="score">{{obj.point}}</div>

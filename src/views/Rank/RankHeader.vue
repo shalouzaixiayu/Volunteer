@@ -1,13 +1,15 @@
 <template>
   <div class="content">
-    <div :class="['item',i==0?'first':'',i==1?'second':'',i==2?'third':'']" v-for="(item, i) in list" :key="item.id" v-show="i < 3">
-      <span class="index">{{i+1}}</span>
-      <div class="img">
-        <img src="../../../src/assets/img/headPics/userimg.jpg" alt="">
+    <template v-for="(item, i) in list" :key="item.id">
+      <div :class="['item',i==0?'first':'',i==1?'second':'',i==2?'third':'']"  v-if="i < 3">
+        <span class="index">{{i+1}}</span>
+        <div class="img">
+          <img :src="item.headImg||'../../../src/assets/img/headPics/userimg.jpg'" alt="">
+        </div>
+        <div class="name">{{item.name}}</div>
+        <div class="score">{{item.point}}</div>
       </div>
-      <div class="name">{{item.name}}</div>
-      <div class="score">{{item.point}}</div>
-    </div>
+    </template>
   </div>
 </template>
 
