@@ -9,7 +9,7 @@
       <rank-head :list="sList"></rank-head>
       <!-- 四名之后 -->
       <div class="main">
-        <rank-item  v-for="(item, i) in sList" :key="i"
+        <rank-item  v-for="(item, i) in sList" :key="item._id"
         :obj="item" :i="i" v-show="i > 2"></rank-item>
       </div>
     </div>
@@ -44,9 +44,6 @@ export default {
         return b.point - a.point;
       })
     },
-
-
-
     // 给前五个学生添加头像
     addImgAds(arr) {
       let i = 0
@@ -57,10 +54,11 @@ export default {
         item.headImg = this.imgList[i++]
       })
       return arr
-    }
+    },
   },
   created() {
-    // bindTypeAndGet(this.$findType.image, 11110, "你好啊")
+    // const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
+    // this.$store.commit('loginStatus', obj)
     // 请求所有对象
     requestAllPeople().then(res => {
       const {data} = res

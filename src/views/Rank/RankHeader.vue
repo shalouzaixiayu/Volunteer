@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <template v-for="(item, i) in list" :key="item.id">
+    <template v-for="(item, i) in list" :key="item._id">
       <div :class="['item',i==0?'first':'',i==1?'second':'',i==2?'third':'']"  v-if="i < 3">
         <span class="index">{{i+1}}</span>
         <div class="img">

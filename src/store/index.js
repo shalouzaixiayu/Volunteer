@@ -26,6 +26,7 @@ export default createStore({
         state.obj = payload
       }
     },
+    // 改变吐司状态
     changeToastStatus(state) {
       state.isShow = !state.isShow
     }

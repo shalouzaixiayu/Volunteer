@@ -104,14 +104,14 @@
       </div>
     </template>
     <!-- 成功吐司 -->
-    <s-toast v-show="isSuccess">{{successString}}</s-toast>
+    <s-toast :class="{'red': isRed}" v-show="isSuccess">{{successString}}</s-toast>
   </div>
 </template>
 
 <script>
 import NavBar from '../../components/common/Navbar/NavBar.vue'
 import SToast from '../../components/common/Toast/SToast.vue' 
-import { login, register, } from '../../network/peopleRequest.js' //bindTypeAndGet
+import { login, register, bindTypeAndGet } from '../../network/peopleRequest.js'
 export default {
   components: { NavBar, SToast },
   name:"ActiveDetail",
@@ -139,7 +139,8 @@ export default {
       confirmPassWordError: '',
       gradeError: '',
       successString: '',
-      isSuccess: false
+      isSuccess: false,
+      isRed: false
     }
   },
   methods: {
@@ -168,12 +169,16 @@ export default {
         const { data, msg } = res.data 
         // 账号不存在
         if(msg !== 'success') {
-          this.success('该账号不存在或密码有误')
+          this.success('该账号不存在或密码有误', true)
           return
         }
-        this.success('登录成功')
+        this.success('登录成功', false)
         window.sessionStorage.setItem('userInfo', JSON.stringify(data[0]))
-        this.$store.commit('switchLoginStatus')
+        this.$store.commit('loginStatus', data[0])
+        if(this.$route.query.id) {
+          this.$router.push({name: 'Rank', query: {id: data[0]._id}})
+          return
+        }
         this.$router.go(-1)
       })
     },
@@ -222,7 +227,7 @@ export default {
 
 
     // 注册操作
-    registerHandle() {
+    registerHandle() {+
       if(this.gradeString == '系部') {
         this.gradeError = '请选择系部班级'
         return
@@ -232,26 +237,34 @@ export default {
         this.confirmPassWord = ''
         return
       }
-      console.log(this.gradeString.split('学院')[1], this.gradeString.split('学院')[0])
-      console.log(this.userName, this.userNum,this.gradeString.split('学院')[1], this.gradeString.split('学院')[0], this.passWord)
-      // 注册组件
+      // console.log(this.gradeString.split('学院')[1], this.gradeString.split('学院')[0])
+      // console.log(this.userName, this.userNum,this.gradeString.split('学院')[1], this.gradeString.split('学院')[0], this.passWord)
+      // 注册
       register({name: this.userName, sId: this.userNum, class: this.gradeString.split('学院')[1], faculty: this.gradeString.split('学院')[0], password: this.passWord})
       .then(res => {
         console.log(res)
+        if(!res.data.status) {
+          this.success(res.data.msg, true)
+          return
+        }
         const random = Math.floor(Math.random()*5)
         window.sessionStorage.setItem('picIndex', random)
         console.log(this.$store.state.headPicList[random])
-        // bindTypeAndGet(this.$findType.image, res.id, this.$store.state.headPicList[random])
+        bindTypeAndGet(this.$findType.image, res.data._id, this.$store.state.headPicList[random])
+        .then(res => {
+          console.log(res)
+        })
         this.userNum = this.passWord = this.checkNum = this.userName = this.confirmPassWord = this.numError = this.passWordError = this.checkError = this.usernameError = this.gradeError = this.confirmPassWordError =  ''
         this.gradeString = '系部'
         this.isRegister = false
-        this.success('注册成功')
+        this.success('注册成功', false)
       })
     },
 
 
     // success成功吐司
-    success(value) {
+    success(value, isError) {
+      this.isRed = isError
       this.successString = value
       this.isSuccess = true
       setTimeout(() => {
@@ -338,11 +351,19 @@ export default {
   },
   created() {
     this.getRandom()
+    // bindTypeAndGet(this.$findType.image, '604f53e05ef31324649ed591', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3633693073,3344238293&fm=26&gp=0.jpg')
+    // .then((res) => {
+    //   console.log(res)
+    // })
+    // console.log(this.$route.query.id)
   }
 }
 </script>
 
 <style scoped>
+  .red{
+    color: red;
+  }
   .content{
     position: relative;
     width: 100%;
