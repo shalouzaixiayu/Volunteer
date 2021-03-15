@@ -32,6 +32,7 @@ import Search from "../../components/common/Search/Search";
 
 import { requestActiveList } from "../../network/activeRequest";
 
+// import {requestActiveList} from '../../network/activeRequest';
 import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
 
@@ -62,6 +63,7 @@ export default {
   created() {
     // 请求活动列表
     this.RequestActiveList(this.currentPage, this.currentCount);
+    // requestActiveList(1, 20).then(res => console.log(res))
   },
   updated() {
     setTimeout(() => (this.showNote = false), 6500);

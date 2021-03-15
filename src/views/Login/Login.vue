@@ -111,6 +111,7 @@
 <script>
 import NavBar from '../../components/common/Navbar/NavBar.vue'
 import SToast from '../../components/common/Toast/SToast.vue' 
+import { login, register } from '../../network/peopleRequest.js'
 export default {
   components: { NavBar, SToast },
   name:"ActiveDetail",
@@ -162,15 +163,19 @@ export default {
         this.getRandom()
         return
       }
-      this.successString = '登录成功'
-      this.isSuccess = true
-      setTimeout(() => {
-        this.isSuccess = false
-      },1000)
-      window.sessionStorage.setItem('login', 'ok')
-      this.$store.commit('switchLoginStatus')
-      console.log(this.userNum, this.passWord)
-      this.$router.go(-1)
+      // 登录请求
+      login({sId: this.userNum, password: this.passWord}).then(res => {
+        const { data, msg } = res.data 
+        // 账号不存在
+        if(msg !== 'success') {
+          this.success('该账号不存在或密码有误')
+          return
+        }
+        this.success('登录成功')
+        window.sessionStorage.setItem('userInfo', JSON.stringify(data[0]))
+        this.$store.commit('switchLoginStatus')
+        this.$router.go(-1)
+      })
     },
 
 
@@ -195,11 +200,11 @@ export default {
       this.gradeString = ''
       this.gradeString += value
       switch (value) {
-        case '计算机信息工程学院': this.classList = ['计科1班', '计科2班', '计科3班', '软件1班', '软件2班', '大数据1班']
+        case '计算机信息工程学院': this.classList = ['计科一班', '计科二班', '计科三班', '软件一班', '软件二班', '大数据一班']
           break;
-        case '外国语学院': this.classList = ['外语1班', '外语2班', '外语3班', '对外1班', '对外2班', '外语文化1班']
+        case '外国语学院': this.classList = ['外语一班', '外语二班', '外三班', '对外一班', '对外二班', '外语文化一班']
           break;
-        case '人文学院': this.classList = ['语文1班', '语文2班', '语文3班', '数学1班', '数学2班', '幼儿1班']
+        case '人文学院': this.classList = ['语文一班', '语文二班', '语三班', '数学一班', '数学二班', '幼儿一班']
           break;
       }
       this.isDepartment = false
@@ -227,14 +232,26 @@ export default {
         this.confirmPassWord = ''
         return
       }
-      console.log(this.userName, this.userNum, this.gradeString, this.passWord, this.confirmPassWord)
+      console.log(this.gradeString.split('学院')[1], this.gradeString.split('学院')[1])
+      console.log(this.userName, this.userNum, this.gradeString, this.passWord)
+      // 注册组件
+      register({name: this.userName, sId: this.userNum, class: this.gradeString.split('学院')[1], faculty: this.gradeString.split('学院')[0], password: this.passWord})
+      .then(res => {
+        console.log(res)
+      })
       const random = Math.floor(Math.random()*5)
       window.sessionStorage.setItem('picIndex', random)
       console.log(this.$store.state.headPicList[random])
       this.userNum = this.passWord = this.checkNum = this.userName = this.confirmPassWord = this.numError = this.passWordError = this.checkError = this.usernameError = this.gradeError = this.confirmPassWordError =  ''
       this.gradeString = '系部'
       this.isRegister = false
-      this.successString = '注册成功'
+      this.success('注册成功')
+    },
+
+
+    // success成功吐司
+    success(value) {
+      this.successString = value
       this.isSuccess = true
       setTimeout(() => {
         this.isSuccess = false
@@ -293,7 +310,7 @@ export default {
             this.userName = ''
             return
           }
-          var regs3 = /^[a-zA-Z0-9_]{3,6}$/
+          var regs3 = /^[a-zA-Z0-9_]{3,10}$/
           if(!regs3.test(this.userName)) {
             this.usernameError = '用户名长度为3-10位'
             this.userName = ''
