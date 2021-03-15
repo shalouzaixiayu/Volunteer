@@ -1,21 +1,31 @@
 <template>
   <div class="detail">
-    <h1>{{ detailObj.title || sliderProps.title}}</h1>
+    <h1>{{ detailObj.title || sliderProps.title }}</h1>
     <div class="info">
-      <span class="sponsor">{{ detailObj.sponsor || sliderProps.sponsor }}</span>
-      <span class="timer">{{ detailObj.timer  || sliderProps.timer}}</span>
+      <span class="sponsor">{{
+        detailObj.sponsor || sliderProps.sponsor
+      }}</span>
+      <span class="timer">{{ detailObj.timer || sliderProps.timer }}</span>
     </div>
 
     <div class="content">
-      <p v-show="sliderProps.id > 0"  
-        v-for= "(p, pIndex) in sliderProps.content"
-        :key="pIndex">
-        {{p}}
-      <img :src="sliderProps.image[pIndex] || defaultImg" v-show="pIndex < 2" />
+      <p
+        v-show="sliderProps.id > 0"
+        v-for="(p, pIndex) in sliderProps.content"
+        :key="pIndex"
+      >
+        {{ p }}
+        <img
+          :src="sliderProps.image[pIndex] || defaultImg"
+          v-show="pIndex < 2"
+        />
       </p>
 
-
-      <p v-for="(p, pIndex) in detailObj.content" :key="pIndex" v-show="detailObj.id >0">
+      <p
+        v-for="(p, pIndex) in detailObj.content"
+        :key="pIndex"
+        v-show="detailObj.id > 0"
+      >
         {{ p }}
         <img :src="detailObj.image[pIndex] || defaultImg" v-show="pIndex < 2" />
       </p>
@@ -52,6 +62,7 @@
 
 <script>
 import { searchActiveById } from "../../../network/activeRequest.js";
+import { bindTypeAndGet } from "../../../network/peopleRequest";
 
 export default {
   name: "DetailContent",
@@ -79,19 +90,37 @@ export default {
   },
   methods: {
     handleEvent(type) {
+      //
+      // if (!this.$store.state.isLogin) {
+      //   this.$store.commit("switchLoginStatus");
+      // }
+      //
       if (!this.$store.state.isLogin) {
         this.showSmall = !this.showSmall;
         setTimeout(() => {
           this.showSmall = !this.showSmall;
         }, 2000);
       } else {
-        console.log("现在是类型为" + type);
+        const id = this.$store.state.obj._id;
+        // const id = "604f2e06f086391848e2e365";
         if (type === "like") {
-          this.likeMsg = "我已经学习";
+          bindTypeAndGet(this.$findType.study, id, {
+            activeId: this.detailObj.id,
+            comMsg: "什么都没评论哟！"
+          }).then((res) => {
+            this.likeMsg = res.data.status ? "我已经学习" : this.likeMsg;
+            // console.log(res.data) // 没这个值
+          });
           // 添加学习记录 加分
         } else if (type === "com") {
-          this.sendMsg = "成功提交";
           // 添加评论记录  加分
+          bindTypeAndGet(this.$findType.comment, id, {
+            activeId: this.detailObj.id,
+            comMsg: this.comMsg,
+          }).then(res => {
+            this.sendMsg = res.data.status ? "提交成功" : this.sendMsg;
+            // console.log(res)  // 这个有问题
+          });
         }
       }
     },
@@ -101,15 +130,15 @@ export default {
     },
     // 请求轮播跳转对象
     getSliderProps() {
-      const sliderId = this.$route.query.id;
+      const sliderId = this.$route.query.id || 0;
       searchActiveById(sliderId).then((res) => {
-         this.sliderProps ={...res.data.data[0]} 
+        this.sliderProps = { ...res.data.data[0] };
       });
-    },  
+    },
   },
   created() {
-    this.getSliderProps()
-  }
+    this.getSliderProps();
+  },
 };
 </script>
 

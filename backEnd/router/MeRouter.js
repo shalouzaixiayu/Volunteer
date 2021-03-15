@@ -61,17 +61,26 @@ Merouter.get('/onePeople', (req, res, next) => {
 Merouter.get('/bind/:type/:id', (req, res, next) => {
   const {type, id} =  req.params   // 拿到 匹配路由值
   const {payload} = req.query  //  拿到其他值
-  switch (type){
+  switch (parseInt(type)){
     case 1:
       peopleDb.bindAutograph(id, payload, data => res.send(JSON.stringify(data)))
       break;
     case 2:
       peopleDb.bindPoint(id, payload, data => res.send(JSON.stringify(data)))
       break;
+    case 3:
+      peopleDb.bindImage(id, payload, data => res.send(JSON.stringify(data)))
+      break;
+    case 4:
+      peopleDb.bindCom(id, payload, data => res.send(JSON.stringify(data)))
+      break;
+    case 5:
+      peopleDb.bindStudy(id, payload, data => res.send(JSON.stringify(data)))
+      break;
     case 6:
       peopleDb.bindNumber(id, payload, data => res.send(JSON.stringify(data)))
       break;
-    // default: console.log(payload)
+    // default: console.log(type, payload)
   }
 })
 

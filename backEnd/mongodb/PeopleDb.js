@@ -54,7 +54,7 @@ const PeoScheme = new mongoose.Schema({
   },
   bindAutograph: {
     type: String,
-    default: '', // 个性签名
+    default: '这家伙很懒，什么都没写.', // 个性签名
   },
   createTime: {
     type: Date,
@@ -170,7 +170,7 @@ function deletePeople(info, callback) {
     sId,
     name
   }).then(data => {
-    if (data.length >= 1) {
+    if (data) {
       obj.status = true
       obj.message = "success"
       obj.data = data
@@ -194,7 +194,7 @@ function bindNumber(id, phone, callback) {
   }, {
     phone,
   }).then(data => {
-    if (data.length >= 1) {
+    if (data) {
       obj.status = true
       obj.message = 'success',
         obj.data = data
@@ -219,7 +219,7 @@ function bindAutograph(id, msg, callback) {
   }, {
     bindAutograph: msg,
   }).then(data => {
-    if (data.length >= 1) {
+    if (data) {
       obj.status = true
       obj.message = 'success',
         obj.data = data
@@ -232,28 +232,28 @@ function bindAutograph(id, msg, callback) {
   })
 }
 
-// 获取个人积分信息
-function getPoint(_id, callback) {
-  people.find({
-    _id,
-  }).then(data => {
-    callback(data)
+// 获取现在的个人信息 return promise 
+function getPoint(_id) {
+  return people.find({
+    _id:_id,
   })
 }
 
-// getPoint('604db78ba9b8012e204f291d', data => console.log(data))
 
+// getPoint('604db78ba9b8012e204f291d', data => console.log(data[0].point))
+
+// bindPoint("604db78ba9b8012e204f291d")
 // 更改积分
-function bindPoint(id, point, callback) {
+async function bindPoint(id, point, callback) {
   const _id = id
   const obj = {}
-
+  const nowPoint = await getPoint(id).then(data => data[0].point)
   people.findOneAndUpdate({
     _id,
   }, {
-    point: point,
+    point: nowPoint + point,
   }).then(data => {
-    if (data.length >= 1) {
+    if (data) {
       obj.status = true
       obj.message = 'success',
         obj.data = data
@@ -265,6 +265,84 @@ function bindPoint(id, point, callback) {
     callback(obj)
   })
 }
+
+  // 绑定学习记录
+async function bindStudy(id, activeId, callback) {
+  const nowPoint = await getPoint(id).then(data => data[0].point)
+  let nowActiveList = await getPoint(id).then(data => data[0].activeList)
+  nowActiveList.push(activeId)
+  const obj = {}
+  // console.log(activeId, nowActiveList)
+  people.findOneAndUpdate({
+    _id: id
+  }, {
+    activeList: nowActiveList,
+    point: nowPoint + 10
+  }).then(data => {
+    if(data){
+      obj.data = data
+      obj.status = true
+      obj.message = 'success'
+      callback(obj)
+    }else{
+      obj.data = null
+      obj.status = false
+      obj.message = 'id验证错误'
+      callback(obj)
+    }
+  })
+}
+
+// 绑定评论
+async function bindCom(id, info , callback){
+  const nowPoint = await getPoint(id).then(data => data[0].point)
+  let nowActiveList = await getPoint(id).then(data => data[0].activeList)
+  nowActiveList.push(info)
+  const obj = {}
+  people.findOneAndUpdate({
+    _id: id
+  }, {
+    activeList: nowActiveList,
+    point: nowPoint + 20
+  }).then(data => {
+    if(data){
+      obj.data = data
+      obj.status = true
+      obj.message = 'success'
+      callback(obj)
+    }else{
+      obj.data = null
+      obj.status = false
+      obj.message = 'id验证错误'
+      callback(obj)
+    }
+  })
+}
+
+// 绑定头像
+async function bindImage(id, info, callback){
+  const nowPoint = await getPoint(id).then(data => data[0].point)
+  const obj = {}
+  people.findOneAndUpdate({
+    _id: id
+  }, {
+    headImg: info.headImg,   // 待修改
+    point: nowPoint + 1
+  }).then(data => {
+    if(data){
+      obj.data = data
+      obj.status = true
+      obj.message = 'success'
+      callback(obj)
+    }else{
+      obj.data = null
+      obj.status = false
+      obj.message = 'id验证错误'
+      callback(obj)
+    }
+  })
+}
+
 
 
 
@@ -319,4 +397,7 @@ module.exports = {
   bindNumber,
   bindAutograph,
   bindPoint,
+  bindStudy,
+  bindCom,
+  bindImage,
 }

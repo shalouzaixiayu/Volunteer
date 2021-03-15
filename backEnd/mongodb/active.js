@@ -48,30 +48,21 @@ const active = new mongoose.model("Active", activeSchema)
 function getActiveList(page, count, callback) {
   const obj = {}
   active.find({
-      id: {
-        '$gte': page * count,
-        '$lt': (parseInt(page) + 1) * count,
-      }
-    }).sort({
-      timer: -1
-    }).then(data => {
-      obj.status = true,
-        obj.msg = 'success',
-        obj.length = data.length,
-        obj.data = data,
-        obj.page = page,
-        obj.count = count,
-        callback(obj)
-    })
-    .catch(err => {
-      obj.status = false,
-        obj.msg = err,
-        obj.length = 0,
-        obj.data = null,
-        obj.page = page,
-        obj.count = count,
-        callback(obj)
-    })
+    id: {
+      '$gte': page * count,
+      '$lt': (parseInt(page) + 1) * count,
+    }
+  }).sort({
+    timer: -1
+  }).then(data => {
+    obj.status = true,
+      obj.msg = 'success',
+      obj.length = data.length,
+      obj.data = data,
+      obj.page = page,
+      obj.count = count,
+      callback(obj)
+  })
 }
 /**
  *
@@ -92,53 +83,52 @@ function searchActiveByTitle(reTitle, maxCount, callback) {
     })
     .limit(parseInt(maxCount))
     .then(data => {
-        if (data.length >= 1) {
-          obj.status = true,
-            obj.msg = 'success',
-            obj.data = data,
-            obj.reTitle = reTitle,
-            obj.maxCount = maxCount,
-            callback(obj)
-        }
-        })
-      .catch(err => {
+      if (data.length >= 1) {
+        obj.status = true,
+          obj.msg = 'success',
+          obj.data = data,
+          obj.reTitle = reTitle,
+          obj.maxCount = maxCount,
+          callback(obj)
+      } else {
         obj.status = false,
-          obj.msg = err,
+          obj.msg = '没找到',
           obj.data = null,
           obj.reTitle = reTitle,
           obj.maxCount = maxCount,
           callback(obj)
-      })
-    }
-  /**
-   *
-   *
-   * @param {*} id
-   * @param {*} callback  promise
-   */
-  function searchActiveById(id, callback) {
-    const obj = {}
-    active.find({
-        id,
-      })
-      .then(data => {
-        if (data.length >= 1) {
-          obj.status = true
-          obj.msg = "success"
-          obj.data = data
-          callback(obj)
-        }
-      })
-      .catch(err => {
+      }
+    })
+}
+/**
+ *
+ *
+ * @param {*} id
+ * @param {*} callback  promise
+ */
+function searchActiveById(id, callback) {
+  const obj = {}
+  // console.log(id + "这里的")
+  active.find({
+      id,
+    })
+    .then(data => {
+      if (data.length >= 1) {
+        obj.status = true
+        obj.msg = "success"
+        obj.data = data
+        callback(obj)
+      } else {
         obj.status = false
-        obj.msg = err
+        obj.msg = '未找到该信息'
         obj.data = null
         callback(obj)
-      })
-  }
+      }
+    })
+}
 
-  module.exports = {
-    getActiveList,
-    searchActiveByTitle,
-    searchActiveById,
-  }
+module.exports = {
+  getActiveList,
+  searchActiveByTitle,
+  searchActiveById,
+}

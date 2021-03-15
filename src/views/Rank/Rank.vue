@@ -44,9 +44,6 @@ export default {
         return b.point - a.point;
       })
     },
-
-
-
     // 给前五个学生添加头像
     addImgAds(arr) {
       let i = 0

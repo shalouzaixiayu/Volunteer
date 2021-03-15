@@ -6,7 +6,7 @@
     <!-- 轮播图 -->
     <home-slider />
     <!-- 小提示 -->
-    <!-- <home-tip/> -->
+    <home-tip/>
 
   </div>
 </template>
@@ -14,12 +14,12 @@
 <script>
 import HomeNavBar from "./HomeCom/HomeNavBar.vue";
 import HomeSlider from "./HomeCom/HomeSlider";
-// import HomeTip  from './HomeCom/HomeTip';
+import HomeTip  from './HomeCom/HomeTip';
 export default {
   components: {
     HomeNavBar,
     HomeSlider,
-    // HomeTip,
+    HomeTip,
   },
   name: "Home",
 };
