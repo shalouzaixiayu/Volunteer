@@ -63,8 +63,8 @@ export default {
     bindTypeAndGet(this.$findType.image, 11110, "你好啊");
     login({ sId: "180102010302", password: "123456" });
     register({
-      name: "王大帅",
-      sId: "180102010306",
+      name: "王五帅",
+      sId: "180102010310",
       class: "计科三班",
       faculty: "计算机信息工程",
       password: "123445",

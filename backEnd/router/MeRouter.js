@@ -71,7 +71,7 @@ Merouter.get('/bind/:type/:id', (req, res, next) => {
     case 6:
       peopleDb.bindNumber(id, payload, data => res.send(JSON.stringify(data)))
       break;
-    default: console.log(payload)
+    // default: console.log(payload)
   }
 })
 

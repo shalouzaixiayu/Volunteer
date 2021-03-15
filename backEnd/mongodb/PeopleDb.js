@@ -88,44 +88,46 @@ function getPeopleNumber(callback) {
 }
 
 // 添加一个志愿者
-function addPeople(info, callback) {  
+function addPeople(info, callback) {
   // 注册修改  isVolunteer 值 让它成为志愿者
   info.isVolunteer = true
-  new people(info).save().then(data => 
-    {
-      callback(data)
-    })
-    .catch(error => console.log(error + 'ssssssssssss'))
+  new people(info).save().then(data => {
+    callback(data)
+  })
+  // .catch(error => console.log(error + '错误信息'))
 }
 
 // 注册志愿者信息
 function register(info, callback) {
   // 先验证，后注册信息
-  let obj = {
-    data: null,
-    msg: "",
-    status: false
-  }
+  // let obj = {
+  //   data: null,
+  //   msg: "",
+  //   status: false
+  // }
   people.find({
-      $or: [{
-          name: info.name
-        },
-        {
-          sId: info.sId
-        }
-      ]
-    }).then(data => {
-      if (data.length === 0) {
-        obj.msg = "success" 
-        addPeople(info, (data) => {
-          obj.data = data
-          obj.status = true
-          callback(obj)
-        })
+    $or: [{
+        name: info.name
+      },
+      {
+        sId: info.sId
       }
+    ]
+  }).then(data => {
+    if (data.length === 0) {
+      console.log('111')
+      addPeople(info, (data) => {
+        callback(data)
+      })
+    } else {
+      console.log('222')
+      const obj = {}
+      obj.data = null
       obj.msg = "用户名或学号已存在"
+      obj.status = false
       callback(obj)
-    })
+    }
+  })
 }
 
 // 登陆
@@ -231,7 +233,7 @@ function bindAutograph(id, msg, callback) {
 }
 
 // 获取个人积分信息
-function getPoint(_id, callback){
+function getPoint(_id, callback) {
   people.find({
     _id,
   }).then(data => {
