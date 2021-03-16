@@ -1,10 +1,6 @@
 <template>
   <div class="content">
-<<<<<<< HEAD
-    <template v-for="(item, i) in list" :key="item.id">
-=======
-    <template v-for="(item, i) in list" :key="item._id">
->>>>>>> pug
+    <div v-for="(item, i) in list" :key="i">
       <div :class="['item',i==0?'first':'',i==1?'second':'',i==2?'third':'']"  v-if="i < 3">
         <span class="index">{{i+1}}</span>
         <div class="img">
@@ -13,7 +9,7 @@
         <div class="name">{{item.name}}</div>
         <div class="score">{{item.point}}</div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 

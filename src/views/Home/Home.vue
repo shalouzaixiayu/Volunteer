@@ -6,11 +6,7 @@
     <!-- 轮播图 -->
     <home-slider />
     <!-- 小提示 -->
-<<<<<<< HEAD
     <home-tip/>
-=======
-    <!-- <home-tip/> -->
->>>>>>> pug
 
   </div>
 </template>
@@ -18,20 +14,12 @@
 <script>
 import HomeNavBar from "./HomeCom/HomeNavBar.vue";
 import HomeSlider from "./HomeCom/HomeSlider";
-<<<<<<< HEAD
 import HomeTip  from './HomeCom/HomeTip';
-=======
-// import HomeTip  from './HomeCom/HomeTip';
->>>>>>> pug
 export default {
   components: {
     HomeNavBar,
     HomeSlider,
-<<<<<<< HEAD
     HomeTip,
-=======
-    // HomeTip,
->>>>>>> pug
   },
   name: "Home",
 };

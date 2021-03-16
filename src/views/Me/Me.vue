@@ -22,11 +22,7 @@
       <h4>我的</h4>
       <div class="signature box" @click="showHandle('signature')">
         <span class="left">个性签名</span>
-<<<<<<< HEAD
-        <span class="content">{{$store.state.isLogin?signature:''}}</span>
-=======
         <span class="content">{{$store.state.isLogin?$store.state.obj.bindAutograph:''}}</span>
->>>>>>> pug
         <span class="right">></span>
       </div>
       <div class="score box" @click="showHandle('score')">
@@ -210,10 +206,7 @@
 <script>
 import SToast from '../../components/common/Toast/SToast.vue'
 import BToast from '../../components/common/Toast/BToast.vue'
-<<<<<<< HEAD
-=======
 import { bindTypeAndGet } from '../../network/peopleRequest.js'
->>>>>>> pug
 export default {
   components: { SToast, BToast },
   data() {
@@ -232,11 +225,7 @@ export default {
       picIndex:0,
       isComment: false,
       isSignature: false,
-<<<<<<< HEAD
       signature: '我是免费的小劳动力',
-=======
-      signature: '',
->>>>>>> pug
       isStudy: false,
       isScore: false
     }
@@ -283,13 +272,10 @@ export default {
           return
       }
       console.log(this.phone)
-<<<<<<< HEAD
-=======
       bindTypeAndGet(this.$findType.phone, this.$store.state.obj._id, this.phone)
       .then((res) => {
         console.log(res)
       })
->>>>>>> pug
       this.success('注册成功')
       this.isBindPhone = false
       this.$store.commit('changeToastStatus')
@@ -342,14 +328,11 @@ export default {
 
     // 发布签名
     pushSignature() {
-<<<<<<< HEAD
-=======
     // 请求接口改变签名
       bindTypeAndGet(this.$findType.autograph, this.$store.state.obj._id, this.signature)
       .then((res) => {
         console.log(res)
       })
->>>>>>> pug
       this.success('发布成功')
       this.$store.commit('changeToastStatus')
     },
@@ -380,10 +363,7 @@ export default {
   created() {
     const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
     this.$store.commit('loginStatus', obj)
-<<<<<<< HEAD
     console.log(this.$store.state.obj)
-=======
->>>>>>> pug
     this.picIndex = +window.sessionStorage.getItem('picIndex') || this.picIndex
     // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
     // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []

@@ -54,11 +54,7 @@ const PeoScheme = new mongoose.Schema({
   },
   bindAutograph: {
     type: String,
-<<<<<<< HEAD
     default: '这家伙很懒，什么都没写.', // 个性签名
-=======
-    default: '', // 个性签名
->>>>>>> pug
   },
   createTime: {
     type: Date,
@@ -174,11 +170,7 @@ function deletePeople(info, callback) {
     sId,
     name
   }).then(data => {
-<<<<<<< HEAD
     if (data) {
-=======
-    if (data.length >= 1) {
->>>>>>> pug
       obj.status = true
       obj.message = "success"
       obj.data = data
@@ -202,11 +194,7 @@ function bindNumber(id, phone, callback) {
   }, {
     phone,
   }).then(data => {
-<<<<<<< HEAD
     if (data) {
-=======
-    if (data.length >= 1) {
->>>>>>> pug
       obj.status = true
       obj.message = 'success',
         obj.data = data
@@ -231,11 +219,7 @@ function bindAutograph(id, msg, callback) {
   }, {
     bindAutograph: msg,
   }).then(data => {
-<<<<<<< HEAD
     if (data) {
-=======
-    if (data.length >= 1) {
->>>>>>> pug
       obj.status = true
       obj.message = 'success',
         obj.data = data
@@ -248,7 +232,6 @@ function bindAutograph(id, msg, callback) {
   })
 }
 
-<<<<<<< HEAD
 // 获取现在的个人信息 return promise 
 function getPoint(_id) {
   return people.find({
@@ -271,30 +254,6 @@ async function bindPoint(id, point, callback) {
     point: nowPoint + point,
   }).then(data => {
     if (data) {
-=======
-// 获取个人积分信息
-function getPoint(_id, callback) {
-  people.find({
-    _id,
-  }).then(data => {
-    callback(data)
-  })
-}
-
-// getPoint('604db78ba9b8012e204f291d', data => console.log(data))
-
-// 更改积分
-function bindPoint(id, point, callback) {
-  const _id = id
-  const obj = {}
-
-  people.findOneAndUpdate({
-    _id,
-  }, {
-    point: point,
-  }).then(data => {
-    if (data.length >= 1) {
->>>>>>> pug
       obj.status = true
       obj.message = 'success',
         obj.data = data
@@ -307,7 +266,6 @@ function bindPoint(id, point, callback) {
   })
 }
 
-<<<<<<< HEAD
   // 绑定学习记录
 async function bindStudy(id, activeId, callback) {
   const nowPoint = await getPoint(id).then(data => data[0].point)
@@ -386,8 +344,6 @@ async function bindImage(id, info, callback){
 }
 
 
-=======
->>>>>>> pug
 
 
 
@@ -441,10 +397,7 @@ module.exports = {
   bindNumber,
   bindAutograph,
   bindPoint,
-<<<<<<< HEAD
   bindStudy,
   bindCom,
   bindImage,
-=======
->>>>>>> pug
 }

@@ -9,11 +9,7 @@
       <rank-head :list="sList"></rank-head>
       <!-- 四名之后 -->
       <div class="main">
-<<<<<<< HEAD
         <rank-item  v-for="(item, i) in sList" :key="i"
-=======
-        <rank-item  v-for="(item, i) in sList" :key="item._id"
->>>>>>> pug
         :obj="item" :i="i" v-show="i > 2"></rank-item>
       </div>
     </div>
@@ -58,18 +54,11 @@ export default {
         item.headImg = this.imgList[i++]
       })
       return arr
-<<<<<<< HEAD
-    }
-  },
-  created() {
-    // bindTypeAndGet(this.$findType.image, 11110, "你好啊")
-=======
     },
   },
   created() {
     // const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
     // this.$store.commit('loginStatus', obj)
->>>>>>> pug
     // 请求所有对象
     requestAllPeople().then(res => {
       const {data} = res
