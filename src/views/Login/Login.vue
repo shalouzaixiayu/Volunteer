@@ -227,7 +227,7 @@ export default {
 
 
     // 注册操作
-    registerHandle() {+
+    registerHandle() {
       if(this.gradeString == '系部') {
         this.gradeError = '请选择系部班级'
         return
