@@ -1,5 +1,6 @@
 <template>
   <div class="detail">
+<<<<<<< HEAD
     <h1>{{ detailObj.title || sliderProps.title }}</h1>
     <div class="info">
       <span class="sponsor">{{
@@ -26,6 +27,24 @@
         :key="pIndex"
         v-show="detailObj.id > 0"
       >
+=======
+    <h1>{{ detailObj.title || sliderProps.title}}</h1>
+    <div class="info">
+      <span class="sponsor">{{ detailObj.sponsor || sliderProps.sponsor }}</span>
+      <span class="timer">{{ detailObj.timer  || sliderProps.timer}}</span>
+    </div>
+
+    <div class="content">
+      <p v-show="sliderProps.id > 0"  
+        v-for= "(p, pIndex) in sliderProps.content"
+        :key="pIndex">
+        {{p}}
+      <img :src="sliderProps.image[pIndex] || defaultImg" v-show="pIndex < 2" />
+      </p>
+
+
+      <p v-for="(p, pIndex) in detailObj.content" :key="pIndex" v-show="detailObj.id >0">
+>>>>>>> pug
         {{ p }}
         <img :src="detailObj.image[pIndex] || defaultImg" v-show="pIndex < 2" />
       </p>
@@ -62,7 +81,10 @@
 
 <script>
 import { searchActiveById } from "../../../network/activeRequest.js";
+<<<<<<< HEAD
 import { bindTypeAndGet } from "../../../network/peopleRequest";
+=======
+>>>>>>> pug
 
 export default {
   name: "DetailContent",
@@ -90,17 +112,21 @@ export default {
   },
   methods: {
     handleEvent(type) {
+<<<<<<< HEAD
       //
       // if (!this.$store.state.isLogin) {
       //   this.$store.commit("switchLoginStatus");
       // }
       //
+=======
+>>>>>>> pug
       if (!this.$store.state.isLogin) {
         this.showSmall = !this.showSmall;
         setTimeout(() => {
           this.showSmall = !this.showSmall;
         }, 2000);
       } else {
+<<<<<<< HEAD
         const id = this.$store.state.obj._id;
         // const id = "604f2e06f086391848e2e365";
         if (type === "like") {
@@ -121,6 +147,15 @@ export default {
             this.sendMsg = res.data.status ? "提交成功" : this.sendMsg;
             // console.log(res)  // 这个有问题
           });
+=======
+        console.log("现在是类型为" + type);
+        if (type === "like") {
+          this.likeMsg = "我已经学习";
+          // 添加学习记录 加分
+        } else if (type === "com") {
+          this.sendMsg = "成功提交";
+          // 添加评论记录  加分
+>>>>>>> pug
         }
       }
     },
@@ -130,6 +165,7 @@ export default {
     },
     // 请求轮播跳转对象
     getSliderProps() {
+<<<<<<< HEAD
       const sliderId = this.$route.query.id || 0;
       searchActiveById(sliderId).then((res) => {
         this.sliderProps = { ...res.data.data[0] };
@@ -139,6 +175,17 @@ export default {
   created() {
     this.getSliderProps();
   },
+=======
+      const sliderId = this.$route.query.id;
+      searchActiveById(sliderId).then((res) => {
+         this.sliderProps ={...res.data.data[0]} 
+      });
+    },  
+  },
+  created() {
+    this.getSliderProps()
+  }
+>>>>>>> pug
 };
 </script>
 

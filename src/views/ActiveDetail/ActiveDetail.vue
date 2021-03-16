@@ -21,7 +21,11 @@ export default {
   },
   data(){
     return{
+<<<<<<< HEAD
       id: this.$route.params.id || 0,
+=======
+      id: this.$route.params.id,
+>>>>>>> pug
       obj: {},   // 传入的对象
     }  
   },

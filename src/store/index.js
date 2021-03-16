@@ -26,6 +26,10 @@ export default createStore({
         state.obj = payload
       }
     },
+<<<<<<< HEAD
+=======
+    // 改变吐司状态
+>>>>>>> pug
     changeToastStatus(state) {
       state.isShow = !state.isShow
     }
