@@ -34,7 +34,7 @@ export default {
           activeIco: require("../../assets/img/tabbarImg/homeA.png"),
         },
         {
-          name: "活动列表",
+          name: "活动令",
           pathTo: "/activeList",
           ico: require("../../assets/img/tabbarImg/list.png"),
           activeIco: require("../../assets/img/tabbarImg/listA.png"),

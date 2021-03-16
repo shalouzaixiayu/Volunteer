@@ -5,6 +5,7 @@ const ActiveDetail =  () => import('../views/ActiveDetail/ActiveDetail.vue')
 const Me =  () => import('../views/Me/Me.vue')
 const BackEndView =  () => import('../views/BackEndView/BackEndView.vue')
 const Rank = () => import('../views/Rank/Rank.vue')
+const Login = () => import('../views/Login/Login.vue')
 
 
 const routes = [
@@ -26,7 +27,7 @@ const routes = [
     name:"ActiveList",
     component: ActiveList,
     meta:{
-      title:"活动大厅",
+      title:"活动令",
       isActive: true
     }
   },
@@ -63,6 +64,15 @@ const routes = [
     component: Rank,
     meta:{
       title:"排名",
+      isActive: false
+    }
+  },
+  {
+    path:"/login",
+    name:"Login",
+    component: Login,
+    meta:{
+      title:"登录",
       isActive: false
     }
   }

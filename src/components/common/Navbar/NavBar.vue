@@ -14,11 +14,12 @@ export default {
 
 <style scoped>
   .navBar{
-    position: flex;
+    display: flex;
     height: 44px;
     line-height: 44px;
     text-align: center;
     background-color: #c82519;  
+    opacity: .8;
     color:#fff;
     justify-content: center;
   }

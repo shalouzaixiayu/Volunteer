@@ -5,7 +5,6 @@
         <component :is="Component"></component>
       </keep-alive>
     </router-view>
-
     <app-tab-bar/>
   </div>
 </template>
