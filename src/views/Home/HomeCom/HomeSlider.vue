@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="hs">
     <slider>
       <slider-item v-for="(item, index) in sliderList" :key="index">
         <div @click="goActiveContent(index)">
@@ -50,4 +50,7 @@ export default {
 </script>
 
 <style>
+.hs{
+  box-shadow: 0 8px 20px 8px  rgba(200, 100, 100, .4);
+}
 </style>

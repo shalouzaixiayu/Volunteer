@@ -44,6 +44,10 @@ const PeoScheme = new mongoose.Schema({
     type: Boolean,
     default: false // 是否是志愿者
   },
+  isManager:{
+    type:Boolean,
+    default: false,  // 是否是管理员
+  },
   point: {
     type: Number,
     default: 0 // 个人积分
@@ -74,6 +78,7 @@ function generatePeople(num = 5, callback) {
         faculty: "计算机信息工程",
         class: "计科三班",
         isVolunteer: true, //  注册人为真
+        isManager: true,  // 是管理员
         point: 10 * (i + 1) + i
       })
       .save()
@@ -363,14 +368,12 @@ function getAllPeople(callback) {
  *
  *
  * @param {*} id   id
- * @param {*} sId  学号
  * @param {*} callback   promise 
  */
-function searchByIdAndSid(id, sId, callback) {
+function searchByIdAndSid(id, callback) {
   const obj = {}
   people.find({
       _id: id,
-      sId: sId
     })
     .then(data => {
       if (data.length >= 1) {

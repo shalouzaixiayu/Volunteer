@@ -15,16 +15,14 @@ export function requestAllPeople() {
  *
  * @export
  * @param {*} _id  people  表 id
- * @param {*} sId  people 学号 sId
  * @returns
  */
-export function requestPeopleById(_id, sId) {
+export function requestPeopleById(_id) {
   return requestAxios({
     url: '/onePeople',
     method: 'GET',
     params: {
       _id,
-      sId
     }
   })
 }

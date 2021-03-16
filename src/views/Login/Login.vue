@@ -175,8 +175,9 @@ export default {
         this.success('登录成功', false)
         window.sessionStorage.setItem('userInfo', JSON.stringify(data[0]))
         this.$store.commit('loginStatus', data[0])
+        // 能拿到活动id
         if(this.$route.query.id) {
-          this.$router.push({name: 'Rank', query: {id: data[0]._id}})
+          this.$router.push({name: 'ActiveDetail', query: {id: this.$route.query.id}})
           return
         }
         this.$router.go(-1)

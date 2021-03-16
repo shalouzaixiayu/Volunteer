@@ -358,6 +358,9 @@ export default {
 
     // 后台模式
     goAdmin() {
+      this.$router.push(
+        {name:"BackEndView"}
+      )
     }
   },
   created() {

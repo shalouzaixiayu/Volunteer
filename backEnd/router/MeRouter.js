@@ -42,9 +42,8 @@ Merouter.get('/onePeople', (req, res, next) => {
   const info = req.query
   const {
     _id,
-    sId
   } = info
-  peopleDb.searchByIdAndSid(_id, sId, data => res.send(JSON.stringify(data)))
+  peopleDb.searchByIdAndSid(_id, data => res.send(JSON.stringify(data)))
 })
 
 

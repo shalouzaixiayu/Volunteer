@@ -5,10 +5,6 @@ mongoose.connect('mongodb://localhost:27017/Volunteer', {
 })
 
 const manager = new mongoose.Schema({
-  _id:{
-    type:Number,
-    required:true,
-  },
   name: {
     type: String,
     required: true,  // 名字

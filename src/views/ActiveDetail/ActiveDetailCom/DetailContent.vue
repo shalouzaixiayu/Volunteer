@@ -126,6 +126,7 @@ export default {
     // 请求轮播跳转对象
     getSliderProps() {
       const sliderId = this.$route.query.id || 0;
+      console.log(sliderId + '活动详情')
       searchActiveById(sliderId).then((res) => {
         this.sliderProps = { ...res.data.data[0] };
       });
