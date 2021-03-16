@@ -1,7 +1,7 @@
 <template>
   <div class="actives">
     <!-- 导航 -->
-    <active-navbar  @goBack2Before="goBack2Before"/>
+    <active-navbar @goBack2Before="goBack2Before" />
     <!-- 注释 -->
     <div class="note" v-show="showNote">
       <transition appear name="note">
@@ -10,20 +10,24 @@
     </div>
     <!-- 搜索框 -->
     <search ref="activeSearch" @activeSearch="activeSearch" />
+    <div class="content">
+      <!-- 活动列表 -->
+      <active-item v-for="item in activeList" :key="item" :item="item" />
 
-    <!-- 活动列表 -->
-    <active-item v-for="item in activeList" :key="item" :item="item" />
-
-    <!-- 下一页 -->
-    <footer class="foot">
-      <div class="previous" v-show="currentPage !== nextPage" @click="changeThisPage(-1)">
-        <span>上一页</span>
-      </div>
-      <div class="next" @click="changeThisPage(1)">
-        <span>下一页</span>
-      </div>
-    </footer>
-    
+      <!-- 下一页 -->
+      <footer class="foot">
+        <div
+          class="previous"
+          v-show="currentPage !== nextPage"
+          @click="changeThisPage(-1)"
+        >
+          <span>上一页</span>
+        </div>
+        <div class="next" @click="changeThisPage(1)">
+          <span>下一页</span>
+        </div>
+      </footer>
+    </div>
   </div>
 </template>
 
@@ -58,7 +62,6 @@ export default {
 
     // 更改搜索框的对象
     this.$refs.activeSearch.changeType("active");
-
   },
   created() {
     // 请求活动列表
@@ -80,14 +83,14 @@ export default {
         this.activeList = obj.data.data;
       }
     },
-    goBack2Before(){
+    goBack2Before() {
       this.RequestActiveList(this.currentPage, this.currentCount);
     },
     // 上一页 && 下一页
     changeThisPage(page) {
-      this.nextPage = this.nextPage + parseInt(page)
-      this.RequestActiveList(this.nextPage, this.currentCount)
-      window.scrollTo(0, 0)
+      this.nextPage = this.nextPage + parseInt(page);
+      this.RequestActiveList(this.nextPage, this.currentCount);
+      window.scrollTo(0, 0);
     },
   },
 };
@@ -98,7 +101,7 @@ export default {
   width: 100vw;
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 260vh;
+  height: 100vh;
 }
 .note-enter-from,
 .note-leave-to {
@@ -127,5 +130,10 @@ export default {
 .foot .next,
 .foot .previous {
   margin: 0 10px;
+}
+.content{
+  height: calc(100vh - 183px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>

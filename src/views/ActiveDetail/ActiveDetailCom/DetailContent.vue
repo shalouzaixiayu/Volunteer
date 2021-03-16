@@ -101,7 +101,8 @@ export default {
         if (type === "like") {
           bindTypeAndGet(this.$findType.study, id, {
             activeId: this.detailObj.id,
-            comMsg: "什么都没评论哟！"
+            comMsg: "什么都没评论哟！",
+            time:new Date().toLocaleDateString()
           }).then((res) => {
             this.likeMsg = res.data.status ? "我已经学习" : this.likeMsg;
             // console.log(res.data) // 没这个值
@@ -112,6 +113,7 @@ export default {
           bindTypeAndGet(this.$findType.comment, id, {
             activeId: this.detailObj.id,
             comMsg: this.comMsg,
+            time:new Date().toLocaleDateString()
           }).then(res => {
             this.sendMsg = res.data.status ? "提交成功" : this.sendMsg;
             // console.log(res)  // 这个有问题
@@ -126,7 +128,6 @@ export default {
     // 请求轮播跳转对象
     getSliderProps() {
       const sliderId = this.$route.query.id || 0;
-      console.log(sliderId + '活动详情')
       searchActiveById(sliderId).then((res) => {
         this.sliderProps = { ...res.data.data[0] };
       });

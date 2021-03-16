@@ -34,13 +34,13 @@
         <span class="right">></span>
       </div>
       <div class="comment box" @click="showHandle('comment')">
-        <span class="left">我的评论</span>
+        <span class="left">学习与评论</span>
         <span class="right">></span>
       </div>
-      <div class="study box" @click="showHandle('study')">
+      <!-- <div class="study box" @click="showHandle('study')">
         <span class="left">我的学习</span>
         <span class="right">></span>
-      </div>
+      </div> -->
       <div class="phone box" @click="showHandle('phone')">
         <span class="left">绑定手机</span>
         <span class="right">></span>
@@ -84,56 +84,14 @@
           </li>
         </ul>
       </div>
-      <!-- 我的评论区域 -->
+      <!-- 学习与评论区域 -->
       <div class="comment common" v-show="isComment&&$store.state.isLogin">
-        <h4>我的评论</h4>
+        <h4>学习与评论</h4>
         <ul>
-          <li>
-            <span class="left">我是真的很帅</span>
-            <span class="right">2021-03-12</span>
+          <li v-for="(item, i) in $store.state.obj.activeList" :key="i" @click="goComment(item.activeId)">
+            <span class="left">{{item.comMsg}}</span>
+            <span class="right">{{item.time}}</span>
           </li>
-          <li><span class="left">帅啊</span>
-            <span class="right">2021-03-12</span></li>
-          <li><span class="left">okokl</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">wahahahahah</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">一半一半</span>
-            <span class="right">2021-03-12</span></li>
-            <li>
-            <span class="left">我是真的很帅</span>
-            <span class="right">2021-03-12</span>
-          </li>
-          <li><span class="left">帅啊</span>
-            <span class="right">2021-03-12</span></li>
-          <li><span class="left">okokl</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">wahahahahah</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">一半一半</span>
-            <span class="right">2021-03-12</span></li><li>
-            <span class="left">我是真的很帅</span>
-            <span class="right">2021-03-12</span>
-          </li>
-          <li><span class="left">帅啊</span>
-            <span class="right">2021-03-12</span></li>
-          <li><span class="left">okokl</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">wahahahahah</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">一半一半</span>
-            <span class="right">2021-03-12</span></li><li>
-            <span class="left">我是真的很帅</span>
-            <span class="right">2021-03-12</span>
-          </li>
-          <li><span class="left">帅啊</span>
-            <span class="right">2021-03-12</span></li>
-          <li><span class="left">okokl</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">wahahahahah</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">一半一半</span>
-            <span class="right">2021-03-12</span></li>
         </ul>
       </div>
       <!-- 我的签名 -->
@@ -143,7 +101,7 @@
         <button class="commonbutton" @click="pushSignature" >发布</button>
       </div>
       <!-- 我的学习 -->
-      <div class="comment common" v-show="isStudy&&$store.state.isLogin">
+      <!-- <div class="comment common" v-show="isStudy&&$store.state.isLogin">
         <h4>我的学习</h4>
         <ul>
           <li>
@@ -183,7 +141,7 @@
             <li><span class="left">学习学习学习学习学习学习学习学习学习学习学习学习</span>
             <span class="right">2021-03-12</span></li>
         </ul>
-      </div>
+      </div> -->
       <!-- 我的积分 -->
       <div class="score common" v-show="isScore&&$store.state.isLogin">
         <h4>我的积分</h4>
@@ -195,7 +153,7 @@
       </div>
     </b-toast>
     <!-- 通知小吐司层 -->
-    <s-toast v-show="isSuccess">{{successStr}}</s-toast>
+    <s-toast :class="{'red': isRed}" v-show="isSuccess">{{successStr}}</s-toast>
     <!-- 图片预览区域 -->
     <div class="previewimg" v-show="isPreviewImg">
       <img ref="img" :src="previewImgUrl" alt="" @click="closePreviewImg">
@@ -206,7 +164,7 @@
 <script>
 import SToast from '../../components/common/Toast/SToast.vue'
 import BToast from '../../components/common/Toast/BToast.vue'
-import { bindTypeAndGet } from '../../network/peopleRequest.js'
+import { bindTypeAndGet, requestPeopleById } from '../../network/peopleRequest.js'
 export default {
   components: { SToast, BToast },
   data() {
@@ -214,7 +172,7 @@ export default {
       isAdmin: true,
       isBindPhone: true,
       isLoadImg: false,
-      phone: '',
+      phone: this.$store.state.obj.phone,
       error: '',
       imgList: [],
       imageList: [],   // imageList最终渲染的图片列表
@@ -225,9 +183,9 @@ export default {
       picIndex:0,
       isComment: false,
       isSignature: false,
-      signature: '我是免费的小劳动力',
-      isStudy: false,
-      isScore: false
+      signature: '',
+      isScore: false,
+      isRed: false
     }
   },
   methods: {
@@ -243,8 +201,9 @@ export default {
     showHandle(type) {
       // 初始化响应数据
       this.$store.commit('changeToastStatus')
-      this.isBindPhone = this.isLoadImg = this.isComment = this.isSignature = this.isStudy = this.isScore = false
-      this.error = this.phone = ''
+      this.isBindPhone = this.isLoadImg = this.isComment = this.isSignature = this.isScore = false
+      this.error = ''
+      this.phone = this.$store.state.obj.phone
       switch (type) {
         case 'phone':this.isBindPhone = true
           break;
@@ -254,8 +213,8 @@ export default {
           break;
         case 'signature': this.isSignature = true
           break
-        case 'study': this.isStudy = true
-          break
+        // case 'study': this.isStudy = true
+        //   break
         case 'score': this.isScore = true
           break
       }
@@ -271,14 +230,20 @@ export default {
           this.phone = ''
           return
       }
-      console.log(this.phone)
       bindTypeAndGet(this.$findType.phone, this.$store.state.obj._id, this.phone)
-      .then((res) => {
-        console.log(res)
+      .then(res => {
+        if(res.data.status) {
+          requestPeopleById(this.$store.state.obj._id).then(res2 => {
+            const {data} = res2.data
+            console.log(data)
+            window.sessionStorage.setItem('userInfo', JSON.stringify(data[0]))
+            this.$store.commit('loginStatus', data[0])
+            this.success('绑定成功', false)
+            this.$store.commit('changeToastStatus')
+            this.isBindPhone = false
+          })
+        }
       })
-      this.success('注册成功')
-      this.isBindPhone = false
-      this.$store.commit('changeToastStatus')
     },
 
 
@@ -303,7 +268,7 @@ export default {
       console.log(this.imageList)
       window.sessionStorage.setItem('imageList', this.imageList)
       this.imgList = []
-      this.success('上传成功')
+      this.success('上传成功', true)
     },
 
 
@@ -331,15 +296,22 @@ export default {
     // 请求接口改变签名
       bindTypeAndGet(this.$findType.autograph, this.$store.state.obj._id, this.signature)
       .then((res) => {
-        console.log(res)
+        if(res.data.status) {
+          requestPeopleById(this.$store.state.obj._id).then(res2 => {
+            const {data} = res2.data
+            window.sessionStorage.setItem('userInfo', JSON.stringify(data[0]))
+            this.$store.commit('loginStatus', data[0])
+            this.success('发布成功', false)
+            this.$store.commit('changeToastStatus')
+          })
+        }
       })
-      this.success('发布成功')
-      this.$store.commit('changeToastStatus')
     },
 
 
     // 成功弹框函数
-    success(value) {
+    success(value, isError) {
+      this.isRed = isError
       this.successStr = value
       this.isSuccess = true
       setTimeout(() => {
@@ -358,15 +330,24 @@ export default {
 
     // 后台模式
     goAdmin() {
+      if(!this.$store.state.obj.isManager){
+        this.success('你还不是管理员', true)
+        return
+      }
       this.$router.push(
         {name:"BackEndView"}
       )
+    },
+
+    // 跳转评论页面
+    goComment(id) {
+      this.$router.push({name: 'ActiveDetail', query: {id}})
     }
   },
   created() {
     const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
     this.$store.commit('loginStatus', obj)
-    console.log(this.$store.state.obj)
+    // console.log(this.$store.state.obj)
     this.picIndex = +window.sessionStorage.getItem('picIndex') || this.picIndex
     // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
     // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []
@@ -377,6 +358,9 @@ export default {
 </script>
 
 <style scoped>
+  .red{
+    color: red;
+  }
   .previewimg{
     z-index: 10;
     position: fixed;

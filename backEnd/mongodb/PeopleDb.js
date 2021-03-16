@@ -44,9 +44,9 @@ const PeoScheme = new mongoose.Schema({
     type: Boolean,
     default: false // 是否是志愿者
   },
-  isManager:{
-    type:Boolean,
-    default: false,  // 是否是管理员
+  isManager: {
+    type: Boolean,
+    default: false, // 是否是管理员
   },
   point: {
     type: Number,
@@ -78,7 +78,7 @@ function generatePeople(num = 5, callback) {
         faculty: "计算机信息工程",
         class: "计科三班",
         isVolunteer: true, //  注册人为真
-        isManager: true,  // 是管理员
+        isManager: true, // 是管理员
         point: 10 * (i + 1) + i
       })
       .save()
@@ -120,12 +120,14 @@ function register(info, callback) {
     ]
   }).then(data => {
     if (data.length === 0) {
-      console.log('111')
       addPeople(info, (data) => {
-        callback(data)
+        const obj = {}
+        obj.data = data
+        obj.status = true
+        obj.msg = 'success'
+        callback(obj)
       })
     } else {
-      console.log('222')
       const obj = {}
       obj.data = null
       obj.msg = "用户名或学号已存在"
@@ -168,7 +170,7 @@ function deletePeople(info, callback) {
     _id,
     sId,
     name
-  } = info
+  } = JSON.parse(info)
   const obj = {}
   people.findOneAndRemove({
     _id,
@@ -240,7 +242,7 @@ function bindAutograph(id, msg, callback) {
 // 获取现在的个人信息 return promise 
 function getPoint(_id) {
   return people.find({
-    _id:_id,
+    _id: _id,
   })
 }
 
@@ -256,7 +258,7 @@ async function bindPoint(id, point, callback) {
   people.findOneAndUpdate({
     _id,
   }, {
-    point: nowPoint + point,
+    point: nowPoint + parseInt(point),
   }).then(data => {
     if (data) {
       obj.status = true
@@ -271,25 +273,25 @@ async function bindPoint(id, point, callback) {
   })
 }
 
-  // 绑定学习记录
-async function bindStudy(id, activeId, callback) {
+// 绑定学习记录
+async function bindStudy(id, info, callback) {
   const nowPoint = await getPoint(id).then(data => data[0].point)
   let nowActiveList = await getPoint(id).then(data => data[0].activeList)
-  nowActiveList.push(activeId)
+  const _info = JSON.parse(info)
+  nowActiveList.push(_info)
   const obj = {}
-  // console.log(activeId, nowActiveList)
   people.findOneAndUpdate({
     _id: id
   }, {
     activeList: nowActiveList,
     point: nowPoint + 10
   }).then(data => {
-    if(data){
+    if (data) {
       obj.data = data
       obj.status = true
       obj.message = 'success'
       callback(obj)
-    }else{
+    } else {
       obj.data = null
       obj.status = false
       obj.message = 'id验证错误'
@@ -299,10 +301,11 @@ async function bindStudy(id, activeId, callback) {
 }
 
 // 绑定评论
-async function bindCom(id, info , callback){
+async function bindCom(id, info, callback) {
+  const _info = JSON.parse(info)
   const nowPoint = await getPoint(id).then(data => data[0].point)
   let nowActiveList = await getPoint(id).then(data => data[0].activeList)
-  nowActiveList.push(info)
+  nowActiveList.push(_info)
   const obj = {}
   people.findOneAndUpdate({
     _id: id
@@ -310,12 +313,12 @@ async function bindCom(id, info , callback){
     activeList: nowActiveList,
     point: nowPoint + 20
   }).then(data => {
-    if(data){
+    if (data) {
       obj.data = data
       obj.status = true
       obj.message = 'success'
       callback(obj)
-    }else{
+    } else {
       obj.data = null
       obj.status = false
       obj.message = 'id验证错误'
@@ -325,21 +328,24 @@ async function bindCom(id, info , callback){
 }
 
 // 绑定头像
-async function bindImage(id, info, callback){
-  const nowPoint = await getPoint(id).then(data => data[0].point)
+async function bindImage(id, info, callback) {
+  const _info = JSON.parse(info)
+  const nowPoint = await getPoint(id).then(data => {
+    return data[0].point
+  })
   const obj = {}
   people.findOneAndUpdate({
     _id: id
   }, {
-    headImg: info.headImg,   // 待修改
+    headImg: _info.headImg, // 待修改
     point: nowPoint + 1
   }).then(data => {
-    if(data){
+    if (data) {
       obj.data = data
       obj.status = true
       obj.message = 'success'
       callback(obj)
-    }else{
+    } else {
       obj.data = null
       obj.status = false
       obj.message = 'id验证错误'

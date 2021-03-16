@@ -325,8 +325,7 @@ export default {
             this.userName = ''
             return
           }
-          var regs3 = /^[a-zA-Z0-9_]{3,10}$/
-          if(!regs3.test(this.userName)) {
+          if(this.userName.length<3||this.userName.length>10) {
             this.usernameError = '用户名长度为3-10位'
             this.userName = ''
             return
@@ -352,10 +351,10 @@ export default {
   },
   created() {
     this.getRandom()
-    // bindTypeAndGet(this.$findType.image, '604f53e05ef31324649ed591', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3633693073,3344238293&fm=26&gp=0.jpg')
-    // .then((res) => {
-    //   console.log(res)
-    // })
+    bindTypeAndGet(this.$findType.image, "60506a40596edb1b6c7cba15", {headImg: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3633693073,3344238293&fm=26&gp=0.jpg'})
+    .then((res) => {
+      console.log(res)
+    })
     // console.log(this.$route.query.id)
   }
 }
