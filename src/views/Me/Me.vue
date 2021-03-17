@@ -37,10 +37,6 @@
         <span class="left">学习与评论</span>
         <span class="right">></span>
       </div>
-      <!-- <div class="study box" @click="showHandle('study')">
-        <span class="left">我的学习</span>
-        <span class="right">></span>
-      </div> -->
       <div class="phone box" @click="showHandle('phone')">
         <span class="left">绑定手机</span>
         <span class="right">></span>
@@ -55,7 +51,7 @@
       </div>
     </div>
     <!-- 后台模式区域 -->
-    <div class="admin common" v-if="isAdmin" @click="goAdmin">
+    <div class="admin common" v-if="$store.state.obj.isManager" @click="goAdmin">
       <h4>后台</h4>
       <div class="loginadm box">
         <span class="left">后台模式</span>
@@ -93,6 +89,7 @@
             <span class="right">{{item.time}}</span>
           </li>
         </ul>
+        <div class="nocomment" v-show="$store.state.obj.activeList?!$store.state.obj.activeList.length:true">还没有评论哦</div>
       </div>
       <!-- 我的签名 -->
       <div class="signature common" v-show="isSignature&&$store.state.isLogin">
@@ -100,48 +97,6 @@
         <input type="text" class="commoninput" placeholder="请输入签名" v-model="signature">
         <button class="commonbutton" @click="pushSignature" >发布</button>
       </div>
-      <!-- 我的学习 -->
-      <!-- <div class="comment common" v-show="isStudy&&$store.state.isLogin">
-        <h4>我的学习</h4>
-        <ul>
-          <li>
-            <span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span>
-          </li>
-          <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-          <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">学习学习学习学习学习学习学习学习学习学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li>
-            <span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span>
-          </li>
-          <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-          <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">学习学习学习学习学习学习学习学习学习学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li>
-            <span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span>
-          </li>
-          <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-          <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-            <li><span class="left">学习学习学习学习学习学习学习学习学习学习学习学习</span>
-            <span class="right">2021-03-12</span></li>
-        </ul>
-      </div> -->
       <!-- 我的积分 -->
       <div class="score common" v-show="isScore&&$store.state.isLogin">
         <h4>我的积分</h4>
@@ -169,7 +124,7 @@ export default {
   components: { SToast, BToast },
   data() {
     return {
-      isAdmin: true,
+      // isAdmin: true,
       isBindPhone: true,
       isLoadImg: false,
       phone: this.$store.state.obj.phone,
@@ -224,7 +179,7 @@ export default {
     // 绑定手机操作
     bindPhoneHandle() {
       // 匹配手机号的正则
-      const phoneReg = /^[1][3|5|8][0-9]{9}$/
+      const phoneReg = /^[1][3|5|7|8][0-9]{9}$/
       if (!phoneReg.test(this.phone)) {
           this.error = '请输入正确的手机号'
           this.phone = ''
@@ -235,7 +190,6 @@ export default {
         if(res.data.status) {
           requestPeopleById(this.$store.state.obj._id).then(res2 => {
             const {data} = res2.data
-            console.log(data)
             window.sessionStorage.setItem('userInfo', JSON.stringify(data[0]))
             this.$store.commit('loginStatus', data[0])
             this.success('绑定成功', false)
@@ -342,13 +296,21 @@ export default {
     // 跳转评论页面
     goComment(id) {
       this.$router.push({name: 'ActiveDetail', query: {id}})
+      this.$store.commit('changeToastStatus')
     }
   },
   created() {
+    // 以下两行代码可让页面刷新依然保持登录状态
     const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
     this.$store.commit('loginStatus', obj)
-    // console.log(this.$store.state.obj)
     this.picIndex = +window.sessionStorage.getItem('picIndex') || this.picIndex
+    requestPeopleById(this.$store.state.obj._id).then(res => {
+      if(!res.data.status) {
+        return
+      }
+      window.sessionStorage.setItem('userInfo', JSON.stringify(res.data.data[0]))
+      this.$store.commit('loginStatus', res.data.data[0])
+    })
     // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
     // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []
     // console.log(imgList)
@@ -426,6 +388,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transform: translateX(30px);
   }
   .common.score p{
     text-align: center;
@@ -542,5 +505,8 @@ export default {
   .toast .unlogin{
     text-align: center;
     color: red;
+  }
+  .nocomment{
+    text-align: center;
   }
 </style>

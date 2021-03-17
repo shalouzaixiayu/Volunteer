@@ -123,7 +123,7 @@ export default {
     },
     goLogin() {
       // 跳转登陆  传入id
-      this.$router.push({ name: "Login", query: { id: this.detailObj.id } });
+      this.$router.push({ name: "Login", query: { id: this.detailObj.id, from:"ActiveDetail" }});
     },
     // 请求轮播跳转对象
     getSliderProps() {

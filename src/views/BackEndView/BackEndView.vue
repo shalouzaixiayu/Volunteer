@@ -1,21 +1,55 @@
 <template>
   <div class="end">
-    
+    <div class="bg">
+      <!-- 管理信息 -->
+      <back-info  :AllPeople="AllPeople"
+      class="info" title="成员操作"/>
+    </div>
   </div>
 </template>
 
 <script>
+import {requestAllPeople} from '../../network/peopleRequest';
+
+import BackInfo from "./BackEndViewCom/BackInfo";
+
 export default {
-  name: 'BackEndView'
-}
+  name: "BackEndView",
+  components: {
+    BackInfo,
+  },
+  data(){
+    return{
+      AllPeople:[],  // 默认人数  
+    }
+  },
+  created() {
+    requestAllPeople().then(res => {
+      if(res.status === 200){
+        this.AllPeople  = res.data
+      }
+    })
+  }
+};
 </script>
 
 <style scoped>
-  .end{
-    width: 100vw;
-    min-height: 100vh;
-    background-image: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201903%2F19%2F20190319132316_ngyiu.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618470014&t=3ab19c90c8fc420de1eef03efe4c55bb");
-    background-size: cover;
-  }
-
+.end {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.bg {
+  width: 100%;
+  height: 100%;
+  background: url('~@/assets/img/htbg.jpg');
+  background-size: 100% 100%;
+  position: relative;
+}
+.info{
+  position: absolute;
+  top:40%;
+  left: 2%;
+}
 </style>

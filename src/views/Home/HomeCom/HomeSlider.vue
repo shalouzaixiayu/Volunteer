@@ -38,7 +38,8 @@ export default {
       this.$router.push({
         name:"ActiveDetail",
         query:{
-          id:_id
+          id:_id,
+          from:"Home"
         }
       })
     }

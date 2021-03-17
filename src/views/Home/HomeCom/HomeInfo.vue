@@ -35,6 +35,7 @@ export default {
         name:"ActiveDetail",
         query:{
           id,
+          from:"Home"
         }
       })
     }

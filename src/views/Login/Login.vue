@@ -176,9 +176,14 @@ export default {
         window.sessionStorage.setItem('userInfo', JSON.stringify(data[0]))
         this.$store.commit('loginStatus', data[0])
         // 能拿到活动id
-        if(this.$route.query.id) {
+        const { from } = this.$route.query
+        if(from === 'ActiveDetail' || from === 'Home') {
           this.$router.push({name: 'ActiveDetail', query: {id: this.$route.query.id}})
           return
+        // } else if(from == 'Home') {
+        //   this.$router.push({name: 'Home', query: {id: this.$route.query.id}})
+        //   return
+        // }
         }
         this.$router.go(-1)
       })
@@ -238,22 +243,21 @@ export default {
         this.confirmPassWord = ''
         return
       }
-      // console.log(this.gradeString.split('学院')[1], this.gradeString.split('学院')[0])
-      // console.log(this.userName, this.userNum,this.gradeString.split('学院')[1], this.gradeString.split('学院')[0], this.passWord)
       // 注册
       register({name: this.userName, sId: this.userNum, class: this.gradeString.split('学院')[1], faculty: this.gradeString.split('学院')[0], password: this.passWord})
       .then(res => {
-        console.log(res)
         if(!res.data.status) {
           this.success(res.data.msg, true)
           return
         }
         const random = Math.floor(Math.random()*5)
         window.sessionStorage.setItem('picIndex', random)
-        console.log(this.$store.state.headPicList[random])
-        bindTypeAndGet(this.$findType.image, res.data._id, this.$store.state.headPicList[random])
-        .then(res => {
-          console.log(res)
+        bindTypeAndGet(this.$findType.image, res.data.data._id, {headImg: this.$store.state.headPicList[random]})
+        .then(res2 => {
+          if(!res2.data.status) {
+            this.success('默认头像绑定失败', true)
+            return
+          }
         })
         this.userNum = this.passWord = this.checkNum = this.userName = this.confirmPassWord = this.numError = this.passWordError = this.checkError = this.usernameError = this.gradeError = this.confirmPassWordError =  ''
         this.gradeString = '系部'
@@ -351,11 +355,6 @@ export default {
   },
   created() {
     this.getRandom()
-    bindTypeAndGet(this.$findType.image, "60506a40596edb1b6c7cba15", {headImg: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3633693073,3344238293&fm=26&gp=0.jpg'})
-    .then((res) => {
-      console.log(res)
-    })
-    // console.log(this.$route.query.id)
   }
 }
 </script>
