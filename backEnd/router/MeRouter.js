@@ -47,6 +47,18 @@ Merouter.get('/onePeople', (req, res, next) => {
 })
 
 
+// 删除学生信息
+Merouter.get('/deletePeople', (req, res, next) => {
+  const {_id} = req.query
+  peopleDb.deletePeople(_id, data => res.send(JSON.stringify(data)))
+ })
+
+ // 更新学生信息
+ Merouter.get('/updatePeople', (req, res, next) => {
+  const {_id, newObj} = req.query
+  peopleDb.updatePeople(_id, newObj, data => res.send(JSON.stringify(data)))
+ })
+
 // 各种杂项
 // const findType = {
 //   autograph: '/bind/1', // 个性签名

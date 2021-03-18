@@ -164,31 +164,40 @@ function login(info, callback) {
     })
 
 }
-// 删除志愿者信息
-function deletePeople(info, callback) {
-  const {
-    _id,
-    sId,
-    name
-  } = JSON.parse(info)
+// 更新信息
+function updatePeople(id, info, callback) {
+  const  _id  = id
+  const newObj = JSON.parse(info)
   const obj = {}
-  people.findOneAndRemove({
-    _id,
-    sId,
-    name
-  }).then(data => {
+  people.findOneAndUpdate({_id}, newObj).then(data => {
     if (data) {
       obj.status = true
       obj.message = "success"
       obj.data = data
     } else {
       obj.status = false
-      obj.message = err
+      obj.message = '错误'
       obj.data = null
     }
     callback(obj)
   })
-
+}
+// 删除志愿者信息
+function deletePeople(info, callback) {
+  const  _id  = info
+  const obj = {}
+  people.findOneAndRemove({_id,}).then(data => {
+    if (data) {
+      obj.status = true
+      obj.message = "success"
+      obj.data = data
+    } else {
+      obj.status = false
+      obj.message = '错误'
+      obj.data = null
+    }
+    callback(obj)
+  })
 }
 
 // 绑定手机号
@@ -402,6 +411,7 @@ module.exports = {
   login,
   register,
   deletePeople,
+  updatePeople,
   searchByIdAndSid,
   bindNumber,
   bindAutograph,

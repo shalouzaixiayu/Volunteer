@@ -90,3 +90,22 @@ export function bindTypeAndGet(findType, id, payload){
 }
 
 
+export function deletePeople(_id){
+  return requestAxios({
+    url:"deletePeople",
+    method:'GET',
+    params: {
+      _id,
+    }
+  })
+}
+export function updatePeople(_id, newObj){
+  return requestAxios({
+    url:"updatePeople",
+    method:'GET',
+    params: {
+      _id,
+      newObj
+    }
+  })
+}

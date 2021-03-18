@@ -3,44 +3,45 @@
     <div class="title" @click="showTb">
       <span class="iconfont icon-chuli1">{{ title }}</span>
       <span class="len iconfont icon-renshu"
-        >总人数: {{ AllPeople.length }}</span
+        >总数: {{ Allactive.length }}</span
       >
     </div>
     <div id="tb" v-show="isShowTb">
       <table class="tb">
         <tr class="oddrowcolor">
-          <th>昵称</th>
-          <th>学号</th>
-          <th>是否为管理员</th>
+          <th>标题</th>
+          <th>组织</th>
+          <th>时间</th>
           <th>更多操作</th>
         </tr>
         <tr
-          v-for="(item, i) in AllPeople"
+          v-for="(item, i) in Allactive"
           :key="i"
           :class="{ oddrowcolor: i % 2 !== 0 ? true : false }"
         >
-          <td>{{ item.name }}</td>
-          <td>{{ item.sId }}</td>
-          <td>{{ item.isManager ? "是" : "否" }}</td>
+          <td class="btWidth">{{ item.title }}</td>
+          <td>{{ item.sponsor }}</td>
+          <td>{{ item.timer }}</td>
           <td class="iconfont icon-chuli3" @click="showMore(item)"></td>
         </tr>
       </table>
     </div>
-
     <!-- 模块框 -->
     <div class="mt" v-show="showMt">
       <div class="changeInfo">
-        <span class="iconfont icon-chuli1 one">{{ currentObj.name }}</span>
+        <span class="iconfont icon-chuli1 one">{{ currentObj.title }}</span>
         <div v-for="(value, key) in currentObj" :key="key" class="change">
           <span class="title">{{ changeKey(key) }}: </span>
-          <input type="text" v-model.lazy="currentObj[key]" />
+          <textarea v-if="key === 'content'" 
+           v-model.lazy="currentObj[key]" cols="30" rows="10"></textarea>
+          <input v-else type="text" v-model.lazy="currentObj[key]" />
         </div>
       </div>
       <footer>
         <span class="tip">修改之后就可以点击提交进行更改.</span>
         <div class="handle">
-          <span @click="_updatePeople">提交</span>
-          <span @click="_deletePeople">删除</span>
+          <span @click="_updateActive">提交</span>
+          <span @click="_deleteActive">删除</span>
           <span @click="showMt = false">关闭</span>
         </div>
       </footer>
@@ -49,20 +50,15 @@
 </template>
 
 <script>
-import { deletePeople, updatePeople } from "../../../network/peopleRequest";
+import { updateActive, deleteActive } from "../../../network/activeRequest";
 export default {
-  name: "BackInfo",
+  name: "BackActive",
   props: {
-    kind: {
-      // 操作的种类
-      type: String,
-      default: "",
-    },
     title: {
       type: String,
       default: "",
     },
-    AllPeople: {
+    Allactive: {
       //  全部的人
       type: Array,
       default() {
@@ -74,7 +70,7 @@ export default {
     return {
       showMt: false,
       isShowTb: false,
-      currentObj: {}, // 当前操作的人
+      currentObj: {}, // 当前操作的活动
     };
   },
   methods: {
@@ -83,38 +79,24 @@ export default {
     },
     changeKey(key) {
       switch (key) {
-        case "headImg":
-          return "头像";
-        case "phone":
-          return "电话";
-        case "activeList":
-          return "学习记录";
-        case "isVolunteer":
-          return "志愿者";
-        case "isManager":
-          return "管理员";
-        case "point":
-          return "得分";
-        case "isBad":
-          return "失信";
-        case "bindAutograph":
-          return "个性签名";
-        case "name":
-          return "姓名";
-        case "password":
-          return "密码";
-        case "sId":
-          return "学号";
-        case "faculty":
-          return "院系";
-        case "class":
-          return "班级";
-        case "createTime":
+        case 'id':
+          return '序号'
+        case "otherMsg":
+          return "感受";
+        case "sponsor":
+          return "组织机构";
+        case "timer":
           return "创建时间";
+        case "title":
+          return "标题";
+        case "image":
+          return "图片";
+        case "content":
+          return "内容";
         case "_id":
           return "ID";
-        case "__v":
-          return "其他";
+        case "totalPeople":
+          return "预计人数";
       }
     },
     showMore(item) {
@@ -122,16 +104,16 @@ export default {
       this.currentObj = item;
       return;
     },
-    _updatePeople(){
-      updatePeople(this.currentObj._id, this.currentObj).then(res => {
+    _updateActive(){
+      updateActive(this.currentObj._id, this.currentObj).then(res => {
          if (res.data.status === true) {
           this.showMt = false;
           window.location.reload();
         }
       })
     },
-    _deletePeople() {
-      deletePeople(this.currentObj._id).then((res) => {
+    _deleteActive() {
+      deleteActive(this.currentObj._id).then((res) => {
         if (res.data.status === true) {
           this.showMt = false;
           window.location.reload();
@@ -158,6 +140,7 @@ export default {
 .info .title .len {
   float: right;
 }
+
 #tb{
   height: 39vh;
   overflow: auto;
@@ -170,7 +153,7 @@ table.tb {
   border-color: #a9c6c9;
   border-collapse: collapse;
   text-align: center;
-  margin: 40px 0;
+  margin: 20px 0;
 }
 table.tb th {
   border-width: 1px;
@@ -183,6 +166,8 @@ table.tb td {
   padding: 8px;
   border-style: solid;
   border-color: #a9c6c9;
+  width: 70px;
+  overflow:hidden
 }
 .oddrowcolor {
   background-color: #d4e3e5;
@@ -204,6 +189,11 @@ table.tb td {
 .changeInfo {
   padding: 10px;
   color: rgba(222, 222, 222);
+}
+.change textarea{
+  resize: none;
+  vertical-align: middle;
+  background-color: rgba(222, 222, 222);
 }
 .changeInfo .one {
   font-size: 18px;

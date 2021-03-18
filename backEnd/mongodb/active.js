@@ -127,8 +127,46 @@ function searchActiveById(id, callback) {
     })
 }
 
+
+// 更新信息
+function updateActive(id, info, callback) {
+  const  _id  = id
+  const newObj = JSON.parse(info)
+  const obj = {}
+  active.findOneAndUpdate({_id}, newObj).then(data => {
+    if (data) {
+      obj.status = true
+      obj.message = "success"
+      obj.data = data
+    } else {
+      obj.status = false
+      obj.message = '错误'
+      obj.data = null
+    }
+    callback(obj)
+  })
+}
+// 删除志愿者信息
+function deleteActive(info, callback) {
+  const  _id  = info
+  const obj = {}
+  active.findOneAndRemove({_id,}).then(data => {
+    if (data) {
+      obj.status = true
+      obj.message = "success"
+      obj.data = data
+    } else {
+      obj.status = false
+      obj.message = '错误'
+      obj.data = null
+    }
+    callback(obj)
+  })
+}
 module.exports = {
   getActiveList,
   searchActiveByTitle,
   searchActiveById,
+  deleteActive,
+  updateActive
 }

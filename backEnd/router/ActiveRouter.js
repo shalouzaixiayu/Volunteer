@@ -31,4 +31,16 @@ activeRouter.get('/idSearch', (req, res, next) => {
 })
 
 
+// 删除
+activeRouter.get('/deleteActive', (req, res, next) => {
+  const {_id} = req.query
+  activeDb.deleteActive(_id, data => res.send(JSON.stringify(data)))
+ })
+
+ // 更新
+ activeRouter.get('/updateActive', (req, res, next) => {
+  const {_id, newObj} = req.query
+  activeDb.updateActive(_id, newObj, data => res.send(JSON.stringify(data)))
+ })
+
 module.exports = activeRouter

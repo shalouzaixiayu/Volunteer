@@ -51,3 +51,23 @@ export function searchActiveById(id){
     }
   })
 }
+
+export function deleteActive(_id){
+  return requestAxios({
+    url:"deleteActive",
+    method:'GET',
+    params: {
+      _id,
+    }
+  })
+}
+export function updateActive(_id, newObj){
+  return requestAxios({
+    url:"updateActive",
+    method:'GET',
+    params: {
+      _id,
+      newObj
+    }
+  })
+}
