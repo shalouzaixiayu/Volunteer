@@ -222,7 +222,7 @@ export default {
       console.log(this.imageList)
       window.sessionStorage.setItem('imageList', this.imageList)
       this.imgList = []
-      this.success('上传成功', true)
+      this.success('上传成功', false)
     },
 
 

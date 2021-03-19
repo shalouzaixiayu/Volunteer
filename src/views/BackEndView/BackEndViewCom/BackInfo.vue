@@ -159,8 +159,11 @@ export default {
   float: right;
 }
 #tb{
-  height: 39vh;
+  height: 45vh;
   overflow: auto;
+  position: relative;
+  z-index:10;
+  background-color:rgb(226, 216, 217);
 }
 table.tb {
   font-family: verdana, arial, sans-serif;

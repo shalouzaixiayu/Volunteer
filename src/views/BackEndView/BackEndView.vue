@@ -6,13 +6,11 @@
         :AllPeople="AllPeople"
         class="info"
         title="成员操作"
-        @click="layer"
       />
       <back-active
         :Allactive="Allactive"
-        class="info2"
+        class="info2" 
         title="活动操作"
-        :class="{ changeInfo: change }"
       />
     </div>
   </div>
@@ -51,9 +49,9 @@ export default {
       });
   },
   methods: {
-    layer() {
-      this.change = !this.change;
-    },
+    // layer() {
+    //   this.change = !this.change;
+    // },
   },
 };
 </script>
