@@ -2,16 +2,8 @@
   <div class="end">
     <div class="bg">
       <!-- 管理信息 -->
-      <back-info
-        :AllPeople="AllPeople"
-        class="info"
-        title="成员操作"
-      />
-      <back-active
-        :Allactive="Allactive"
-        class="info2" 
-        title="活动操作"
-      />
+      <back-info :AllPeople="AllPeople" class="info" title="成员操作" />
+      <back-active :Allactive="Allactive" class="info2" title="活动操作" />
     </div>
   </div>
 </template>
@@ -58,15 +50,13 @@ export default {
 
 <style scoped>
 .end {
-  width: 100vw;
-  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
 }
 .bg {
   width: 100%;
   height: 100%;
-  background: url("~@/assets/img/htbg.jpg");
+  background: url("~@/assets/img/htbg.jpg") ;
   background-size: 100% 100%;
   position: relative;
 }

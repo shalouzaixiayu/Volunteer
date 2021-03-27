@@ -1,5 +1,5 @@
 <template>
-  <div class="info">
+  <div class="infos">
     <div class="title" @click="showTb">
       <span class="iconfont icon-chuli1">{{ title }}</span>
       <span class="len iconfont icon-renshu"
@@ -30,10 +30,11 @@
     <div class="mt" v-show="showMt">
       <div class="changeInfo">
         <span class="iconfont icon-chuli1 one">{{ currentObj.title }}</span>
-        <div v-for="(value, key) in currentObj" :key="key" class="change">
+        <div v-for="(value, key) in currentObj" :key="key" class="change"
+         :class="{bigText: key === 'content'}">
           <span class="title">{{ changeKey(key) }}: </span>
           <textarea v-if="key === 'content'" 
-           v-model.lazy="currentObj[key]" cols="30" rows="10"></textarea>
+           v-model.lazy="currentObj[key]"></textarea>
           <input v-else type="text" v-model.lazy="currentObj[key]" />
         </div>
       </div>
@@ -125,27 +126,30 @@ export default {
 </script>
 
 <style scoped>
-.info {
-  padding: 5px;
+.infos {
   font-size: 14px;
-  width: 100vw;
+  width: 100%;
+  margin-top: 30px;
   margin-bottom: 30px;
   position: relative;
 }
-.info .title {
+.infos .title {
+  text-align: center;
   height: 20px;
   line-height: 20px;
   width: 80%;
 }
-.info .title .len {
+.infos .title .len {
   float: right;
 }
 
 #tb{
-  height: 39vh;
-  overflow: auto;
+  height: 45vh;
+  overflow-x:hidden;
+  overflow-y: auto;
 }
 table.tb {
+  width: 90%;
   font-family: verdana, arial, sans-serif;
   font-size: 11px;
   color: #333333;
@@ -153,11 +157,11 @@ table.tb {
   border-color: #a9c6c9;
   border-collapse: collapse;
   text-align: center;
-  margin: 20px 0;
+  margin: 40px 20px;
 }
 table.tb th {
   border-width: 1px;
-  padding: 8px;
+  padding: 10px;
   border-style: solid;
   border-color: #a9c6c9;
 }
@@ -176,24 +180,41 @@ table.tb td {
   background-color: #c3dde0;
 }
 .mt {
-  width: 80%;
+  width: 90%;
   height: 300px;
+  overflow-x:hidden;
+  overflow-y: scroll;
   background-color: rgba(1, 1, 1, 0.3);
   position: absolute;
   top: 10px;
   left: 5%;
   border-radius: 15px;
-  z-index: 2;
-  overflow: auto;
+  z-index: 3;
+  text-align: center;
 }
 .changeInfo {
   padding: 10px;
   color: rgba(222, 222, 222);
 }
 .change textarea{
+  width: 300px;
+  height: 300px;
+  text-indent: 30px;
+  line-height: 20px;
+  /* display: none; */
+  border-radius: 15px;
+  padding-top: 20px;
   resize: none;
   vertical-align: middle;
   background-color: rgba(222, 222, 222);
+  transition: all .5s ease;
+}
+.change textarea:focus{
+  width: 400px;
+  height: 400px;
+}
+.bigText{
+  height: 400px !important;
 }
 .changeInfo .one {
   font-size: 18px;
@@ -203,17 +224,21 @@ table.tb td {
 }
 .changeInfo .change {
   padding: 5px;
+  font-size: 18px;
+  height: 40px;
 }
 .changeInfo .change input {
   background-color: rgba(222, 222, 222);
   border-radius: 15px;
   text-align: center;
-  width: 100px;
-  transition: width 0.6s ease;
+  width: 250px;
+  transition: width 0.8s ease;
   font-size: 14px;
+  line-height: 25px;
+  margin-left: 10px;
 }
 .changeInfo .change input:focus {
-  width: 210px;
+  width: 350px;
 }
 footer {
   color: rgba(222, 222, 222);

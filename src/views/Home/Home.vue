@@ -16,7 +16,7 @@
       <div class="end">
         <img src="@/assets/logoko.png" alt="" />
         <div class="msg">
-          <span>学志愿 做志愿</span>
+          <span>志愿者之家</span>
         </div>
       </div>
       <div class="github">{{ endMsg }}</div>
@@ -76,20 +76,21 @@ export default {
 .home {
   width: 100vw;
   overflow: hidden;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f3f2f2;
 }
 .content{
   height: calc(100vh - 294px);
   overflow-y: scroll;
   overflow-x: hidden;
+  padding-left: 9px;
 }
 .bg2 {
   width: 100%;
   height: 120px;
 }
 .addpadding {
-  padding-bottom: 50px;
+  padding-bottom: 80px;
 }
 .cl {
   height: 0;
@@ -98,12 +99,16 @@ export default {
   border-bottom-color: rgb(209, 78, 68);
   transform: translateY(10px);
 }
+.end {
+  text-align: center;
+}
 .end img {
   transform: translateX(-20px);
 }
 .end .msg {
   background-color: rgb(243, 242, 242);
   height: 100px;
+  line-height: 100px;
   width: 100%;
   transform: translateY(-40px);
   text-align: center;

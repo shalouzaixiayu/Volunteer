@@ -35,8 +35,6 @@
 import Search from "../../components/common/Search/Search";
 
 import { requestActiveList } from "../../network/activeRequest";
-
-// import {requestActiveList} from '../../network/activeRequest';
 import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
 
@@ -90,19 +88,14 @@ export default {
     changeThisPage(page) {
       this.nextPage = this.nextPage + parseInt(page);
       this.RequestActiveList(this.nextPage, this.currentCount);
-      window.scrollTo(0, 0);
+      // 移动到最上面
+      document.querySelector('.content').scrollTo(0, 0);  
     },
   },
 };
 </script>
 
 <style scoped>
-.actives {
-  width: 100vw;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  height: 100vh;
-}
 .note-enter-from,
 .note-leave-to {
   opacity: 0;
@@ -125,7 +118,8 @@ export default {
 .foot {
   display: flex;
   justify-content: center;
-  margin: 10px 0;
+  margin: 30px 0;
+  padding-bottom: 40px;
 }
 .foot .next,
 .foot .previous {

@@ -31,17 +31,12 @@ export default {
     })
   
   },
-  methods:{
-
-  }
-
 }
 </script>
 
 <style scoped>
   .detail{
-    /* height: 280vh; */
-    width: 100vw;
-    overflow: hidden;
+    width: 100%;
+    min-height: 100%;
   }
 </style>

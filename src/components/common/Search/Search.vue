@@ -50,9 +50,9 @@ export default {
   border-radius: 42px;
   border: 1px solid #324b4e;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: width 0.7s;
 }
 .search input:focus {
-  width: 300px;
+  width: 500px;
 }
 </style>

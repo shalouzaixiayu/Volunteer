@@ -34,7 +34,7 @@ export default {
     goToActiveDetail() {
       this.$router.push({
         name: "ActiveDetail",
-        params: {
+        query: {
           id: this.item.id,
         },
       });

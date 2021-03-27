@@ -142,8 +142,7 @@ export default {
 <style scoped>
 .detail {
   width: 100%;
-  /* height: 100%; */
-  margin: 20px 5px;
+  margin: 40px 5px;
   color: #a90000;
 }
 .detail h1 {
@@ -155,7 +154,7 @@ export default {
 .info {
   text-align: center;
   font-size: 12px;
-  margin: 12px;
+  margin: 15px 0;
 }
 .info .timer {
   margin-left: 8px;
@@ -165,15 +164,18 @@ export default {
   text-indent: 32px;
   line-height: 20px;
   font-size: 16px;
-  /* padding: 0 3px; */
+  padding: 0 10px 0 0;
+  display: flex;
+  align-items:center;
+  align-content: center;
 }
 .content img {
-  height: 350px;
-  width: 350px;
+  order: -1;
+  width: 300px;
   margin: 10px 5px;
 }
 .addSreenHeight {
-  padding: 80px 0;
+  padding: 70px 0;
 }
 .like {
   margin: 20px 0;
@@ -195,6 +197,7 @@ export default {
 .comment textarea {
   border: 1px solid #ccc;
   resize: none;
+  padding: 10px 0 0 15px;
 }
 .small {
   z-index: 99;

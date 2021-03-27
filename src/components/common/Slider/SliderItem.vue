@@ -13,8 +13,8 @@ export default {
 <style>
   .sitem{
     flex-shrink: 0;
-    width: 100vw;
-    height:200px;
+    width: 100%;
+    height:300px;
   }
   .sitem img{
     width: 100%;  

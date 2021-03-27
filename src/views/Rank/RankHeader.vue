@@ -16,7 +16,7 @@
 <script>
 
 export default {
-  name:"RankItem",
+  name:"RankHead",
   props: ['list']
 }
 </script>

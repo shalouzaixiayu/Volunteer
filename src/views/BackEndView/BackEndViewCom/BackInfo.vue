@@ -1,9 +1,9 @@
 <template>
-  <div class="info">
+  <div class="infos">
     <div class="title" @click="showTb">
       <span class="iconfont icon-chuli1">{{ title }}</span>
       <span class="len iconfont icon-renshu"
-        >总人数: {{ AllPeople.length }}</span
+        >总数: {{ AllPeople.length }}</span
       >
     </div>
     <div id="tb" v-show="isShowTb">
@@ -143,29 +143,32 @@ export default {
 </script>
 
 <style scoped>
-.info {
-  padding: 5px;
+.infos {
   font-size: 14px;
-  width: 100vw;
+  width: 100%;
   margin-bottom: 30px;
   position: relative;
+  text-align: center;
 }
-.info .title {
+.infos .title {
+  margin-top: 20px;
   height: 20px;
   line-height: 20px;
   width: 80%;
 }
-.info .title .len {
+.infos .title .len {
   float: right;
 }
 #tb{
   height: 45vh;
-  overflow: auto;
+  overflow-x:hidden;
+  overflow-y: auto;
   position: relative;
-  z-index:10;
+  z-index:2;
   background-color:rgb(226, 216, 217);
 }
 table.tb {
+  width: 90%;
   font-family: verdana, arial, sans-serif;
   font-size: 11px;
   color: #333333;
@@ -173,11 +176,11 @@ table.tb {
   border-color: #a9c6c9;
   border-collapse: collapse;
   text-align: center;
-  margin: 40px 0;
+  margin: 40px 20px;
 }
 table.tb th {
   border-width: 1px;
-  padding: 8px;
+  padding: 10px;
   border-style: solid;
   border-color: #a9c6c9;
 }
@@ -194,14 +197,15 @@ table.tb td {
   background-color: #c3dde0;
 }
 .mt {
-  width: 80%;
+  width: 90%;
   height: 300px;
+  overflow: scroll;
   background-color: rgba(1, 1, 1, 0.3);
   position: absolute;
   top: 10px;
   left: 5%;
   border-radius: 15px;
-  z-index: 2;
+  z-index: 5;
   overflow: auto;
 }
 .changeInfo {
@@ -216,17 +220,21 @@ table.tb td {
 }
 .changeInfo .change {
   padding: 5px;
+  height: 40px;
+  font-size: 18px;
 }
 .changeInfo .change input {
   background-color: rgba(222, 222, 222);
   border-radius: 15px;
+  margin-left: 10px;
   text-align: center;
-  width: 100px;
+  width: 200px;
+  line-height: 25px;
   transition: width 0.6s ease;
   font-size: 14px;
 }
 .changeInfo .change input:focus {
-  width: 210px;
+  width: 300px;
 }
 footer {
   color: rgba(222, 222, 222);
