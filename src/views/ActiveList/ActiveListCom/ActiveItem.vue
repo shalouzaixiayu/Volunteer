@@ -3,7 +3,7 @@
     <div class="item" @click="goToActiveDetail">
       <h3>{{ item.title }}</h3>
       <div class="content">
-        <img :src="item.image[0] || defaultImg"/>
+        <img :src="item.image[0] || defaultImg" />
         <p>{{ item.content[0] }}</p>
       </div>
       <footer>
@@ -26,9 +26,9 @@ export default {
     },
   },
   computed: {
-    defaultImg(){
+    defaultImg() {
       return require("../../../assets/img/defaultImg.jpg");
-    }
+    },
   },
   methods: {
     goToActiveDetail() {
@@ -50,6 +50,7 @@ export default {
   height: 130px;
   width: 100%;
   border-bottom: 1px solid #ddd;
+  cursor: pointer;
 }
 .item h3 {
   display: inline-block;

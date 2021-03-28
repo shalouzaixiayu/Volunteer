@@ -2,7 +2,7 @@
   <div>
     <!-- 导航 -->
     <nav-bar>
-      <template #left> 
+      <template #left>
         <span class="lt" @click="goback">&lt;</span>
       </template>
       <template #center>
@@ -17,25 +17,26 @@ import NavBar from "../../../components/common/Navbar/NavBar.vue";
 export default {
   name: "ActiveNavbar",
   components: {
-    NavBar
+    NavBar,
   },
   computed: {
-    msg(){
+    msg() {
       return this.$route.meta.title;
-    }  
+    },
   },
   methods: {
-    goback(){
-      this.$emit("goBack2Before")
-    }  
-  }
+    goback() {
+      this.$emit("goBack2Before");
+    },
+  },
 };
 </script>
 
 <style scoped>
-.lt{
-    font-size: 30px;
-    font-weight: 300;
-    margin-left:-25px;
-  } 
+.lt {
+  font-size: 30px;
+  font-weight: 300;
+  margin-left: -25px;
+  cursor: pointer;
+}
 </style>

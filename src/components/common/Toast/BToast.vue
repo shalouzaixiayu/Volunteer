@@ -1,6 +1,6 @@
 <template>
   <div ref="toastcontainer" class="toastcontainer" v-show="$store.state.isShow" @click="toastOut">
-    <div class="toast" @click="a">
+    <div class="toast">
       <slot></slot>
     </div>
   </div>
@@ -23,10 +23,11 @@ export default {
 <style scoped>
 .toastcontainer{
     position: fixed;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     top: 0;
-    width: 100vw;
-    height: 94vh;
+    width: 750px;
+    height: 100vh;
     background-color: rgba(0, 0, 0, .3);
   }
   .toastcontainer .toast{

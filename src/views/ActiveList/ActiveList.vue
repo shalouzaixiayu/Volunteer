@@ -10,9 +10,30 @@
     </div>
     <!-- 搜索框 -->
     <search ref="activeSearch" @activeSearch="activeSearch" />
+
+    <!-- 切换活动状态 -->
+    <div class="toggleActive">
+      <div
+        v-for="(item, index) in ActiveType"
+        :key="index"
+        :class="{ active: index === currentType }"
+        @click="toggleActive(index)"
+      >
+        <span>{{ item }}</span>
+      </div>
+    </div>
     <div class="content">
-      <!-- 活动列表 -->
-      <active-item v-for="item in activeList" :key="item" :item="item" />
+      <!-- 活动列表 现在要判断 是新的 还是已有的 -->
+      <template v-if="currentType === 1">
+        <active-item v-for="item in activeList" :key="item" :item="item" />
+      </template>
+
+      <template v-if="currentType === 0">
+        <!-- 当没数据的时候显示这个  -->
+        <error v-if="NewActiveList.length === 0"/>
+        <!-- 如果有数据就显示下面的 -->
+
+      </template>
 
       <!-- 下一页 -->
       <footer class="foot">
@@ -37,6 +58,7 @@ import Search from "../../components/common/Search/Search";
 import { requestActiveList } from "../../network/activeRequest";
 import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
+import Error from './ActiveListCom/Error';
 
 export default {
   name: "ActiveList",
@@ -44,15 +66,19 @@ export default {
     ActiveNavbar,
     ActiveItem,
     Search,
+    Error,
   },
   data() {
     return {
       showNote: false,
       note: "PS:以下志愿者活动由爬虫代码得来，仅仅作为项目需求，无其他用处！",
-      activeList: [], // 活动列表
+      activeList: [], // 已有活动列表
       currentPage: 5, // 当前页
       currentCount: 10, // 最大数
       nextPage: 5, // 下一页
+      NewActiveList: [],  //  新创建的活动
+      ActiveType: ["正在筹备", "以往内容"], //  活动类型 用于切换状态
+      currentType: 1, //  现在是以往内容
     };
   },
   mounted() {
@@ -89,7 +115,13 @@ export default {
       this.nextPage = this.nextPage + parseInt(page);
       this.RequestActiveList(this.nextPage, this.currentCount);
       // 移动到最上面
-      document.querySelector('.content').scrollTo(0, 0);  
+      document.querySelector(".content").scrollTo(0, 0);
+    },
+    // 切换当前活动状态
+    toggleActive(index) {
+      this.currentType = index;
+      // 更改搜索框的搜索路径
+      this.$refs.activeSearch.changeType("nowActive");
     },
   },
 };
@@ -115,18 +147,38 @@ export default {
   white-space: nowrap;
   margin-bottom: 10px;
 }
+.toggleActive {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 10px;
+  transform: translateY(-10px);
+  font-size: 16px;
+  color: #a90000;
+  cursor: pointer;
+}
+.toggleActive div {
+  padding: 10px;
+  margin-right: 10px;
+  background-color: #fff;
+  opacity: 0.8;
+}
+.toggleActive div.active {
+  background-color: #a90000;
+  color: #fff;
+}
 .foot {
   display: flex;
   justify-content: center;
   margin: 30px 0;
   padding-bottom: 40px;
+  cursor: pointer;
 }
 .foot .next,
 .foot .previous {
   margin: 0 10px;
 }
-.content{
-  height: calc(100vh - 183px);
+.content {
+  height: calc(100vh - 219px);
   overflow-y: auto;
   overflow-x: hidden;
 }

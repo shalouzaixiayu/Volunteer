@@ -110,7 +110,7 @@
 
 <script>
 import NavBar from '../../components/common/Navbar/NavBar.vue'
-import SToast from '../../components/common/Toast/SToast.vue' 
+import SToast from '../../components/common/Toast/SToast.vue'
 import { login, register, bindTypeAndGet } from '../../network/peopleRequest.js'
 export default {
   components: { NavBar, SToast },
@@ -374,6 +374,7 @@ export default {
     background-color: rgb(243, 240, 240);
   }
   .back{
+    cursor: pointer;
     text-align: left;
     font-size: 26px;
     color: #000;
@@ -419,7 +420,7 @@ export default {
     margin-right: 5px;
     flex: 3;
     border: 1px solid #ccc;
-    padding-left: 24px;
+    padding-left: 56px;
     border-radius: 7px;
   }
   .formcontainer .checkcode input{
@@ -442,11 +443,13 @@ export default {
     background-color: #04BE02;
     color: #fff;
     font-size: 16px;
+    cursor: pointer;
   }
   .register{
     margin-top: 133px;
     text-align: center;
     font-size: 12px;
+    cursor: pointer;
   }
   .register span{
     color: #04BE02;
@@ -457,16 +460,17 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
   }
   .formcontainer .grade .left{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 8px;
+    margin-left: 41px;
     color:rgb(95, 94, 94);
   }
   .formcontainer .grade .left.font{
-    font-size: 12px;
+    font-size: 13px;
   }
   .formcontainer .grade .left .iconfont{
     margin-right: 10px;

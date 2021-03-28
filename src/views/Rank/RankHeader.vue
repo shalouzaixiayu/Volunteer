@@ -73,10 +73,10 @@ export default {
     flex: 2;
   }
   .item.second{
-    left: 23px;
+    left: 95px;
   }
   .item.third{
-    right: 23px;
+    right: 95px;
   }
   .item.first .img img{
     width: 100px;

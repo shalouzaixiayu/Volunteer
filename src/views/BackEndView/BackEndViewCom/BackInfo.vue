@@ -2,9 +2,7 @@
   <div class="infos">
     <div class="title" @click="showTb">
       <span class="iconfont icon-chuli1">{{ title }}</span>
-      <span class="len iconfont icon-renshu"
-        >总数: {{ AllPeople.length }}</span
-      >
+      <span class="len iconfont icon-renshu">总数: {{ AllPeople.length }}</span>
     </div>
     <div id="tb" v-show="isShowTb">
       <table class="tb">
@@ -22,7 +20,7 @@
           <td>{{ item.name }}</td>
           <td>{{ item.sId }}</td>
           <td>{{ item.isManager ? "是" : "否" }}</td>
-          <td class="iconfont icon-chuli3" @click="showMore(item)"></td>
+          <td class="iconfont icon-chuli3 point" @click="showMore(item)"></td>
         </tr>
       </table>
     </div>
@@ -39,9 +37,9 @@
       <footer>
         <span class="tip">修改之后就可以点击提交进行更改.</span>
         <div class="handle">
-          <span @click="_updatePeople">提交</span>
-          <span @click="_deletePeople">删除</span>
-          <span @click="showMt = false">关闭</span>
+          <span @click="_updatePeople" class="point">提交</span>
+          <span @click="_deletePeople" class="point">删除</span>
+          <span @click="showMt = false" class="point">关闭</span>
         </div>
       </footer>
     </div>
@@ -78,7 +76,7 @@ export default {
     };
   },
   methods: {
-    showTb(){
+    showTb() {
       this.isShowTb = !this.isShowTb;
     },
     changeKey(key) {
@@ -122,13 +120,13 @@ export default {
       this.currentObj = item;
       return;
     },
-    _updatePeople(){
-      updatePeople(this.currentObj._id, this.currentObj).then(res => {
-         if (res.data.status === true) {
+    _updatePeople() {
+      updatePeople(this.currentObj._id, this.currentObj).then((res) => {
+        if (res.data.status === true) {
           this.showMt = false;
           window.location.reload();
         }
-      })
+      });
     },
     _deletePeople() {
       deletePeople(this.currentObj._id).then((res) => {
@@ -143,6 +141,9 @@ export default {
 </script>
 
 <style scoped>
+.point{
+  cursor: pointer;
+}
 .infos {
   font-size: 14px;
   width: 100%;
@@ -154,18 +155,23 @@ export default {
   margin-top: 20px;
   height: 20px;
   line-height: 20px;
-  width: 80%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
 }
-.infos .title .len {
-  float: right;
+.infos .title span:nth-child(1){
+  width: 40%;
 }
-#tb{
+.infos .title span:nth-child(2) {
+  width: 40%;
+}
+#tb {
   height: 45vh;
-  overflow-x:hidden;
+  overflow-x: hidden;
   overflow-y: auto;
   position: relative;
-  z-index:2;
-  background-color:rgb(226, 216, 217);
+  z-index: 2;
+  background-color: rgb(226, 216, 217);
 }
 table.tb {
   width: 90%;

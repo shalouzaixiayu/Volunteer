@@ -29,6 +29,10 @@ export default createStore({
     // 改变吐司状态
     changeToastStatus(state) {
       state.isShow = !state.isShow
+    },
+    out(state){
+      // 推出清空函数
+      state.obj = {}
     }
   },
   actions: {},

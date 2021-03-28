@@ -25,14 +25,13 @@
     <span class="why1" @click="showMore(3)">做志愿可以收获什么 ? </span>
     <div v-show="isShow3">
       <p>
-       奉献社会。志愿者通过参与志愿工作,有机会为社会出力,尽一份公民责任和义务。
-      提供学习的机会。志愿者在参与志愿工作过程中,除了可以帮助人以外,更可培养自己的组织及领导能力。学习新知识、增强自信心及学会与人...
+        奉献社会。志愿者通过参与志愿工作,有机会为社会出力,尽一份公民责任和义务。
+        提供学习的机会。志愿者在参与志愿工作过程中,除了可以帮助人以外,更可培养自己的组织及领导能力。学习新知识、增强自信心及学会与人...
       </p>
       <p>
         丰富生活体验。志愿者利用闲余时间,参与一些有意义的工作和活动,既可扩大自己的生活圈子,更可亲身体验社会的人和事,加深对社会的认识,这对志愿者自身的成长和提高是十分有益的......
       </p>
     </div>
-
   </div>
 </template>
 
@@ -52,7 +51,7 @@ export default {
         this.isShow1 = !this.isShow1;
       } else if (index === 2) {
         this.isShow2 = !this.isShow2;
-      }else if (index === 3){
+      } else if (index === 3) {
         this.isShow3 = !this.isShow3;
       }
     },
@@ -73,15 +72,15 @@ export default {
   font-size: 16px;
   padding: 20px;
   line-height: 16px;
+  cursor: pointer;
 }
-.why1::before{
+.why1::before {
   content: "😊     ";
 }
-.why p{
+.why p {
   text-indent: 32px;
   line-height: 30px;
   margin: 10px 5px;
   text-align: center;
 }
-
 </style>

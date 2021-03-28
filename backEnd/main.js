@@ -4,7 +4,7 @@
 
  const Merouter = require('./router/MeRouter') // 处理我的页面
  const activeRouter = require('./router/ActiveRouter') // 处理活动列表
-
+ const NewRouter  = require('./router/NewRouter')  // 处理新活动
 
  const port = 3000
 
@@ -20,6 +20,7 @@
  //    methods:['GET', 'POST']
  //  }))
 
+ // 搞定跨域问题
  app.use((req, res, next) => {
    res.header('Access-Control-Allow-Origin', "*");
    res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length,Authorization,Accept,X-Requested-With');
@@ -34,6 +35,7 @@
 
  app.use(Merouter)
  app.use(activeRouter)
+ app.use(NewRouter)
 
 
  app.listen(port, () => {

@@ -21,24 +21,24 @@
     <div class="my common">
       <h4>我的</h4>
       <div class="signature box" @click="showHandle('signature')">
-        <span class="left">个性签名</span>
+        <span class="left"><i class="iconfont icon-qianming"></i>个性签名</span>
         <span class="content">{{$store.state.isLogin?$store.state.obj.bindAutograph:''}}</span>
         <span class="right">></span>
       </div>
       <div class="score box" @click="showHandle('score')">
-        <span class="left">我的积分</span>
+        <span class="left"><i class="iconfont icon-jifen"></i>我的积分</span>
         <span class="right">></span>
       </div>
       <div class="imgs box" @click="showHandle('imgs')">
-        <span class="left">我的图片</span>
+        <span class="left"><i class="iconfont icon-image"></i>我的图片</span>
         <span class="right">></span>
       </div>
       <div class="comment box" @click="showHandle('comment')">
-        <span class="left">学习与评论</span>
+        <span class="left"><i class="iconfont icon-pinglun"></i>学习与评论</span>
         <span class="right">></span>
       </div>
       <div class="phone box" @click="showHandle('phone')">
-        <span class="left">绑定手机</span>
+        <span class="left"><i class="iconfont icon-shouji"></i>绑定手机</span>
         <span class="right">></span>
       </div>
     </div>
@@ -46,15 +46,22 @@
     <div class="out common" v-if="$store.state.isLogin" @click="logOut">
       <h4>设置</h4>
       <div class="box">
-        <span class="left">退出登录</span>
+        <span class="left"><i class="iconfont icon-denglu"></i>退出登录</span>
         <span class="right">></span>
+      </div>
+    </div>
+    <!-- 发布志愿者活动 -->
+    <div class="admin common" v-if="$store.state.obj.isManager" @click="pushActive">
+      <h4>后台</h4>
+      <div class="loginadm box">
+        <span class="left"><i class="iconfont icon-fabu"></i>发布志愿者活动</span>
+        <span class="right">去发布 ></span>
       </div>
     </div>
     <!-- 后台模式区域 -->
     <div class="admin common" v-if="$store.state.obj.isManager" @click="goAdmin">
-      <h4>后台</h4>
       <div class="loginadm box">
-        <span class="left">后台模式</span>
+        <span class="left"><i class="iconfont icon-guanli"></i>后台模式</span>
         <span class="right">进入 ></span>
       </div>
     </div>
@@ -277,6 +284,7 @@ export default {
     // 退出登录
     logOut() {
       this.$store.commit('switchLoginStatus')
+      this.$store.commit('out')
       window.sessionStorage.setItem('userInfo', '')
       window.sessionStorage.setItem('picIndex', '')
     },
@@ -284,13 +292,13 @@ export default {
 
     // 后台模式
     goAdmin() {
-      if(!this.$store.state.obj.isManager){
-        this.success('你还不是管理员', true)
-        return
-      }
       this.$router.push(
         {name:"BackEndView"}
       )
+    },
+    // 发布志愿者活动
+    pushActive() {
+      this.$router.push('/ActivePush')
     },
 
     // 跳转评论页面
@@ -330,13 +338,13 @@ export default {
     left: 0;
   }
   .previewimg img{
+    cursor: pointer;
     width: 100vw;
     height: 100vh;
   }
   .header{
     height: 30vh;
     position: relative;
-    margin-bottom: 20px;
   }
   .unloginbac {
     background-color: #a90000;
@@ -364,6 +372,7 @@ export default {
   .header .hadlogin .info .text,
   .header .unlogin .text{
     font-weight: bold;
+    cursor: pointer;
   }
   .header .unlogin{
     position: absolute;
@@ -394,6 +403,7 @@ export default {
     text-align: center;
   }
   .common .box{
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -409,7 +419,6 @@ export default {
     font-weight: bold;
   }
   .admin .box{
-    border: none;
     margin-top: 5px;
   }
   .my .box .left,
@@ -435,6 +444,7 @@ export default {
     height: 12px;
   }
   .toast .common .commonbutton{
+    cursor: pointer;
     padding: 15px;
     margin-top: 22px;
     background-color: #04BE02;
@@ -452,6 +462,7 @@ export default {
     flex-wrap: wrap;
   }
   .toast .loadimg ul li{
+    cursor: pointer;
     position: relative;
     margin-right: 12px;
   }
@@ -508,5 +519,8 @@ export default {
   }
   .nocomment{
     text-align: center;
+  }
+  .iconfont{
+    margin:0 20px 0 5px;
   }
 </style>

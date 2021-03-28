@@ -21,7 +21,7 @@ export default {
   .item{
     display: flex;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px 40px;
     border-bottom: 2px solid rgb(241, 239, 239);
   }
   .item .name{

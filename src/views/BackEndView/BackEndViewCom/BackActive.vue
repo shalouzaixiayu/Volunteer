@@ -2,9 +2,7 @@
   <div class="infos">
     <div class="title" @click="showTb">
       <span class="iconfont icon-chuli1">{{ title }}</span>
-      <span class="len iconfont icon-renshu"
-        >总数: {{ Allactive.length }}</span
-      >
+      <span class="len iconfont icon-renshu">总数: {{ Allactive.length }}</span>
     </div>
     <div id="tb" v-show="isShowTb">
       <table class="tb">
@@ -22,7 +20,7 @@
           <td class="btWidth">{{ item.title }}</td>
           <td>{{ item.sponsor }}</td>
           <td>{{ item.timer }}</td>
-          <td class="iconfont icon-chuli3" @click="showMore(item)"></td>
+          <td class="iconfont icon-chuli3 point" @click="showMore(item)"></td>
         </tr>
       </table>
     </div>
@@ -30,20 +28,26 @@
     <div class="mt" v-show="showMt">
       <div class="changeInfo">
         <span class="iconfont icon-chuli1 one">{{ currentObj.title }}</span>
-        <div v-for="(value, key) in currentObj" :key="key" class="change"
-         :class="{bigText: key === 'content'}">
+        <div
+          v-for="(value, key) in currentObj"
+          :key="key"
+          class="change"
+          :class="{ bigText: key === 'content' }"
+        >
           <span class="title">{{ changeKey(key) }}: </span>
-          <textarea v-if="key === 'content'" 
-           v-model.lazy="currentObj[key]"></textarea>
+          <textarea
+            v-if="key === 'content'"
+            v-model.lazy="currentObj[key]"
+          ></textarea>
           <input v-else type="text" v-model.lazy="currentObj[key]" />
         </div>
       </div>
       <footer>
         <span class="tip">修改之后就可以点击提交进行更改.</span>
         <div class="handle">
-          <span @click="_updateActive">提交</span>
-          <span @click="_deleteActive">删除</span>
-          <span @click="showMt = false">关闭</span>
+          <span @click="_updateActive" class="point">提交</span>
+          <span @click="_deleteActive" class="point">删除</span>
+          <span @click="showMt = false" class="point">关闭</span>
         </div>
       </footer>
     </div>
@@ -75,13 +79,13 @@ export default {
     };
   },
   methods: {
-    showTb(){
+    showTb() {
       this.isShowTb = !this.isShowTb;
     },
     changeKey(key) {
       switch (key) {
-        case 'id':
-          return '序号'
+        case "id":
+          return "序号";
         case "otherMsg":
           return "感受";
         case "sponsor":
@@ -105,13 +109,13 @@ export default {
       this.currentObj = item;
       return;
     },
-    _updateActive(){
-      updateActive(this.currentObj._id, this.currentObj).then(res => {
-         if (res.data.status === true) {
+    _updateActive() {
+      updateActive(this.currentObj._id, this.currentObj).then((res) => {
+        if (res.data.status === true) {
           this.showMt = false;
           window.location.reload();
         }
-      })
+      });
     },
     _deleteActive() {
       deleteActive(this.currentObj._id).then((res) => {
@@ -126,6 +130,9 @@ export default {
 </script>
 
 <style scoped>
+.point {
+  cursor: pointer;
+}
 .infos {
   font-size: 14px;
   width: 100%;
@@ -137,15 +144,20 @@ export default {
   text-align: center;
   height: 20px;
   line-height: 20px;
-  width: 80%;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
 }
-.infos .title .len {
-  float: right;
+.infos .title span:nth-child(1){
+  width: 40%;
+}
+.infos .title span:nth-child(2) {
+  width: 40%;
 }
 
-#tb{
+#tb {
   height: 45vh;
-  overflow-x:hidden;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 table.tb {
@@ -171,7 +183,7 @@ table.tb td {
   border-style: solid;
   border-color: #a9c6c9;
   width: 70px;
-  overflow:hidden
+  overflow: hidden;
 }
 .oddrowcolor {
   background-color: #d4e3e5;
@@ -182,7 +194,7 @@ table.tb td {
 .mt {
   width: 90%;
   height: 300px;
-  overflow-x:hidden;
+  overflow-x: hidden;
   overflow-y: scroll;
   background-color: rgba(1, 1, 1, 0.3);
   position: absolute;
@@ -196,7 +208,7 @@ table.tb td {
   padding: 10px;
   color: rgba(222, 222, 222);
 }
-.change textarea{
+.change textarea {
   width: 300px;
   height: 300px;
   text-indent: 30px;
@@ -207,13 +219,13 @@ table.tb td {
   resize: none;
   vertical-align: middle;
   background-color: rgba(222, 222, 222);
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
-.change textarea:focus{
+.change textarea:focus {
   width: 400px;
   height: 400px;
 }
-.bigText{
+.bigText {
   height: 400px !important;
 }
 .changeInfo .one {
