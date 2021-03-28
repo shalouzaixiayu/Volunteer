@@ -32,7 +32,7 @@
         <!-- 当没数据的时候显示这个  -->
         <error v-if="NewActiveList.length === 0"/>
         <!-- 如果有数据就显示下面的 -->
-
+        <new-active v-if="NewActiveList.length !== 0"/>
       </template>
 
       <!-- 下一页 -->
@@ -60,6 +60,8 @@ import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
 import Error from './ActiveListCom/Error';
 
+import NewActive from '../NewActive/NewActive';
+
 export default {
   name: "ActiveList",
   components: {
@@ -67,6 +69,7 @@ export default {
     ActiveItem,
     Search,
     Error,
+    NewActive,
   },
   data() {
     return {
@@ -76,7 +79,7 @@ export default {
       currentPage: 5, // 当前页
       currentCount: 10, // 最大数
       nextPage: 5, // 下一页
-      NewActiveList: [],  //  新创建的活动
+      NewActiveList: [123],  //  新创建的活动
       ActiveType: ["正在筹备", "以往内容"], //  活动类型 用于切换状态
       currentType: 1, //  现在是以往内容
     };

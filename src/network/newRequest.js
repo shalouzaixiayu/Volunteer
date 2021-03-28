@@ -20,10 +20,21 @@ import {requestAxios} from './index';
  */
 export function createNewActive(obj){
   return requestAxios({
-    url:"active/create",
+    url:"/active/create",
     method:"POST",
     data:{
       obj
     }
+  })
+}
+
+export function uploadImage(file){
+  return requestAxios({
+    url: '/image:123',
+    method: "POST",
+    data: file,
+    // 其他对象通过params 传播
+    // 只能接受一个file对象
+    headers:{'Content-Type':'multipart/form-data'}
   })
 }
