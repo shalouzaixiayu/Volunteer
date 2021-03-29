@@ -50,6 +50,21 @@ const newActiveSchema = new mongoose.Schema({
     required: false,
     default: ""
   },
+  // 活动图片
+  activeImage:{
+    type:Array,
+    required: false,
+    default: []
+  },
+  // 待申请人列表状态
+  activeProposer:{
+    //   [{}, {}, {}, {}] ....
+    //   {sId, status :'pending(default) | fulfilled | rejected '}
+    //    如果它申请， 需要管理员更改状态为 fulfilled 如果不同意 状态更改为 rejected
+    type: Array,
+    required: false,
+    defalut: []
+  },
   // 创建时间 
   activeCreateTimer: {
     type: Date,
@@ -107,6 +122,21 @@ function createActive(obj, callback) {
   })
 }
 
+/**
+ * @param {*} page  页面参数  
+ * @param {*} count 数量参数  
+ * @param {*} callback 
+ */
+ function getActiveList(page, count, callback) {
+  const obj = {}
+  newActiveModel.find().then(data => {
+     obj.status = true,
+      obj.msg = 'success',
+      obj.length = data.length,
+      obj.data = data.splice(page, (page + 1) * count),
+      callback(obj)
+  })
+}
 
   // const obj = {
   //   activeThema: '看电视',
@@ -127,4 +157,5 @@ module.exports = {
   findActiveThema,
   createActive,
   newActiveView,
+  getActiveList,
 }

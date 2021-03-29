@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
 import { uploadImage } from "../../network/newRequest";
 export default {
   name: "NewActive",

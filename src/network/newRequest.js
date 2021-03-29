@@ -28,6 +28,24 @@ export function createNewActive(obj){
   })
 }
 
+/**
+ *
+ *
+ * @export  请求新的活动列表
+ * @param {*} page 
+ * @param {*} count
+ * @returns  promise 
+ */
+ export function getAllNewActive(page, count){
+  return requestAxios({
+    url:"/getNewList",
+    method: 'GET',
+    params: {
+      page, count
+    }
+  })
+}
+
 export function uploadImage(file){
   return requestAxios({
     url: '/image:123',

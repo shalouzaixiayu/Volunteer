@@ -30,9 +30,13 @@
 
       <template v-if="currentType === 0">
         <!-- 当没数据的时候显示这个  -->
-        <error v-if="NewActiveList.length === 0"/>
+        <error v-if="NewActiveList.length === 0" />
         <!-- 如果有数据就显示下面的 -->
-        <new-active v-if="NewActiveList.length !== 0"/>
+        <template v-if="NewActiveList.length !== 0">
+          <new-item v-for="item in NewActiveList" :key="item"  :item="item"/>
+        </template>
+
+        <!-- {{NewActiveList}} -->
       </template>
 
       <!-- 下一页 -->
@@ -56,11 +60,14 @@
 import Search from "../../components/common/Search/Search";
 
 import { requestActiveList } from "../../network/activeRequest";
+import { getAllNewActive } from "../../network/newRequest";
+
 import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
-import Error from './ActiveListCom/Error';
+import Error from "./ActiveListCom/Error";
 
-import NewActive from '../NewActive/NewActive';
+import NewItem from "../NewActive/NewItem";
+// import NewActive from '../NewActive/NewActive';
 
 export default {
   name: "ActiveList",
@@ -69,7 +76,7 @@ export default {
     ActiveItem,
     Search,
     Error,
-    NewActive,
+    NewItem, // 新的item组件
   },
   data() {
     return {
@@ -78,8 +85,10 @@ export default {
       activeList: [], // 已有活动列表
       currentPage: 5, // 当前页
       currentCount: 10, // 最大数
+      currentPage1: 0, //  新的活动当前页
+      currentCount1: 10, // 新的活动最大数
       nextPage: 5, // 下一页
-      NewActiveList: [123],  //  新创建的活动
+      NewActiveList: [], //  新创建的活动
       ActiveType: ["正在筹备", "以往内容"], //  活动类型 用于切换状态
       currentType: 1, //  现在是以往内容
     };
@@ -94,16 +103,26 @@ export default {
     // 请求活动列表
     this.RequestActiveList(this.currentPage, this.currentCount);
     // requestActiveList(1, 20).then(res => console.log(res))
+
+    this.GetAllNewActive(this.currentPage1, this.currentCount1);
   },
   updated() {
     setTimeout(() => (this.showNote = false), 6500);
   },
   methods: {
+    // 请求原有的活动列表
     RequestActiveList(currentPage, currentCount) {
       requestActiveList(currentPage, currentCount).then(
         (res) => (this.activeList = res.data.data)
       );
     },
+    // 请求新的活动列表
+    GetAllNewActive(currentPage1, currentCount1) {
+      getAllNewActive(currentPage1, currentCount1).then(
+        (res) => (this.NewActiveList = res.data.data)
+      );
+    },
+
     activeSearch(obj) {
       // 更改活动列表
       if (obj.status && obj.type == "active") {
