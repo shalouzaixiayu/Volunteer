@@ -45,10 +45,18 @@ export function createNewActive(obj){
     }
   })
 }
-
-export function uploadImage(file){
+/**
+ *
+ *
+ * @export    传递file对象和id
+ * @param {*} file
+ * @param {*} id
+ * @returns
+ */
+export function uploadImage(file, id){
+  
   return requestAxios({
-    url: '/image:123',
+    url: `/image${id}`,
     method: "POST",
     data: file,
     // 其他对象通过params 传播

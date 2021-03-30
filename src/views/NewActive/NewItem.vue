@@ -11,12 +11,17 @@
         <span class="timer">{{ handleTimer(item.activeTimer) }}</span>
       </footer>
     </div>
+    <new-active/>
   </div>
 </template>
 
 <script>
+import NewActive from './NewActive';
 export default {
   name: "NewItem",
+  components: {
+    NewActive,
+    },
   props: {
     item: {
       type: Object,

@@ -27,7 +27,7 @@ export default {
       for (const file of files) {
         formData.append("image", file)
       }
-      uploadImage(formData);
+      uploadImage(formData, 'super');
       // console.log(formData.getAll('image'))
     },
   },

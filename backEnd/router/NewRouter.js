@@ -1,30 +1,59 @@
 const express = require('express');
 const NewRouter = express.Router();
 const NewActive = require('../mongodb/newActive');
-const multer = require('multer'); //   handle files
+const multer = require('multer'); //   handle files   下载图片的第三方库
+const fs = require('fs');
 const path = require('path');
 
-function changeFileName(name) {
-  return multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/news')
-    },
-    filename: function (req, file, cb) {
-      cb(null, name.substring(0, 10) + '-' + file.originalname)
-    }
-  })
-}
-
-// 函数更改图片的保存位置
-const _storage = changeFileName('123456')
+//  处理下载图片插件
+const _storage  = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/news')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
 
 const upload = multer({
   storage: _storage
 })
 
+// 上传图片的接口
+NewRouter.post('/image:id', upload.array('image', 10), (req, res) => {
+  const {id} = req.params; //  解析 id
+  console.log(req.files);
+  const files = req.files;
+
+  // 更改文件名
+  if(files.length <= 1){
+    const oldName = path.join(path.dirname(__dirname), files[0].path);
+    const newName = path.join(path.dirname(__dirname), files[0].destination, `${id.substr(0, 8)}-${files[0].originalname}`);
+    fs.rename(oldName, newName, (err) =>{
+      if(err) throw err;
+      console.log('更改Ok')
+    });
+      // 发送事件
+      NewActive.AddImageById(newName, id, data => res.send(JSON.stringify(data)))
+  }else {
+    for (const file of files) {
+      const oldName = path.join(path.dirname(__dirname), file.path);
+      const newName = path.join(path.dirname(__dirname), file.destination, `${id.substr(0, 8)}-${file.originalname}`);
+      fs.rename(oldName, newName, (err) =>{
+        if(err) throw err;
+        console.log('更改Ok');
+      });
+        // 发送事件
+        NewActive.AddImageById(newName, id, data => res.send(JSON.stringify(data)))
+    }
+  }
+
+
+})
+
 
 // 管理员发布一个活动数据
-NewRouter.post('/active/create', (req, res, next) => {
+NewRouter.post('/active/create', (req, res) => {
   const {
     obj
   } = {
@@ -35,20 +64,11 @@ NewRouter.post('/active/create', (req, res, next) => {
 
 
 // 按照页数, 请求活动列表
-NewRouter.get('/getNewList', (req, res, next) => {
+NewRouter.get('/getNewList', (req, res) => {
   const { page, count } = req.query 
   NewActive.getActiveList(page, count, data => {
     res.send(JSON.stringify(data))
   })
 })
-
-
-// 上传图片的接口
-NewRouter.post('/image:num', upload.array('image', 10), (req, res, next) => {
-  // console.log(req.params)
-  console.log(req.files)
-})
-
-
 
 module.exports = NewRouter;

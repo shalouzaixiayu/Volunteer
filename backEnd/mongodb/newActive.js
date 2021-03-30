@@ -75,6 +75,20 @@ const newActiveSchema = new mongoose.Schema({
 const newActiveModel = new mongoose.model('newActive', newActiveSchema);
 
 // 操作数据的api
+
+
+
+/**
+ *
+ *  通过id来查询新建的活动
+ * @param {*} id
+ * @returns
+ */
+function searchId(id){
+  return newActiveModel.find({
+    _id: id
+  })
+}
 /**
  *
  *  通过主题来查询新建的活动
@@ -85,6 +99,42 @@ function findActiveThema(thema) {
     activeThema: thema
   })
 }
+
+
+/**
+ *
+ * @exports   通过id查找到活动列表，向里面追加活动图片,每次一张
+ * @param {*} nowFileName
+ * @param {*} id
+ */
+ async function AddImageById(nowFileName, id, callback){
+  const obj = await searchId(id)
+  const _obj = obj[0]
+  const state = {
+    status: false,
+    data: null,
+    msg: ''
+  }
+  _obj.activeImage.push(nowFileName)
+  newActiveModel.findOneAndUpdate({
+    _id: id
+  }, _obj).then(res => {
+    if(res){
+      console.log(res)
+      state.status = true;
+      state.data = res;
+      state.msg = 'success'
+    }else{
+      state.msg = '错误'
+    }
+    callback(state)
+  })
+
+}
+
+
+// AddImageById('葫芦娃小金刚', '605fda1d474bbd5b6013a740', res => console.log(res))
+
 /**
  *
  * 创建一个新的活动
@@ -94,6 +144,9 @@ function newActiveView(obj) {
   const _obj =  obj instanceof Object ? obj : JSON.parse(obj);
   return new newActiveModel(_obj).save()
 }
+
+
+
 /**
  *
  * 创建一个新的活动
@@ -158,4 +211,5 @@ module.exports = {
   createActive,
   newActiveView,
   getActiveList,
+  AddImageById,
 }
