@@ -10,6 +10,8 @@ const BackEndView = () => import('../views/BackEndView/BackEndView.vue')
 const Rank = () => import('../views/Rank/Rank.vue')
 const Login = () => import('../views/Login/Login.vue')
 const ActivePush = () => import('../views/ActivePush/activePush.vue');
+const NewDetail = () =>  import('../views/NewActive/NewDetail.vue');
+
 
 const routes = [{
     path: '',
@@ -85,9 +87,17 @@ const routes = [{
     meta: {
       title: "发布活动",
       isActive: false
-    }
-  }
-
+    },
+  },
+  {
+    path: "/NewDetail",
+    name: "NewDetail",
+    component: NewDetail,
+    meta: {
+      title: "活动详情",
+      isActive: false
+    },
+  },
 ]
 
 const router = createRouter({

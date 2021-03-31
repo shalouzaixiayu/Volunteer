@@ -64,3 +64,20 @@ export function uploadImage(file, id){
     headers:{'Content-Type':'multipart/form-data'}
   })
 }
+
+/**
+ *
+ *
+ * @export  通过id去查找关于新的活动的信息
+ * @param {*} id  活动id
+ * @returns
+ */
+export function searchNewById(id){
+  return requestAxios({
+    url: '/searchById2',
+    method: "GET",
+    params: {
+      id,
+    }
+  })
+}

@@ -120,7 +120,7 @@ function findActiveThema(thema) {
     _id: id
   }, _obj).then(res => {
     if(res){
-      console.log(res)
+      // console.log(res)
       state.status = true;
       state.data = res;
       state.msg = 'success'
@@ -165,7 +165,7 @@ function createActive(obj, callback) {
       callback(start);
     } else {
       newActiveView(_obj).then(data => {
-        console.log(data)
+        // console.log(data)
         start.data = data;
         start.msg = 'success';
         start.status = true;
@@ -212,4 +212,5 @@ module.exports = {
   newActiveView,
   getActiveList,
   AddImageById,
+  searchId,
 }

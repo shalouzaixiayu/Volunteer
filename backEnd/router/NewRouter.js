@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 //  处理下载图片插件
-const _storage  = multer.diskStorage({
+const _storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/news')
   },
@@ -21,30 +21,32 @@ const upload = multer({
 
 // 上传图片的接口
 NewRouter.post('/image:id', upload.array('image', 10), (req, res) => {
-  const {id} = req.params; //  解析 id
-  console.log(req.files);
+  const {
+    id
+  } = req.params; //  解析 id
+  // console.log(req.files);
   const files = req.files;
 
   // 更改文件名
-  if(files.length <= 1){
-    const oldName = path.join(path.dirname(__dirname), files[0].path);
-    const newName = path.join(path.dirname(__dirname), files[0].destination, `${id.substr(0, 8)}-${files[0].originalname}`);
-    fs.rename(oldName, newName, (err) =>{
-      if(err) throw err;
+  if (files.length <= 1) {
+    const oldName = path.join('../backEnd', files[0].path);
+    const newName = path.join('../backEnd', files[0].destination, `${id.substr(0, 8)}-${files[0].originalname}`);
+    fs.rename(oldName, newName, (err) => {
+      if (err) throw err;
       console.log('更改Ok')
     });
-      // 发送事件
-      NewActive.AddImageById(newName, id, data => res.send(JSON.stringify(data)))
-  }else {
+    // 发送事件
+    NewActive.AddImageById(`http://localhost:3000/static/news/${id.substr(0, 8)}-${files[0].originalname}`, id, data => res.send(JSON.stringify(data)))
+  } else {
     for (const file of files) {
-      const oldName = path.join(path.dirname(__dirname), file.path);
-      const newName = path.join(path.dirname(__dirname), file.destination, `${id.substr(0, 8)}-${file.originalname}`);
-      fs.rename(oldName, newName, (err) =>{
-        if(err) throw err;
+      const oldName = path.join('../backEnd', file.path);
+      const newName = path.join('../backEnd', file.destination, `${id.substr(0, 8)}-${file.originalname}`);
+      fs.rename(oldName, newName, (err) => {
+        if (err) throw err;
         console.log('更改Ok');
       });
-        // 发送事件
-        NewActive.AddImageById(newName, id, data => res.send(JSON.stringify(data)))
+      // 发送事件
+      NewActive.AddImageById(`http://localhost:3000/static/news/${id.substr(0, 8)}-${file.originalname}`, id, data => res.send(JSON.stringify(data)))
     }
   }
 
@@ -65,10 +67,28 @@ NewRouter.post('/active/create', (req, res) => {
 
 // 按照页数, 请求活动列表
 NewRouter.get('/getNewList', (req, res) => {
-  const { page, count } = req.query 
+  const {
+    page,
+    count
+  } = req.query
   NewActive.getActiveList(page, count, data => {
     res.send(JSON.stringify(data))
   })
 })
 
+
+// 通过id请求某个活动列表
+NewRouter.get('/searchById2', (req, res) => {
+  const {
+    id
+  } = req.query
+  NewActive.searchId(id).then((data) => {
+    if (data.length >= 1) {
+      res.send(JSON.stringify(data))
+    }else {
+      res.send("no find id by this id")
+    }
+  })
+
+})
 module.exports = NewRouter;

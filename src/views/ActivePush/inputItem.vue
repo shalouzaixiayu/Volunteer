@@ -1,12 +1,15 @@
 <template>
   <div class="item">
     <div class="left"><slot></slot></div>
-    <div class="right"><input type="text" v-model="msg" @blur="blurHandle"></div>
+    <div class="right">
+      <input :type="type" v-model="msg" @blur="blurHandle">
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: ['type'],
   data() {
     return {
       msg: ''

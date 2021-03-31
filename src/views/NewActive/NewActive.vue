@@ -1,6 +1,6 @@
 <template>
   <div id="newActive">
-      上传图片<input type="file" @change="handleFile" multiple/>
+      上传图片<input type="file" @change="handleFile"/>
   </div>
 </template>
 

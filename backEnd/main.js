@@ -1,6 +1,7 @@
  const express = require('express')
  const app = express()
  const bodyParser = require('body-parser')
+ const path = require('path');
 
  const Merouter = require('./router/MeRouter') // 处理我的页面
  const activeRouter = require('./router/ActiveRouter') // 处理活动列表
@@ -8,6 +9,11 @@
 
  const port = 3000
 
+//  http://localhost:3000/static/news/1.png
+ app.use('/static', express.static(path.join(__dirname, 'uploads')))
+
+
+ 
  app.use(bodyParser.urlencoded({
    extended: false
  }))

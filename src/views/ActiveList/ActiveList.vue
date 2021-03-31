@@ -33,10 +33,9 @@
         <error v-if="NewActiveList.length === 0" />
         <!-- 如果有数据就显示下面的 -->
         <template v-if="NewActiveList.length !== 0">
-          <new-item v-for="item in NewActiveList" :key="item"  :item="item"/>
+          <new-item v-for="item in NewActiveList" :key="item" :item="item" />
         </template>
-
-        <!-- {{NewActiveList}} -->
+        
       </template>
 
       <!-- 下一页 -->
@@ -88,6 +87,7 @@ export default {
       currentPage1: 0, //  新的活动当前页
       currentCount1: 10, // 新的活动最大数
       nextPage: 5, // 下一页
+      nextPage1: 0, //  新的活动下一页
       NewActiveList: [], //  新创建的活动
       ActiveType: ["正在筹备", "以往内容"], //  活动类型 用于切换状态
       currentType: 1, //  现在是以往内容
@@ -108,6 +108,7 @@ export default {
   },
   updated() {
     setTimeout(() => (this.showNote = false), 6500);
+    // this.GetAllNewActive(this.currentPage1, this.currentCount1);
   },
   methods: {
     // 请求原有的活动列表
@@ -134,16 +135,30 @@ export default {
     },
     // 上一页 && 下一页
     changeThisPage(page) {
-      this.nextPage = this.nextPage + parseInt(page);
-      this.RequestActiveList(this.nextPage, this.currentCount);
-      // 移动到最上面
-      document.querySelector(".content").scrollTo(0, 0);
+      if (this.currentType === 1) {
+        this.nextPage = this.nextPage + parseInt(page);
+        this.RequestActiveList(this.nextPage, this.currentCount);
+        // 移动到最上面
+        document.querySelector(".content").scrollTo(0, 0);
+      } else {
+        this.nextPage1 = this.nextPage1 + parseInt(page);
+        this.GetAllNewActive(this.nextPage1, this.currentCount1);
+        // 移动到最上面
+        document.querySelector(".content").scrollTo(0, 0);
+      }
     },
     // 切换当前活动状态
     toggleActive(index) {
       this.currentType = index;
       // 更改搜索框的搜索路径
       this.$refs.activeSearch.changeType("nowActive");
+
+      // 同步刷新列表
+      if (this.currentType === 0) {
+        this.GetAllNewActive(this.currentPage1, this.currentCount1);
+      } else {
+        this.RequestActiveList(this.currentPage, this.currentCount);
+      }
     },
   },
 };
