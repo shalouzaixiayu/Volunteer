@@ -1,6 +1,6 @@
 <template>
   <div class="item">
-    <h3><slot>活动图片</slot></h3>
+    <h3><slot></slot></h3>
     <div class="content">
       <div class="box">
         <div class="show">

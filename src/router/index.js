@@ -10,7 +10,11 @@ const BackEndView = () => import('../views/BackEndView/BackEndView.vue')
 const Rank = () => import('../views/Rank/Rank.vue')
 const Login = () => import('../views/Login/Login.vue')
 const ActivePush = () => import('../views/ActivePush/activePush.vue');
-const NewDetail = () =>  import('../views/NewActive/NewDetail.vue');
+const NewDetail = () => import('../views/NewActive/NewDetail.vue');
+
+//  朋友圈
+const showComs = () => import('../views/Comment/showComs/showComs.vue');
+const createCom = () => import('../views/Comment/createCom/createCom.vue');
 
 
 const routes = [{
@@ -98,6 +102,24 @@ const routes = [{
       isActive: false
     },
   },
+  {
+    path: "/ShowComs",
+    name: "ShowComs",
+    component: showComs,
+    meta: {
+      title: "朋友圈",
+      isActive: false
+    }
+  },
+  {
+    path: "/CreateCom",
+    name: "CreateCom",
+    component: createCom,
+    meta: {
+      title: "发布朋友圈",
+      isActive: false
+    }
+  }
 ]
 
 const router = createRouter({

@@ -63,7 +63,7 @@ const newActiveSchema = new mongoose.Schema({
     //    如果它申请， 需要管理员更改状态为 fulfilled 如果不同意 状态更改为 rejected
     type: Array,
     required: false,
-    defalut: []
+    defalut:[]
   },
   // 创建时间 
   activeCreateTimer: {

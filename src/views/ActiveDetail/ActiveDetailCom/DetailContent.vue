@@ -105,7 +105,7 @@ export default {
             time:new Date().toLocaleDateString()
           }).then((res) => {
             this.likeMsg = res.data.status ? "我已经学习" : this.likeMsg;
-            // console.log(res.data) // 没这个值
+          
           });
           // 添加学习记录 加分
         } else if (type === "com") {

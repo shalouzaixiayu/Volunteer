@@ -20,6 +20,10 @@
     <!-- 我的区域 -->
     <div class="my common">
       <h4>我的</h4>
+      <div class="signature box" @click="comments">
+        <span class="left"><i class="iconfont icon-tubiaozhizuo-"></i>朋友圈</span>
+        <span class="right">></span>
+      </div>
       <div class="signature box" @click="showHandle('signature')">
         <span class="left"><i class="iconfont icon-qianming"></i>个性签名</span>
         <span class="content">{{$store.state.isLogin?$store.state.obj.bindAutograph:''}}</span>
@@ -305,6 +309,14 @@ export default {
     goComment(id) {
       this.$router.push({name: 'ActiveDetail', query: {id}})
       this.$store.commit('changeToastStatus')
+    },
+
+    // 去朋友圈
+    comments() {
+      if(!this.$store.state.isLogin){
+        return this.success('请先登录', true)
+      }
+      this.$router.push('/ShowComs')
     }
   },
   created() {

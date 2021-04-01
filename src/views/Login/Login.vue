@@ -180,10 +180,9 @@ export default {
         if(from === 'ActiveDetail' || from === 'Home') {
           this.$router.push({name: 'ActiveDetail', query: {id: this.$route.query.id}})
           return
-        // } else if(from == 'Home') {
-        //   this.$router.push({name: 'Home', query: {id: this.$route.query.id}})
-        //   return
-        // }
+        } else if(from === 'NewDetail') {
+          this.$router.push({name: 'NewDetail', query: {id: this.$route.query.id}})
+          return
         }
         this.$router.go(-1)
       })
