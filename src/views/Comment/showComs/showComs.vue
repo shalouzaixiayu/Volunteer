@@ -56,7 +56,8 @@ export default {
   .top{
     /* position: relative; */
   }
-  .back{
+  .top .back{
+  
     font-size: 30px;
     /* position: absolute; */
     /* left: 30px; */
