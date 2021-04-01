@@ -53,9 +53,6 @@ export default {
     padding-bottom: 40px;
     box-sizing: border-box;
   }
-  .top{
-    /* position: relative; */
-  }
   .top .back{
   
     font-size: 30px;
