@@ -51,19 +51,19 @@ const newActiveSchema = new mongoose.Schema({
     default: ""
   },
   // 活动图片
-  activeImage:{
-    type:Array,
+  activeImage: {
+    type: Array,
     required: false,
     default: []
   },
   // 待申请人列表状态
-  activeProposer:{
+  activeProposer: {
     //   [{}, {}, {}, {}] ....
     //   {sId, status :'pending(default) | fulfilled | rejected '}
     //    如果它申请， 需要管理员更改状态为 fulfilled 如果不同意 状态更改为 rejected
     type: Array,
     required: false,
-    defalut:[]
+    defalut: []
   },
   // 创建时间 
   activeCreateTimer: {
@@ -84,22 +84,73 @@ const newActiveModel = new mongoose.model('newActive', newActiveSchema);
  * @param {*} id
  * @returns
  */
-function searchId(id){
+function searchId(id) {
   return newActiveModel.find({
     _id: id
   })
 }
 /**
  *
- *  通过主题来查询新建的活动
+ *  通过主题来查询新建的活动  model ture 表示正则  否则就是普通
  * @param {*} thema  这是一个对象 {thema: ....}
  */
-function findActiveThema(thema) {
-  return newActiveModel.find({
-    activeThema: thema
-  })
+function findActiveThema(thema, model=false) {
+  if(!model){
+    return newActiveModel.find({
+      activeThema: thema
+    })
+  }else if(model){
+    return newActiveModel.find({
+      activeThema: {
+        $regex: eval(`/.*${thema}.*/ig`)
+      }
+    })
+  }
+  
 }
 
+/**
+ *
+ * 更改这个活动的申请人状态
+ * @param {*} _id
+ * @param {*} pId
+ */
+async function enterActive(_id, pId, callback) {
+  //  拿到这个活动的id
+  const activeObj = await searchId(_id);
+  const _activeObj = activeObj[0];
+  const thisObj = {
+    status: 'pending', // 就绪状态
+    sId: pId,
+  }
+  const obj = {
+    status: false,
+    msg: "",
+    data: null
+  }
+  //  添加到这个活动状态下   default  pending 状态
+  //  进行排他判断
+  const flag = _activeObj.activeProposer.filter(item => item.sId === pId);
+  // console.log(flag)
+  if(Array.isArray(flag) && flag.length === 0){
+    // console.log(222)
+    _activeObj.activeProposer.push(thisObj);
+    _activeObj.activeNumber -= 1;
+    // 进行数据更新
+    newActiveModel.findOneAndUpdate({
+      _id: _id,
+    }, _activeObj).then(res => {
+      obj.status =  true;
+      obj.data = res;
+      obj.msg = "success";
+      callback(obj);
+    })
+  }else{
+    // console.log(111)
+    obj.msg = "请勿重新操作，等待审核..."
+    callback(obj)
+  } 
+}
 
 /**
  *
@@ -107,7 +158,7 @@ function findActiveThema(thema) {
  * @param {*} nowFileName
  * @param {*} id
  */
- async function AddImageById(nowFileName, id, callback){
+async function AddImageById(nowFileName, id, callback) {
   const obj = await searchId(id)
   const _obj = obj[0]
   const state = {
@@ -119,12 +170,12 @@ function findActiveThema(thema) {
   newActiveModel.findOneAndUpdate({
     _id: id
   }, _obj).then(res => {
-    if(res){
+    if (res) {
       // console.log(res)
       state.status = true;
       state.data = res;
       state.msg = 'success'
-    }else{
+    } else {
       state.msg = '错误'
     }
     callback(state)
@@ -141,7 +192,7 @@ function findActiveThema(thema) {
  * @param {*} obj  活动参数
  */
 function newActiveView(obj) {
-  const _obj =  obj instanceof Object ? obj : JSON.parse(obj);
+  const _obj = obj instanceof Object ? obj : JSON.parse(obj);
   return new newActiveModel(_obj).save()
 }
 
@@ -180,10 +231,10 @@ function createActive(obj, callback) {
  * @param {*} count 数量参数  
  * @param {*} callback 
  */
- function getActiveList(page, count, callback) {
+function getActiveList(page, count, callback) {
   const obj = {}
-  newActiveModel.find().then(data => {
-     obj.status = true,
+  newActiveModel.find().sort({activeTimer:-1}).then(data => {
+    obj.status = true,
       obj.msg = 'success',
       obj.length = data.length,
       obj.data = data.splice(page, (page + 1) * count),
@@ -191,16 +242,16 @@ function createActive(obj, callback) {
   })
 }
 
-  // const obj = {
-  //   activeThema: '看电视',
-  //   activeTimer,
-  //   activeNumber: 30,
-  //   activeManager: '张人',
-  //   activeAddress: '北京',
-  //   activeIntroduce:'好玩的',
-  //   activeBZ:'备注信息'
-  // }
-  // createActive(obj, (res) => console.log(res))
+// const obj = {
+//   activeThema: '看电视',
+//   activeTimer,
+//   activeNumber: 30,
+//   activeManager: '张人',
+//   activeAddress: '北京',
+//   activeIntroduce:'好玩的',
+//   activeBZ:'备注信息'
+// }
+// createActive(obj, (res) => console.log(res))
 
 
 
@@ -213,4 +264,5 @@ module.exports = {
   getActiveList,
   AddImageById,
   searchId,
+  enterActive,
 }

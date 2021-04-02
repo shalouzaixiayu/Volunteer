@@ -89,6 +89,28 @@ NewRouter.get('/searchById2', (req, res) => {
       res.send("no find id by this id")
     }
   })
+})
 
+
+// 通过主题请求某个活动列表
+NewRouter.get('/searchByThema2', (req, res) => {
+  const {
+    thema
+  } = req.query
+  NewActive.findActiveThema(thema, true).then((data) => {
+    if (data.length >= 1) {
+      res.send(JSON.stringify(data))
+    }else {
+      res.send("no find id by this thema")
+    }
+  })
+})
+
+
+
+
+NewRouter.get('/enterActive',  (req, res) => {
+  const {_id, pId} =  req.query
+  NewActive.enterActive(_id, pId, (data) => res.send(JSON.stringify(data)))
 })
 module.exports = NewRouter;

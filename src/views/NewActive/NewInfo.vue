@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { searchNewById } from "../../network/newRequest";
+import { searchNewById, enterActive } from "../../network/newRequest";
 export default {
   name: "NewInfo",
   props: {
@@ -105,7 +105,13 @@ export default {
         this.showSmall = !this.showSmall;
 
         // 发送事件 去审核这个活动
-
+        enterActive(this.obj._id, this.$store.state.obj._id).then(res => {
+          if (res.data.status){
+            // 如果成功
+            this.obj = res.data.data;
+            window.location.reload();
+          }
+        })
 
         setTimeout(() => {
           this.showSmall = !this.showSmall;

@@ -81,3 +81,36 @@ export function searchNewById(id){
     }
   })
 }
+/**
+ *
+ *
+ * @export  通过主题去查找关于新的活动的信息
+ * @param {*} id  活动id
+ * @returns
+ */
+export function searchNewByThema(thema){
+  return requestAxios({
+    url: '/searchByThema2',
+    method: "GET",
+    params: {
+      thema,
+    }
+  })
+}
+/**
+ *
+ *
+ * @export 参加活动,_id活动id，PId志愿id
+ * @param {*} _id
+ * @param {*} pId
+ * @returns
+ */
+export function enterActive(_id, pId){
+  return requestAxios({
+    url: '/enterActive',
+    method: "GET",
+    params:{
+      _id, pId
+    }
+  })
+}

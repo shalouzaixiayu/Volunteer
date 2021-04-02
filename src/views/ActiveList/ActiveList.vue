@@ -9,7 +9,7 @@
       </transition>
     </div>
     <!-- 搜索框 -->
-    <search ref="activeSearch" @activeSearch="activeSearch" />
+    <search ref="activeSearch" @activeSearch="activeSearch" @newSearch="newSearch"/>
 
     <!-- 切换活动状态 -->
     <div class="toggleActive">
@@ -89,7 +89,7 @@ export default {
       nextPage: 5, // 下一页
       nextPage1: 0, //  新的活动下一页
       NewActiveList: [], //  新创建的活动
-      ActiveType: ["正在筹备", "以往内容"], //  活动类型 用于切换状态
+      ActiveType: ["正在筹备", "以往内容", "我的活动"], //  活动类型 用于切换状态
       currentType: 1, //  现在是以往内容
     };
   },
@@ -130,6 +130,10 @@ export default {
         this.activeList = obj.data.data;
       }
     },
+    newSearch(obj){
+      // 更改新创建的活动列表
+      this.NewActiveList = obj;
+    },
     goBack2Before() {
       this.RequestActiveList(this.currentPage, this.currentCount);
     },
@@ -150,11 +154,10 @@ export default {
     // 切换当前活动状态
     toggleActive(index) {
       this.currentType = index;
-      // 更改搜索框的搜索路径
-      this.$refs.activeSearch.changeType("nowActive");
-
       // 同步刷新列表
       if (this.currentType === 0) {
+        // 更改搜索框的搜索路径
+        this.$refs.activeSearch.changeType("nowActive");
         this.GetAllNewActive(this.currentPage1, this.currentCount1);
       } else {
         this.RequestActiveList(this.currentPage, this.currentCount);

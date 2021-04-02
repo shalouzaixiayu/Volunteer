@@ -11,6 +11,7 @@
 
 <script>
 import { searchActiveByTitle } from "../../../network/activeRequest";
+import {searchNewByThema} from '../../../network/newRequest';
 export default {
   name: "Search",
   data() {
@@ -32,8 +33,15 @@ export default {
           this.obj.type = this.type;
           this.$emit('activeSearch', this.obj)
         });
+        // nowActive
+      }else if(this.type === 'nowActive' && this.search){
+        searchNewByThema(this.search).then(data => {
+          this.obj = data.data
+          this.obj.type = this.type;
+          this.$emit('newSearch', this.obj)
+        })
+        }
       }
-    },
   },
 };
 </script>
