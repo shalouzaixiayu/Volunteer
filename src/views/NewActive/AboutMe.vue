@@ -88,8 +88,8 @@ export default {
     // 活动跳转回去
     goActive(_id){
       this.$router.push({
-        name:"NewInfo",
-        query: {
+        name:"NewDetail",
+        params: {
           _id
         }
       })

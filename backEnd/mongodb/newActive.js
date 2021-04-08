@@ -6,7 +6,7 @@ mongoose.connect('mongodb://localhost:27017/Volunteer', {
   useUnifiedTopology: true
 })
 
-// mongoose.set('useFindAndModify', false);
+mongoose.set('useFindAndModify', false);
 
 // 规范集合的数据源
 const newActiveSchema = new mongoose.Schema({

@@ -79,6 +79,7 @@ NewRouter.get('/getNewList', (req, res) => {
 
 // 通过id请求某个活动列表
 NewRouter.get('/searchById2', (req, res) => {
+  // console.log(req.query)
   const {
     id
   } = req.query

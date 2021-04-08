@@ -11,7 +11,7 @@ const Rank = () => import('../views/Rank/Rank.vue')
 const Login = () => import('../views/Login/Login.vue')
 const ActivePush = () => import('../views/ActivePush/activePush.vue');
 const NewDetail = () => import('../views/NewActive/NewDetail.vue');
-const NewInfo = () => import('../views/NewActive/NewInfo.vue');
+// const NewInfo = () => import('../views/NewActive/NewInfo.vue');
 //  朋友圈
 const showComs = () => import('../views/Comment/showComs/showComs.vue');
 const createCom = () => import('../views/Comment/createCom/createCom.vue');
@@ -105,15 +105,15 @@ const routes = [{
       isActive: false
     },
   },
-  {
-    path:"/NewDetail/NewInfo",
-    name:"NewInfo",
-    component: NewInfo,
-    meta:{
-      title:"活动详情",
-      isActive: false,
-    }
-  },
+  // {
+  //   path:"/NewDetail/NewInfo",
+  //   name:"NewInfo",
+  //   component: NewInfo,
+  //   meta:{
+  //     title:"活动详情",
+  //     isActive: false,
+  //   }
+  // },
   {
     path: "/ShowComs",
     name: "ShowComs",

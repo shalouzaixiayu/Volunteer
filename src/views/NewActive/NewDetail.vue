@@ -23,6 +23,11 @@ export default {
   },
   created(){
     this.id = this.$route.query.id
+     //重新请求这个id活动
+    if(this.$route.params._id){
+      this.id = this.$route.params._id
+      // console.log(this.$route.params._id)
+    }
   }
 }
 </script>
