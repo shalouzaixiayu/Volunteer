@@ -35,7 +35,14 @@
         <template v-if="NewActiveList.length !== 0">
           <new-item v-for="item in NewActiveList" :key="item" :item="item" />
         </template>
-        
+      </template>
+
+      <!-- 如果点击我的活动 跳转到我的活动界面  -->
+      <template v-if="currentType === 2">
+        <about-me>
+          <!-- 如果没有登陆 -->
+         
+        </about-me>
       </template>
 
       <!-- 下一页 -->
@@ -65,7 +72,9 @@ import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
 import Error from "./ActiveListCom/Error";
 
+
 import NewItem from "../NewActive/NewItem";
+import AboutMe from '../NewActive/AboutMe';
 // import NewActive from '../NewActive/NewActive';
 
 export default {
@@ -76,6 +85,7 @@ export default {
     Search,
     Error,
     NewItem, // 新的item组件
+    AboutMe  //  我的活动野蛮
   },
   data() {
     return {

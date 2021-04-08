@@ -114,3 +114,20 @@ export function enterActive(_id, pId){
     }
   })
 }
+
+/**
+ *
+ *
+ * @export 根据志愿id，在数据中进行匹配，拿到参加的各种状态的活动
+ * @param {*} pId  志愿id
+ * @returns
+ */
+export function compareMe(pId){
+  return requestAxios({
+    url:'/enterActive/me',
+    method:"GET",
+    params:{
+      pId,
+    }
+  })
+}

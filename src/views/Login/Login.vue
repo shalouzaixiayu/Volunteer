@@ -183,6 +183,8 @@ export default {
         } else if(from === 'NewDetail') {
           this.$router.push({name: 'NewDetail', query: {id: this.$route.query.id}})
           return
+        }else if (from === 'AboutMe') {
+          this.$router.push({name:"AboutMe"})
         }
         this.$router.go(-1)
       })

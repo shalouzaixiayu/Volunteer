@@ -2,7 +2,9 @@ const mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017/Volunteer', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
+});
+
+mongoose.set('useFindAndModify', false);
 
 const manager = new mongoose.Schema({
   name: {
@@ -33,4 +35,4 @@ const manager = new mongoose.Schema({
 })
 
 
-const manager = new mongoose.model('Manager', manager)
+// const manager = new mongoose.model('Manager', manager)

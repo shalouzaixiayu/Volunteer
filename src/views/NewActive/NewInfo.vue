@@ -76,6 +76,13 @@ export default {
     };
   },
   created() {
+    //重新请求这个id活动
+    if(this.$route.query.id){
+      console.log(this.$route.query.id)
+    }
+    
+
+
     searchNewById(this.id).then((res) => (this.obj = res.data && res.data[0]));
   },
   methods: {

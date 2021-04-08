@@ -6,6 +6,8 @@ mongoose.connect('mongodb://localhost:27017/Volunteer', {
   useUnifiedTopology: true
 })
 
+// mongoose.set('useFindAndModify', false);
+
 // 规范集合的数据源
 const newActiveSchema = new mongoose.Schema({
   // 活动主题
@@ -108,6 +110,44 @@ function findActiveThema(thema, model=false) {
   }
   
 }
+/**
+ *
+ * 通过志愿id 去匹配获得中的  activeProposer 状态信息
+ * @param {*} pId 志愿id
+ * @param {*} callback  
+ */  
+//  [{
+// 	"status" : "pending",
+// 	"sId" : "6053184c613f0e4348e6429e"
+// }]
+function compareMeActive(pId,callback){
+  const obj = {
+    status: false,
+    data: null,
+    msg: ""
+  }
+  newActiveModel.find({
+    activeProposer:{
+      // 数组嵌套查询
+      $elemMatch:{
+        'sId':pId
+      }
+    }
+  }).then(res => {
+    if(res.length >= 1){
+      obj.data = res;
+      obj.status =  true;
+      obj.msg = "success";
+      callback(obj)
+    }else{
+      obj.msg = "出了一点错误";
+      callback(obj);
+    }
+  })
+}
+
+
+
 
 /**
  *
@@ -265,4 +305,5 @@ module.exports = {
   AddImageById,
   searchId,
   enterActive,
+  compareMeActive,
 }

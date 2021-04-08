@@ -106,11 +106,20 @@ NewRouter.get('/searchByThema2', (req, res) => {
   })
 })
 
-
-
-
+//  这人参加某活动
 NewRouter.get('/enterActive',  (req, res) => {
   const {_id, pId} =  req.query
   NewActive.enterActive(_id, pId, (data) => res.send(JSON.stringify(data)))
 })
+
+// 我的活动  得到状态 数据库
+NewRouter.get('/enterActive/me', (req, res) => {
+  // 根据这个用户的id， 去模糊查询
+  const {pId}  = req.query;
+  //  算法还没实现 根据这个id  去查找所有活动  如果存在这个获得 就返回获得 
+  NewActive.compareMeActive(pId, (data) => res.send(JSON.stringify(data)))
+  
+})
+
+
 module.exports = NewRouter;
