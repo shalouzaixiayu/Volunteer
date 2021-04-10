@@ -64,7 +64,7 @@ const peopleModel = new mongoose.model('peopleTalk', peopleSchema)
 // new一个评论信息
 function newTalk(obj){
   const _obj = obj instanceof Object ? obj : JSON.parse(obj);
-  return new  peopleModel(_obj).save()
+  return  new peopleModel(_obj).save()
 }
 
 /**

@@ -1,6 +1,22 @@
 import {
   requestAxios
 } from './index'
+/**
+ *
+ *
+ * @export 追加头像-formdata:keys="image",_id用户id，很长的哪个
+ * @param {*} file
+ * @param {*} _id
+ */
+export function addHeadImgBysId(file, _id){
+  return requestAxios({
+    url:`/addHeadImg-${_id}`,
+    data: file,
+    headers:{'Content-Type':'multipart/form-data'}
+  })
+}
+
+
 
 
 export function requestAllPeople() {

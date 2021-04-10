@@ -69,6 +69,13 @@ const PeoScheme = new mongoose.Schema({
 
 const people = new mongoose.model('People', PeoScheme)
 
+const headPicList = ['https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2118582514,3082357895&fm=26&gp=0.jpg',
+  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2172435215,840313269&fm=26&gp=0.jpg',
+  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2899335337,2471522323&fm=26&gp=0.jpg',
+  'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1198700900,3240457758&fm=26&gp=0.jpg',
+  'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3633693073,3344238293&fm=26&gp=0.jpg'
+]
+
 function generatePeople(num = 5, callback) {
   // 生成五个学生数据
   for (let i = 0; i < num; i++) {
@@ -80,7 +87,8 @@ function generatePeople(num = 5, callback) {
         class: "计科三班",
         isVolunteer: true, //  注册人为真
         isManager: true, // 是管理员
-        point: 10 * (i + 1) + i
+        point: 10 * (i + 1) + i,
+        headImg:headPicList[i], // 头像地址
       })
       .save()
       .then(data => {
@@ -167,10 +175,12 @@ function login(info, callback) {
 }
 // 更新信息
 function updatePeople(id, info, callback) {
-  const  _id  = id
+  const _id = id
   const newObj = JSON.parse(info)
   const obj = {}
-  people.findOneAndUpdate({_id}, newObj).then(data => {
+  people.findOneAndUpdate({
+    _id
+  }, newObj).then(data => {
     if (data) {
       obj.status = true
       obj.message = "success"
@@ -185,9 +195,11 @@ function updatePeople(id, info, callback) {
 }
 // 删除志愿者信息
 function deletePeople(info, callback) {
-  const  _id  = info
+  const _id = info
   const obj = {}
-  people.findOneAndRemove({_id,}).then(data => {
+  people.findOneAndRemove({
+    _id,
+  }).then(data => {
     if (data) {
       obj.status = true
       obj.message = "success"
@@ -255,6 +267,36 @@ function getPoint(_id) {
     _id: _id,
   })
 }
+
+
+// 给用户追加头像信息
+async function AddImageById(filename, _id, callback){
+  const obj = await getPoint(_id);
+  const _obj = obj[0];
+  _obj.headImg = filename; //  直接更换图片信息
+  const state = {
+    status:false,
+    data:null,
+    msg:"",
+  };
+  people.findOneAndUpdate({
+    _id,
+  }, _obj).then(res => {
+    if (res) {
+      // console.log(res)
+      state.status = true;
+      state.data = res;
+      state.msg = 'success'
+    } else {
+      state.msg = '错误'
+    }
+    callback(state)
+  })
+
+
+}
+
+
 
 
 // getPoint('604db78ba9b8012e204f291d', data => console.log(data[0].point))
@@ -420,4 +462,5 @@ module.exports = {
   bindStudy,
   bindCom,
   bindImage,
+  AddImageById,
 }
