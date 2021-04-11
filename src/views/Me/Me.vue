@@ -34,7 +34,7 @@
         <span class="right">></span>
       </div>
       <div class="imgs box" @click="showHandle('imgs')">
-        <span class="left"><i class="iconfont icon-image"></i>我的图片</span>
+        <span class="left"><i class="iconfont icon-image"></i>绑定头像</span>
         <span class="right">></span>
       </div>
       <div class="comment box" @click="showHandle('comment')">
@@ -80,16 +80,15 @@
       </div>
       <!-- 上传图片区域 -->
       <div class="loadimg common" v-show="isLoadImg&&$store.state.isLogin&&$store.state.isLogin">
-        <h4>上传图片</h4>
-        <input type="file" class="commoninput" placeholder="请上传图片" multiple @change="loadImghandle">
+        <h4>绑定头像</h4>
+        <input type="file" class="commoninput" placeholder="请上传图片" @change="loadImghandle">
         <p class="commonp">{{error}}</p>
-        <button class="commonbutton" @click="subLoadImg">上传</button>
         <ul>
           <li v-for="(item, i) in imageList" :key="i" @click="previewImg(i)">
             <img :src="item" alt="">
-            <span @click.stop="delImg(i)">x</span>
           </li>
         </ul>
+        <button class="commonbutton" @click="subLoadImg">绑定</button>
       </div>
       <!-- 学习与评论区域 -->
       <div class="comment common" v-show="isComment&&$store.state.isLogin">
@@ -130,7 +129,7 @@
 <script>
 import SToast from '../../components/common/Toast/SToast.vue'
 import BToast from '../../components/common/Toast/BToast.vue'
-import { bindTypeAndGet, requestPeopleById } from '../../network/peopleRequest.js'
+import { bindTypeAndGet, requestPeopleById, addHeadImgBysId } from '../../network/peopleRequest.js'
 export default {
   components: { SToast, BToast },
   data() {
@@ -140,7 +139,6 @@ export default {
       isLoadImg: false,
       phone: this.$store.state.obj.phone,
       error: '',
-      imgList: [],
       imageList: [],   // imageList最终渲染的图片列表
       successStr: '',
       isSuccess: false,
@@ -151,7 +149,8 @@ export default {
       isSignature: false,
       signature: '',
       isScore: false,
-      isRed: false
+      isRed: false,
+      files: {}
     }
   },
   methods: {
@@ -215,24 +214,28 @@ export default {
     // 上传图片 注：不能将第一次上传的图片再一次上传 即第二次不能重复第一次的操作，可能是这个input的规定
     loadImghandle(e) {
       this.error = ''
+      this.imageList = []
       const {files} = e.srcElement
+      this.files = files
       files.forEach(item => {
         const imgURL = window.URL.createObjectURL(item)
-        this.imgList.push(imgURL)
+        this.imageList.push(imgURL)
       })
     },
 
-
     // 提交上传图片
     subLoadImg() {
-      if(!this.imgList.length) {
-        this.error = '请先选择图片在上传'
+      if(!this.imageList.length) {
+        this.error = '请先选择图片在绑定'
         return
       }
-      this.imageList = [...this.imageList, ...this.imgList]
-      console.log(this.imageList)
-      window.sessionStorage.setItem('imageList', this.imageList)
-      this.imgList = []
+      const formData = new FormData()
+      for (const file of this.files) {
+        formData.append("image", file)
+      }
+      addHeadImgBysId(formData, this.$store.state.obj._id).then(res => {
+        console.log(res)
+      })
       this.success('上传成功', false)
     },
 
@@ -241,12 +244,6 @@ export default {
     previewImg(i) {
       this.isPreviewImg = true
       this.previewImgUrl = this.imageList[i]
-    },
-
-
-    // 删除图片
-    delImg(i) {
-      this.imageList.splice(i, 1)
     },
 
 
@@ -331,10 +328,6 @@ export default {
       window.sessionStorage.setItem('userInfo', JSON.stringify(res.data.data[0]))
       this.$store.commit('loginStatus', res.data.data[0])
     })
-    // 获取浏览器上传存储的图片，图片本地地址一样，上传能够显示，但是一加载无法显示
-    // const imgList = window.sessionStorage.getItem('imageList') ? window.sessionStorage.getItem('imageList').split(',') : []
-    // console.log(imgList)
-    // this.imageList = imgList
   }
 }
 </script>
@@ -470,7 +463,6 @@ export default {
   }
   .toast .loadimg ul{
     display: flex;
-    margin-top: 41px;
     flex-wrap: wrap;
   }
   .toast .loadimg ul li{
@@ -482,18 +474,6 @@ export default {
     width: 45px;
     height: 45px;
     border-radius: 3px;
-  }
-  .toast .loadimg ul li span{
-    text-align: center;
-    width: 12px;
-    height: 12px;
-    line-height: 7px;
-    border-radius: 50%;
-    position: absolute;
-    right: -3px;
-    top: -2px;
-    background-color: red;
-    color: #fff;
   }
   .toast .comment.common{
     margin-top: 0;

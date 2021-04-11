@@ -97,11 +97,11 @@ function newTalk(obj){
 // 发布的图片信息
 /**
  *
- * @exports   通过id查找到活动列表，向里面追加活动图片,每次一张
+ * @exports   通过id查找到活动列表，向里面追加活动图片
  * @param {*} nowFileName 图片地址
  * @param {*} id 活动id
  */
- async function AddImageById(nowFileName, id, callback) {
+ async function AddImageById(nowFileNameList, id, callback) {
   const obj = await findTalkById(id)
   const _obj = obj[0]
   const state = {
@@ -109,7 +109,10 @@ function newTalk(obj){
     data: null,
     msg: ''
   }
-  _obj.sendImg.push(nowFileName)
+  // 循环加上
+  for (const file of nowFileNameList) {
+    _obj.sendImg.push(file)
+  }
   peopleModel.findOneAndUpdate({
     _id: id
   }, _obj).then(res => {
@@ -131,6 +134,7 @@ function newTalk(obj){
 function findTalkById(_id){
   return peopleModel.find({_id})
 }
+
 // 查找所有的评论信息 
 function findAllTalk(callback){
   const obj = {
@@ -166,12 +170,12 @@ function findAllTalk(callback){
   const flag =  _obj.giveLike.filter(item => item === pId);
   if (Array.isArray(flag) && flag.length === 0){
     //  表示没有重复操作
-    if (mode){
+    if (mode === 'true'){
       _obj.giveLike.push(pId)
     }
   }else {
     // 重复操作了  但是可以取消
-    if(!mode){
+    if(mode === 'false'){
       _obj.giveLike.splice(_obj.giveLike.findIndex(item => item === pId), 1);
     }
   }

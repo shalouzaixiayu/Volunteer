@@ -12,12 +12,18 @@
         <rank-item  v-for="(item, i) in sList" :key="i"
         :obj="item" :i="i" v-show="i > 2"></rank-item>
       </div>
+
+  
     </div>
+
+
   </div>
 </template>
 
 <script>
 import { requestAllPeople } from "../../network/peopleRequest.js";
+
+
 import RankHead from "./RankHeader.vue";
 import RankItem from "./RankItem.vue";
 import NavBar from "../../components/common/Navbar/NavBar.vue";
@@ -55,6 +61,17 @@ export default {
       })
       return arr
     },
+
+    handleChange(event){
+
+      const files = event.target.files;
+      const formData = new FormData();
+  
+      for (const file of files) {
+        formData.append("image", file)
+      }
+   
+    }
   },
   created() {
     // const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
@@ -65,6 +82,7 @@ export default {
       this.addImgAds(data)
       this.sList = data
       this.listSort(this.sList);
+
     })
   },
 };

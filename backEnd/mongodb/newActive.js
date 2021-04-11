@@ -198,7 +198,7 @@ async function enterActive(_id, pId, callback) {
  * @param {*} nowFileName
  * @param {*} id
  */
-async function AddImageById(nowFileName, id, callback) {
+async function AddImageById(nowFileNameList, id, callback) {
   const obj = await searchId(id)
   const _obj = obj[0]
   const state = {
@@ -206,7 +206,10 @@ async function AddImageById(nowFileName, id, callback) {
     data: null,
     msg: ''
   }
-  _obj.activeImage.push(nowFileName)
+  // 循环加上
+  for (const file of nowFileNameList) {
+    _obj.activeImage.push(file)
+  }
   newActiveModel.findOneAndUpdate({
     _id: id
   }, _obj).then(res => {

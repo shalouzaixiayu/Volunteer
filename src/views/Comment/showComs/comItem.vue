@@ -1,109 +1,116 @@
 <template>
   <div class="item">
     <div class="left">
-      <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3359744892,2081027568&fm=26&gp=0.jpg" alt="">
+      <img :src="userObj.headImg" alt="">
     </div>
     <div class="right">
-      <h4 class="user">我是一只小猪</h4>
-      <p class="text">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
+      <h4 class="user">{{userObj.name}}</h4>
+      <p class="text">{{obj.sendContent}}</p>
       <ul class="img">
-        <li>
-          <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3359744892,2081027568&fm=26&gp=0.jpg" alt="">
-        </li>
-        <li>
-          <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3359744892,2081027568&fm=26&gp=0.jpg" alt="">
-        </li>
-        <li>
-          <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3359744892,2081027568&fm=26&gp=0.jpg" alt="">
-        </li>
-        <li>
-          <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3359744892,2081027568&fm=26&gp=0.jpg" alt="">
-        </li>
-        <li>
-          <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3359744892,2081027568&fm=26&gp=0.jpg" alt="">
-        </li>
-        <li>
-          <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3359744892,2081027568&fm=26&gp=0.jpg" alt="">
+        <li v-for="(item, i) in obj.sendImg" :key="i">
+          <img :src="item" alt="">
         </li>
       </ul>
       <div class="opt">
-        <span class="time">2021-01-01</span>
-        <div class="discuss" >
-          <i @click="showToast" class="iconfont icon-dian"></i>
+        <span class="time">{{obj.sendTimer.slice(0, 10)}}</span>
+        <div class="discuss" @click="showToast">
+          <i  class="iconfont icon-dian"></i>
           <div class="opttoast" v-show="isShowToast">
-            <span class="left" @click="likeHanle"><i class="iconfont icon-aixin"></i>{{str}}</span>
-            <span class="left" @click="commentHandle"><i class="iconfont icon-pinglun"></i>评论</span>
+            <span class="left" @click.stop="likeHanle"><i class="iconfont icon-aixin"></i>{{isLike?'赞':'取消'}}</span>
+            <span class="left" @click.stop="commentHandle"><i class="iconfont icon-pinglun"></i>评论</span>
           </div>
         </div>
       </div>
       <div class="box">
-        <div class="like">
+        <div class="like" v-show="likeList.length">
           <i class="iconfont icon-aixin"></i>
-          <span>张三</span>
-          <span>张三</span>
-          <span>张三</span>
-          <span>张三</span>
-          <span>张三</span>
+          <span v-for="(item, i) in likeList" :key="i">{{item}}</span>
         </div>
         <ul class="comments">
-        <li>
-          <span class="from">张三：</span>
-          <span class="contents">你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒</span>
-        </li>
-        <li>
-          <span class="from">张三：</span>
-          <span class="contents">你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒</span>
-        </li>
-        <li>
-          <span class="from">张三：</span>
-          <span class="contents">你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒你很棒</span>
+        <li v-for="(item, i) in comList" :key="i">
+          <span class="from">{{item.name}}：</span>
+          <span class="contents">{{item.content}}</span>
         </li>
       </ul>
       </div>
     </div>
     <!-- 吐司 -->
-    <b-toast>
-      <div class="common">
-        <h4>评论</h4>
-        <input type="text" class="commoninput" placeholder="请输入评论" v-model="comment">
-        <button class="commonbutton" @click="pushComment" >发表</button>
+    <div class="toastcontainer" v-show="isShow" @click.self="isShow=false">
+      <div class="toast">
+        <div class="common">
+          <h4>评论</h4>
+          <textarea class="commoninput"  rows="10" placeholder="请输入评论" v-model="comment"></textarea>
+          <button class="commonbutton" @click="pushComment" >发表</button>
+        </div>
       </div>
-    </b-toast>
+    </div>
   </div>
 </template>
 
 <script>
-import BToast from '../../../components/common/Toast/BToast.vue'
+import { requestPeopleById } from '../../../network/peopleRequest.js'
+import { giveLikeOrCancel, giveContent } from '../../../network/talkRequest.js'
 export default {
-  components: { BToast },
+  props: ['obj'],
   data() {
     return {
       comment: '',
-      str: '赞',
-      isShowToast: false
+      isLike: true,
+      isShowToast: false,
+      userObj: {},
+      likeList: [],
+      comList: [],
+      isShow: false
     }
   },
   methods: {
     // 弹出点赞吐司
     showToast() {
       this.isShowToast = !this.isShowToast
+      setTimeout(() => {
+        this.isShowToast = false
+      }, 2000)
     },
     // 点赞处理
     likeHanle() {
-      this.str = this.str === '赞' ? '取消' : '赞' 
+      const _id = this.obj._id
+      const pId = this.$store.state.obj._id
+      const mode = this.isLike
+      giveLikeOrCancel(_id, mode, pId).then(res => {
+        console.log(res)
+      })
+      if(mode) {
+        this.likeList.push(this.$store.state.obj.name)
+      } else {
+        const i = this.likeList.findIndex(item => item == this.$store.state.obj.name)
+        this.likeList.splice(i, 1)
+      }
+      this.isLike = !this.isLike
       this.close()
 
     },
 
     // 评论处理
     commentHandle() {
-      this.$store.commit('changeToastStatus')
-      this.close()
+      this.isShow =true
     },
 
     // 发表评论
     pushComment() {
-      this.$store.commit('changeToastStatus')
+      if(!this.comment.trim()) {
+        return
+      }
+      const _id = this.obj._id
+      const pId = this.$store.state.obj._id
+      const content = this.comment
+      this.comList.push({
+        name: this.$store.state.obj.name,
+        content 
+      })
+      giveContent(_id, pId, content)
+      this.isShow = false
+      this.comment = ''
+      this.close()
     },
     
     // 关闭点赞吐司
@@ -111,7 +118,38 @@ export default {
       setTimeout(() => {
         this.isShowToast = false
       }, 500)
+    },
+
+    // 获取用户
+    findUserById(_id, cb) {
+      requestPeopleById(_id).then(res => {
+        const {data} = res
+        if(data.status) {
+          cb(data)
+        }
+    })
     }
+  },
+  created() {
+    // 获取头像名字
+    this.findUserById(this.obj.sendId, data => {
+      this.userObj = data.data[0]
+    })
+    // 获取点赞名字
+    this.obj.giveLike.forEach(item => {
+      this.findUserById(item, data => {
+        this.likeList.push(data.data[0].name)
+        if(data.data[0].name == this.$store.state.obj.name) {
+          this.isLike = false
+        }
+      })
+    })
+    // 获取评论名字
+    this.obj.giveContent.forEach(item => {
+      this.findUserById(item.pId, data => {
+        this.comList.push({name: data.data[0].name, content: item.content})
+      })
+    })
   }
 }
 </script>
@@ -124,6 +162,7 @@ export default {
     font-size: 16px;
   }
   .item .right{
+    /* width: 613px; */
     flex: 1;
     margin-left: 20px;
     display: flex;
@@ -141,6 +180,7 @@ export default {
     margin-bottom: 10px;
   }
   .item .right .text{
+    word-break:break-all;
     line-height: 1.5;
   }
   .item .right .img{
@@ -192,6 +232,7 @@ export default {
     line-height: 1.4;
     margin-bottom: 5px;
     padding: 4px 8px;
+    word-break:break-all;
   }
   .item .right .comments li .from{
     font-weight: bold;
@@ -226,10 +267,12 @@ export default {
     font-size: 16px;
   }
   .common .commoninput{
-    padding: 15px 15px 15px 20px;
-    background-color: rgb(236, 233, 233);
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: rgb(247, 247, 247);
     border-radius: 5px;
     box-shadow: 0 0 5px #fff inset;
+    resize: none;
   }
   .common .commonbutton{
     cursor: pointer;
@@ -242,6 +285,29 @@ export default {
   .common h4{
     color: #999;
     text-align: center;
-    margin-bottom: 34px;
+    margin-bottom: 15px;
+  }
+  .toastcontainer{
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    width: 750px;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .3);
+    z-index: 99;
+  }
+  .toastcontainer .toast{
+    width: 80%;
+    max-height: 400px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 18%;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #ccc;
+    padding: 20px;
+    box-sizing: border-box;
   }
 </style>

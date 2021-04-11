@@ -1,15 +1,15 @@
 <template>
     <ul>
-      <li :class="activeIndex===i?'active':''" v-for="(item, i) in list" :key="i" @click="choose(item, i)">{{item}}</li>
+      <li :class="activeIndex===i?'active':''" v-for="(item, i) in list" :key="i" @click="choose(item.activeThema, i)">{{item.activeThema}}</li>
     </ul>
 </template>
 
 <script>
 export default {
+  props: ['list'],
   data() {
     return {
-      activeIndex: 0,
-      list: ['睡觉', '吃饭', '学习', '植树', '其他']
+      activeIndex: 0
     }
   },
   methods: {
@@ -28,11 +28,15 @@ export default {
     justify-content: space-around;
   }
   ul li{
-    padding: 7px 26px;
+    width: 18%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
     background-color: #fff;
     border-radius: 2px;
     cursor: pointer;
     margin-bottom: 10px;
+    text-overflow: ellipsis;
   }
   .active{
     background-color: red;

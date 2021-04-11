@@ -13,10 +13,7 @@
       </template>
     </nav-bar>
     <div class="main">
-      <com-item></com-item>
-      <com-item></com-item>
-      <com-item></com-item>
-      <com-item></com-item>
+      <com-item v-for="item in list" :key="item._id" :obj='item'></com-item>
     </div>
   </div>
 </template>
@@ -24,8 +21,14 @@
 <script>
 import NavBar from '../../../components/common/Navbar/NavBar.vue'
 import ComItem from './comItem.vue'
+import { getAllTalk } from '../../../network/talkRequest.js'
 export default {
   components: { NavBar, ComItem },
+  data() {
+    return {
+      list: []
+    }
+  },
   methods: {
 
     backHandle() {
@@ -40,6 +43,13 @@ export default {
   created() {
     const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
     this.$store.commit('loginStatus', obj)
+    getAllTalk().then(res => {
+      const {data} = res
+      if(data.msg == "success") {
+        this.list = data.data
+      }
+    })
+ 
   }
 }
 </script>
@@ -56,8 +66,8 @@ export default {
   .top .back{
   
     font-size: 30px;
-    /* position: absolute; */
-    /* left: 30px; */
+    position: absolute;
+    left: 30px;
     cursor: pointer;
     
   }

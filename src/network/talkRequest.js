@@ -1,4 +1,4 @@
-import {requestAxios} from 'index.js'
+import {requestAxios} from './index';
 
 // 请求所有评论信息
 export function getAllTalk(){

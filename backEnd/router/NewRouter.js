@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 //  处理下载图片插件
-const _storage = multer.diskStorage({
+let _storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/news')
   },
@@ -15,7 +15,7 @@ const _storage = multer.diskStorage({
   }
 })
 
-const upload = multer({
+let upload = multer({
   storage: _storage
 })
 
@@ -36,8 +36,10 @@ NewRouter.post('/image:id', upload.array('image', 10), (req, res) => {
       console.log('更改Ok')
     });
     // 发送事件
-    NewActive.AddImageById(`http://localhost:3000/static/news/${id.substr(0, 8)}-${files[0].originalname}`, id, data => res.send(JSON.stringify(data)))
+    NewActive.AddImageById([`http://localhost:3000/static/news/${id.substr(0, 8)}-${files[0].originalname}`], id, data => res.send(JSON.stringify(data)))
   } else {
+    // 暂存文件数组
+    let fileList = []; 
     for (const file of files) {
       const oldName = path.join('../backEnd', file.path);
       const newName = path.join('../backEnd', file.destination, `${id.substr(0, 8)}-${file.originalname}`);
@@ -45,12 +47,11 @@ NewRouter.post('/image:id', upload.array('image', 10), (req, res) => {
         if (err) throw err;
         console.log('更改Ok');
       });
-      // 发送事件
-      NewActive.AddImageById(`http://localhost:3000/static/news/${id.substr(0, 8)}-${file.originalname}`, id, data => res.send(JSON.stringify(data)))
+      fileList.push(`http://localhost:3000/static/talks/${id.substr(0, 8)}-${file.originalname}`)
     }
+    // 发送事件
+    NewActive.AddImageById(fileList, id, data => res.send(JSON.stringify(data)))
   }
-
-
 })
 
 

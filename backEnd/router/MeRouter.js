@@ -7,7 +7,7 @@ const fs = require('fs');
 
 
 //  处理下载图片插件
-const _storage = multer.diskStorage({
+let _storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/headImgs')
   },
@@ -16,7 +16,7 @@ const _storage = multer.diskStorage({
   }
 })
 
-const upload = multer({
+let upload = multer({
   storage: _storage
 })
 

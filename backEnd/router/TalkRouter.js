@@ -7,25 +7,23 @@ const path = require('path');
 
 
 //  处理评论圈图片函数
-const _storage = multer.diskStorage({
-  destination: (req, file, cb) =>{
+// 这个是全局定义的  只能用let  不然修改不了  
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
     cb(null, 'uploads/talks')
   },
-  filename: (req, file, cb) => {
+  filename: function (req, file, cb) {
     cb(null, file.originalname)
   }
 })
 
-const upload = multer({
-  storag:_storage
-})
+let upload = multer({ storage: storage })
 
 
 // 朋友圈评论图片 
 talkRouter.post('/talk/imgTalk-:talkId', upload.array('image', 10), (req, res) => {
   const {talkId} = req.params;  // 拿到评论圈id信息
   const  files = req.files;
-
   // 更改文件名
   if (files.length <= 1) {
     const oldName = path.join('../backEnd', files[0].path);
@@ -35,8 +33,10 @@ talkRouter.post('/talk/imgTalk-:talkId', upload.array('image', 10), (req, res) =
       console.log('更改Ok')
     });
     // 发送事件
-    friends.AddImageById(`http://localhost:3000/static/talks/${talkId.substr(0, 8)}-${files[0].originalname}`, talkId, data => res.send(JSON.stringify(data)))
+    friends.AddImageById([`http://localhost:3000/static/talks/${talkId.substr(0, 8)}-${files[0].originalname}`,], talkId, data => res.send(JSON.stringify(data)))
   } else {
+    // 暂存文件数组
+    let fileList = []; 
     for (const file of files) {
       const oldName = path.join('../backEnd', file.path);
       const newName = path.join('../backEnd', file.destination, `${talkId.substr(0, 8)}-${file.originalname}`);
@@ -44,10 +44,10 @@ talkRouter.post('/talk/imgTalk-:talkId', upload.array('image', 10), (req, res) =
         if (err) throw err;
         console.log('更改Ok');
       });
-      // 发送事件
-      friends.AddImageById(`http://localhost:3000/static/talks/${talkId.substr(0, 8)}-${file.originalname}`, 
-      talkId, data => res.send(JSON.stringify(data)))
+      fileList.push(`http://localhost:3000/static/talks/${talkId.substr(0, 8)}-${file.originalname}`)
     }
+      // 发送事件
+      friends.AddImageById(fileList,  talkId, data => res.send(JSON.stringify(data)))
   }
 })
 
@@ -74,7 +74,11 @@ talkRouter.get('/talk/giveContent', (req, res) => {
 
 // 请求所有信息
 talkRouter.get('/talk/getAll', (req, res) => {
-  friends.findAllTalk().then(data => res.send(JSON.stringify(data)))
+  friends.findAllTalk(data => {
+    setTimeout(() => {
+      res.send(JSON.stringify(data))
+    }, 100);
+  })
 })
 
 // 发布一个新的评论信息  创建评论信息
