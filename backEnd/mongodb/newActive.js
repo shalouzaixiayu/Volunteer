@@ -96,50 +96,50 @@ function searchId(id) {
  *  通过主题来查询新建的活动  model ture 表示正则  否则就是普通
  * @param {*} thema  这是一个对象 {thema: ....}
  */
-function findActiveThema(thema, model=false) {
-  if(!model){
+function findActiveThema(thema, model = false) {
+  if (!model) {
     return newActiveModel.find({
       activeThema: thema
     })
-  }else if(model){
+  } else if (model) {
     return newActiveModel.find({
       activeThema: {
         $regex: eval(`/.*${thema}.*/ig`)
       }
     })
   }
-  
+
 }
 /**
  *
  * 通过志愿id 去匹配获得中的  activeProposer 状态信息
  * @param {*} pId 志愿id
  * @param {*} callback  
- */  
+ */
 //  [{
 // 	"status" : "pending",
 // 	"sId" : "6053184c613f0e4348e6429e"
 // }]
-function compareMeActive(pId,callback){
+function compareMeActive(pId, callback) {
   const obj = {
     status: false,
     data: null,
     msg: ""
   }
   newActiveModel.find({
-    activeProposer:{
+    activeProposer: {
       // 数组嵌套查询
-      $elemMatch:{
-        'sId':pId
+      $elemMatch: {
+        'sId': pId
       }
     }
   }).then(res => {
-    if(res.length >= 1){
+    if (res.length >= 1) {
       obj.data = res;
-      obj.status =  true;
+      obj.status = true;
       obj.msg = "success";
       callback(obj)
-    }else{
+    } else {
       obj.msg = "出了一点错误";
       callback(obj);
     }
@@ -172,7 +172,7 @@ async function enterActive(_id, pId, callback) {
   //  进行排他判断
   const flag = _activeObj.activeProposer.filter(item => item.sId === pId);
   // console.log(flag)
-  if(Array.isArray(flag) && flag.length === 0){
+  if (Array.isArray(flag) && flag.length === 0) {
     // console.log(222)
     _activeObj.activeProposer.push(thisObj);
     _activeObj.activeNumber -= 1;
@@ -180,16 +180,16 @@ async function enterActive(_id, pId, callback) {
     newActiveModel.findOneAndUpdate({
       _id: _id,
     }, _activeObj).then(res => {
-      obj.status =  true;
+      obj.status = true;
       obj.data = res;
       obj.msg = "success";
       callback(obj);
     })
-  }else{
+  } else {
     // console.log(111)
     obj.msg = "请勿重新操作，等待审核..."
     callback(obj)
-  } 
+  }
 }
 
 /**
@@ -276,7 +276,9 @@ function createActive(obj, callback) {
  */
 function getActiveList(page, count, callback) {
   const obj = {}
-  newActiveModel.find().sort({activeTimer:-1}).then(data => {
+  newActiveModel.find().sort({
+    activeTimer: -1
+  }).then(data => {
     obj.status = true,
       obj.msg = 'success',
       obj.length = data.length,
@@ -298,6 +300,45 @@ function getActiveList(page, count, callback) {
 
 
 
+//  对数据进行更新
+function updateNewActive(_id, info, callback) {
+  const _info = info instanceof Object ? info : JSON.parse(info);
+  //  拿到之前的数据
+  // let previousInfo = await searchId(_id);
+  const obj = {
+    data: null,
+    msg: ""
+  }
+  newActiveModel.findOneAndUpdate({
+    _id
+  }, _info).then(res => {
+    // console.log(res);
+    if(res.length >= 1){
+      obj.data = res;
+      obj.msg ="success"
+      callback(obj)
+    }else{
+      callback(obj)
+    }
+  })
+}
+
+// 删除数据
+function deleteNewActive(_id, callback){
+  const obj = {msg : "error"}
+  newActiveModel.findOneAndRemove({_id}).then(
+    res => {
+      if (res){
+        obj.msg = "删除成功"
+        callback(obj);
+      }else{
+        callback(obj);
+      }
+    }
+  )
+}
+
+
 
 
 module.exports = {
@@ -309,4 +350,6 @@ module.exports = {
   searchId,
   enterActive,
   compareMeActive,
+  updateNewActive,
+  deleteNewActive,
 }

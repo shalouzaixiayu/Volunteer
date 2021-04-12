@@ -8,7 +8,7 @@
       <p class="text">{{obj.sendContent}}</p>
       <ul class="img">
         <li v-for="(item, i) in obj.sendImg" :key="i">
-          <img :src="item" alt="">
+          <img :src="item" alt="" @click="prew(item)" >
         </li>
       </ul>
       <div class="opt">
@@ -44,6 +44,9 @@
         </div>
       </div>
     </div>
+    <div class="imgprew" v-show="isBigImg" @click="isBigImg=false">
+      <img :src="url" alt="">
+    </div>
   </div>
 </template>
 
@@ -60,39 +63,48 @@ export default {
       userObj: {},
       likeList: [],
       comList: [],
-      isShow: false
+      isShow: false,
+      timer: null,
+      isBigImg: false,
+      url: ''
     }
   },
   methods: {
     // 弹出点赞吐司
     showToast() {
       this.isShowToast = !this.isShowToast
-      setTimeout(() => {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
         this.isShowToast = false
       }, 2000)
     },
     // 点赞处理
     likeHanle() {
+      clearTimeout(this.timer)
       const _id = this.obj._id
       const pId = this.$store.state.obj._id
       const mode = this.isLike
       giveLikeOrCancel(_id, mode, pId).then(res => {
-        console.log(res)
+        const { data } = res
+        if(!data.status) {
+          return
+        }
+        if(mode) {
+          this.likeList.push(this.$store.state.obj.name)
+        } else {
+          const i = this.likeList.findIndex(item => item == this.$store.state.obj.name)
+          this.likeList.splice(i, 1)
+        }
+        this.isLike = !this.isLike
+        this.close()
       })
-      if(mode) {
-        this.likeList.push(this.$store.state.obj.name)
-      } else {
-        const i = this.likeList.findIndex(item => item == this.$store.state.obj.name)
-        this.likeList.splice(i, 1)
-      }
-      this.isLike = !this.isLike
-      this.close()
-
     },
 
     // 评论处理
     commentHandle() {
+      clearTimeout(this.timer)
       this.isShow =true
+      this.close()
     },
 
     // 发表评论
@@ -103,14 +115,18 @@ export default {
       const _id = this.obj._id
       const pId = this.$store.state.obj._id
       const content = this.comment
-      this.comList.push({
-        name: this.$store.state.obj.name,
-        content 
+      giveContent(_id, pId, content).then(res => {
+        const { data } = res
+        if(!data.status) {
+          return
+        }
+        this.comList.push({
+          name: this.$store.state.obj.name,
+          content 
+        })
       })
-      giveContent(_id, pId, content)
       this.isShow = false
       this.comment = ''
-      this.close()
     },
     
     // 关闭点赞吐司
@@ -128,6 +144,11 @@ export default {
           cb(data)
         }
     })
+    },
+
+    prew(url) {
+      this.isBigImg = true
+      this.url = url
     }
   },
   created() {
@@ -162,7 +183,6 @@ export default {
     font-size: 16px;
   }
   .item .right{
-    /* width: 613px; */
     flex: 1;
     margin-left: 20px;
     display: flex;
@@ -309,5 +329,18 @@ export default {
     box-shadow: 0 0 15px #ccc;
     padding: 20px;
     box-sizing: border-box;
+  }
+  .imgprew{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .96);
+    text-align: center;
+    z-index: 100;
+  }
+  .imgprew img{
+    height: 100%;
   }
 </style>

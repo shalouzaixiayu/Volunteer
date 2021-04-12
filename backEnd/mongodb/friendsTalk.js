@@ -9,6 +9,10 @@ mongoose.connect('mongodb://localhost:27017/Volunteer', {
 mongoose.set('useFindAndModify', false);
 
 
+//  导入加分的逻辑
+const peopleDb = require('../mongodb/PeopleDb');
+
+
 // 数据库架构
 const peopleSchema =  new mongoose.Schema({
   // 发布人名字
@@ -73,12 +77,17 @@ function newTalk(obj){
  * @param {*} obj  活动对象
  */
  function createTalk(obj, callback) {
+  
   const _obj = obj instanceof Object ? obj : JSON.parse(obj);
   const start = {
     data: null,
     msg: "",
     status: false,
   }
+  // 给该用户加分
+  peopleDb.addPointById(_obj.sendId, 10, (res) => console.log(res));
+
+
   findTalkById(_obj._id).then(res => {
     if (res.length >= 1) {
       start.msg = "该评论信息已存在！";
@@ -172,6 +181,8 @@ function findAllTalk(callback){
     //  表示没有重复操作
     if (mode === 'true'){
       _obj.giveLike.push(pId)
+        // 给该用户加分
+      peopleDb.addPointById(_obj.sendId, 2, (res) => console.log(res));
     }
   }else {
     // 重复操作了  但是可以取消
@@ -212,6 +223,10 @@ function findAllTalk(callback){
     msg: ''
   }
   _obj.giveContent.push({pId, content})
+
+  // 给该用户加分
+  peopleDb.addPointById(_obj.sendId, 5, (res) => console.log(res));
+
   peopleModel.findOneAndUpdate({
     _id,
   }, _obj).then(res => {

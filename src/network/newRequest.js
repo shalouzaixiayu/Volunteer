@@ -131,3 +131,36 @@ export function compareMe(pId){
     }
   })
 }
+
+/**
+ *
+ *
+ * @export  更新这条数据，通过_id
+ * @param {*} _id
+ * @param {*} info
+ */
+export function updateNewActive(_id, info){
+  return requestAxios({
+    url:"/enterActive/update",
+    method:"GET",
+    params:{
+      _id, info
+    }
+  })
+}
+
+/**
+ *
+ *
+ * @export  删除这条数据，通过_id
+* @param _id
+ */
+ export function deleteNewActive(_id){
+  return requestAxios({
+    url:"/enterActive/delete",
+    method:"GET",
+    params:{
+      _id
+    }
+  })
+}

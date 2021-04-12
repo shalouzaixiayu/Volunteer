@@ -113,12 +113,6 @@ function addPeople(info, callback) {
 
 // 注册志愿者信息
 function register(info, callback) {
-  // 先验证，后注册信息
-  // let obj = {
-  //   data: null,
-  //   msg: "",
-  //   status: false
-  // }
   people.find({
     $or: [{
         name: info.name
@@ -262,7 +256,7 @@ function bindAutograph(id, msg, callback) {
 }
 
 // 获取现在的个人信息 return promise 
-function getPoint(_id) {
+function getInfoById(_id) {
   return people.find({
     _id: _id,
   })
@@ -270,8 +264,9 @@ function getPoint(_id) {
 
 
 // 给用户追加头像信息
+// 这个只有一张， 只会覆盖的加  
 async function AddImageById(filename, _id, callback){
-  const obj = await getPoint(_id);
+  const obj = await getInfoById(_id);
   const _obj = obj[0];
   _obj.headImg = filename; //  直接更换图片信息
   const state = {
@@ -299,14 +294,14 @@ async function AddImageById(filename, _id, callback){
 
 
 
-// getPoint('604db78ba9b8012e204f291d', data => console.log(data[0].point))
+// getInfoById('604db78ba9b8012e204f291d', data => console.log(data[0].point))
 
 // bindPoint("604db78ba9b8012e204f291d")
 // 更改积分
 async function bindPoint(id, point, callback) {
   const _id = id
   const obj = {}
-  const nowPoint = await getPoint(id).then(data => data[0].point)
+  const nowPoint = await getInfoById(id).then(data => data[0].point)
   people.findOneAndUpdate({
     _id,
   }, {
@@ -327,8 +322,7 @@ async function bindPoint(id, point, callback) {
 
 // 绑定学习记录
 async function bindStudy(id, info, callback) {
-  const nowPoint = await getPoint(id).then(data => data[0].point)
-  let nowActiveList = await getPoint(id).then(data => data[0].activeList)
+  let nowActiveList = await getInfoById(id).then(data => data[0].activeList)
   const _info = JSON.parse(info)
   nowActiveList.push(_info)
   const obj = {}
@@ -336,7 +330,6 @@ async function bindStudy(id, info, callback) {
     _id: id
   }, {
     activeList: nowActiveList,
-    point: nowPoint + 10
   }).then(data => {
     if (data) {
       obj.data = data
@@ -355,15 +348,13 @@ async function bindStudy(id, info, callback) {
 // 绑定评论
 async function bindCom(id, info, callback) {
   const _info = JSON.parse(info)
-  const nowPoint = await getPoint(id).then(data => data[0].point)
-  let nowActiveList = await getPoint(id).then(data => data[0].activeList)
+  let nowActiveList = await getInfoById(id).then(data => data[0].activeList)
   nowActiveList.push(_info)
   const obj = {}
   people.findOneAndUpdate({
     _id: id
   }, {
     activeList: nowActiveList,
-    point: nowPoint + 20
   }).then(data => {
     if (data) {
       obj.data = data
@@ -379,18 +370,14 @@ async function bindCom(id, info, callback) {
   })
 }
 
-// 绑定头像
+// 绑定头像  await 可以直接拿到 promise 的 then 值
 async function bindImage(id, info, callback) {
   const _info = JSON.parse(info)
-  const nowPoint = await getPoint(id).then(data => {
-    return data[0].point
-  })
   const obj = {}
   people.findOneAndUpdate({
     _id: id
   }, {
     headImg: _info.headImg, // 待修改
-    point: nowPoint + 1
   }).then(data => {
     if (data) {
       obj.data = data
@@ -447,7 +434,37 @@ function searchByIdAndSid(id, callback) {
     })
 }
 
+
+//  给用户加分 
+async function addPointById(_id, point, callback){
+  // 拿到旧的分数
+  const perviousInfo = await getInfoById(_id);
+  const perPoint = perviousInfo[0].point;
+  const obj = {
+    data: null,
+    msg:"",
+  }
+  people.findOneAndUpdate({
+    _id,
+  }, {
+    point: parseInt(perPoint) + parseInt(point)
+  }).then(res => {
+    if(res){
+      obj.data = res;
+      obj.msg = "success";
+      callback(obj);
+    }else{
+      callback(obj)
+    }
+  })
+
+
+}
+
+
+
 module.exports = {
+  addPointById,
   generatePeople,
   getPeopleNumber,
   getAllPeople,

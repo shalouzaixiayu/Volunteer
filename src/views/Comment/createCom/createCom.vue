@@ -33,6 +33,7 @@ import ImgItem from '../../ActivePush/imgItem.vue'
 import SToast from '../../../components/common/Toast/SToast.vue'
 import { sendTalk, sendTalkImg } from '../../../network/talkRequest.js'
 import { getAllNewActive } from '../../../network/newRequest.js'
+// import {addPointById} from '../../../network/peopleRequest';
 export default {
   components: { NavBar, ActiveType, ActiveArea, ImgItem, SToast },
   data() {
@@ -63,12 +64,12 @@ export default {
 
     // 图片处理
     imgHandle(files) {
-      console.log(files)
       this.files = files
     },
 
     // 发布
     sub() {
+      let flag = true
       const {_id} = this.$store.state.obj
       if(!this.sendContent.trim()) {
         return this.err('请填写完整')
@@ -84,14 +85,25 @@ export default {
           return this.err('发布失败')
         }
         if(this.files.length) {
+          flag = false
           const formData = new FormData()
           for (const file of this.files) {
             formData.append("image", file)
           }
-          sendTalkImg(formData, id);
+          sendTalkImg(formData, id).then(res => {
+            const {data} = res
+            if(!data.status) {
+              return this.err('图片上传失败')
+            }
+            flag = true
+            return this.$router.go(-1)
+          })
         }
-        
-        this.$router.go(-1)
+        // 加分逻辑
+
+        if(flag) {
+          this.$router.go(-1)
+        }
       })
     },
     // 错误提示
@@ -137,6 +149,7 @@ export default {
     position: absolute;
     left: 30px;
     cursor: pointer;
+    font-size: 30px;
   }
   .main {
     height: 95%;

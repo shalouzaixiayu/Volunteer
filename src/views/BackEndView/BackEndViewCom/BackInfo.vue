@@ -4,7 +4,7 @@
       <span class="iconfont icon-chuli1">{{ title }}</span>
       <span class="len iconfont icon-renshu">总数: {{ AllPeople.length }}</span>
     </div>
-    <div id="tb" v-show="isShowTb">
+    <div id="tb" v-show="isShowTb" :class="{addPadding:isShowTb}">
       <table class="tb">
         <tr class="oddrowcolor">
           <th>昵称</th>
@@ -141,6 +141,9 @@ export default {
 </script>
 
 <style scoped>
+.addPadding {
+  padding-bottom:100px;
+}
 .point{
   cursor: pointer;
 }

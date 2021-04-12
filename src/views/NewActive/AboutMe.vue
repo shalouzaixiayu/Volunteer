@@ -7,8 +7,9 @@
       v-show="enterList.length === 0 && !showSmall"
       @click="showME"
     >
-      点我刷新...
-    </div>
+      {{msg2}}
+    </div> 
+ 
 
     <!-- 做一个列表 展示现在的状态 -->
     <ul class="zlist">
@@ -44,9 +45,14 @@ export default {
       msg: "", // 弹出信息
       enterList: [], //  参加的活动列表
       pId: "", // 志愿id
+      msg2:"点我刷新...", // 前面信息
     };
   },
   created() {
+    const obj = window.sessionStorage.getItem('userInfo')?JSON.parse(window.sessionStorage.getItem('userInfo')):{}
+
+    this.$store.commit('loginStatus', obj);
+
     //  进行状态判断
     if (!this.$store.state.isLogin) {
       this.showSmall = !this.showSmall;
@@ -61,6 +67,8 @@ export default {
         // console.log(res)
         if (res.data.status){
           this.enterList = res.data.data;
+        }else{
+          this.msg2 = "你好像什么都没有参加哟..."
         }
       });
     },
@@ -154,11 +162,9 @@ export default {
   text-overflow: ellipsis;
 }
 .zlist li div:nth-child(2){
-  width:30%;
+  width:25%;
 }
-.zlist li div:nth-child(3){
-  width:30%;
-}
+
 .zlist li:hover{
   /* color: #fff; */
   background-color: rgba(1, 1, 1, 0.3);

@@ -22,6 +22,7 @@ let upload = multer({
 
 // 给用户上传头像
 Merouter.post('/addHeadImg-:_id', upload.array('image', 1), (req, res) => {
+  console.log(123123)
   const {_id} = req.params; //  解析 id
   const files = req.files;
 
@@ -105,6 +106,13 @@ Merouter.get('/deletePeople', (req, res) => {
   const {_id, newObj} = req.query
   peopleDb.updatePeople(_id, newObj, data => res.send(JSON.stringify(data)))
  })
+
+// 给此人加分
+Merouter.get('/me/addPoint', (req, res) => {
+  const {_id, point} = req.query;
+  peopleDb.addPointById(_id, point, (data) => res.send(JSON.stringify(data)))
+})
+
 
 // 各种杂项
 // const findType = {

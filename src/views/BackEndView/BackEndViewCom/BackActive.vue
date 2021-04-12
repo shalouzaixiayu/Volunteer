@@ -4,7 +4,7 @@
       <span class="iconfont icon-chuli1">{{ title }}</span>
       <span class="len iconfont icon-renshu">总数: {{ Allactive.length }}</span>
     </div>
-    <div id="tb" v-show="isShowTb">
+    <div id="tb" v-show="isShowTb" :class="{ addPadding: isShowTb }">
       <table class="tb">
         <tr class="oddrowcolor">
           <th>标题</th>
@@ -130,6 +130,9 @@ export default {
 </script>
 
 <style scoped>
+.addPadding {
+  padding-bottom: 150px;
+}
 .point {
   cursor: pointer;
 }
@@ -148,7 +151,7 @@ export default {
   justify-content: center;
   cursor: pointer;
 }
-.infos .title span:nth-child(1){
+.infos .title span:nth-child(1) {
   width: 40%;
 }
 .infos .title span:nth-child(2) {
@@ -159,6 +162,7 @@ export default {
   height: 45vh;
   overflow-x: hidden;
   overflow-y: auto;
+  background-color: rgb(226, 216, 217);
 }
 table.tb {
   width: 90%;

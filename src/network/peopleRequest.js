@@ -11,11 +11,28 @@ import {
 export function addHeadImgBysId(file, _id){
   return requestAxios({
     url:`/addHeadImg-${_id}`,
+    method: 'post',
     data: file,
     headers:{'Content-Type':'multipart/form-data'}
   })
 }
 
+/**
+ *
+ *
+ * @export 通过id查找给这个人加减分
+ * @param {*} _id  学号id
+ * @param {*} point 分数
+ */
+export function addPointById(_id, point){
+  return requestAxios({
+    url:"/me/addPoint",
+    method:"GET",
+    params:{
+      _id, point,
+    }
+  })
+}
 
 
 

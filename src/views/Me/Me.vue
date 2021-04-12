@@ -233,10 +233,14 @@ export default {
       for (const file of this.files) {
         formData.append("image", file)
       }
+      // 上传头像接口 执行完成 之后刷新
       addHeadImgBysId(formData, this.$store.state.obj._id).then(res => {
-        console.log(res)
+        if(res.status == 200){
+          this.success('上传成功', false);
+          window.location.reload();
+        }
       })
-      this.success('上传成功', false)
+
     },
 
 

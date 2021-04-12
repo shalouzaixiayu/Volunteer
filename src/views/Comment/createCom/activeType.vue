@@ -36,7 +36,11 @@ export default {
     border-radius: 2px;
     cursor: pointer;
     margin-bottom: 10px;
+    overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
+    padding:0 5px;
+    box-sizing: border-box;
   }
   .active{
     background-color: red;

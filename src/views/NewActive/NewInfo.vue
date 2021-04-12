@@ -60,6 +60,7 @@
 
 <script>
 import { searchNewById, enterActive } from "../../network/newRequest";
+import { addPointById } from "../../network/peopleRequest";
 export default {
   name: "NewInfo",
   props: {
@@ -105,13 +106,21 @@ export default {
         this.showSmall = !this.showSmall;
 
         // 发送事件 去审核这个活动
-        enterActive(this.obj._id, this.$store.state.obj._id).then(res => {
-          if (res.data.status){
+        enterActive(this.obj._id, this.$store.state.obj._id).then((res) => {
+          if (res.data.status) {
             // 如果成功
             this.obj = res.data.data;
-            window.location.reload();
+
+            // 加分逻辑
+            addPointById(this.$store.state.obj._id, 5, (data) => {
+              if (data) {
+              console.log(data)
+              }
+              
+            });
+              window.location.reload();
           }
-        })
+        });
 
         setTimeout(() => {
           this.showSmall = !this.showSmall;

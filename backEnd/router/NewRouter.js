@@ -124,4 +124,19 @@ NewRouter.get('/enterActive/me', (req, res) => {
 })
 
 
+// 更新数据
+NewRouter.get('/enterActive/update', (req, res) => {
+  // 通过 _id 去对数据进行更新
+  const {_id, info}  = req.query;
+  NewActive.updateNewActive(_id, info, (data) => res.send(JSON.stringify(data)))
+  
+})
+
+
+// 删除数据
+NewRouter.get('/enterActive/delete', (req, res) => {
+  const {_id} = req.query;
+  NewActive.deleteNewActive(_id,  (data) => res.send(JSON.stringify(data)))
+})
+
 module.exports = NewRouter;
