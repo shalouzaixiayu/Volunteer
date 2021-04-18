@@ -217,7 +217,7 @@ export default {
       this.imageList = []
       const {files} = e.srcElement
       this.files = files
-      files.forEach(item => {
+      files.forEach(item => { 
         const imgURL = window.URL.createObjectURL(item)
         this.imageList.push(imgURL)
       })
@@ -361,7 +361,7 @@ export default {
   .header .hadlogin .bigimg img{
     width: 100%;
     height: 30vh;
-    filter: blur(3px);
+    filter: blur(3px);  
   }
   .header .hadlogin .info{
     position: absolute;

@@ -214,9 +214,9 @@ export default {
       switch (value) {
         case '计算机信息工程学院': this.classList = ['计科一班', '计科二班', '计科三班', '软件一班', '软件二班', '大数据一班']
           break;
-        case '外国语学院': this.classList = ['外语一班', '外语二班', '外三班', '对外一班', '对外二班', '外语文化一班']
+        case '外国语学院': this.classList = ['外语一班', '外语二班', '外语三班', '文化一班', '文化二班', '文化三班']
           break;
-        case '人文学院': this.classList = ['语文一班', '语文二班', '语三班', '数学一班', '数学二班', '幼儿一班']
+        case '人文学院': this.classList = ['语文一班', '语文二班', '语文三班', '数学一班', '数学二班', '数学三班']
           break;
       }
       this.isDepartment = false
