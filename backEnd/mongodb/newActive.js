@@ -175,7 +175,7 @@ async function enterActive(_id, pId, callback) {
   if (Array.isArray(flag) && flag.length === 0) {
     // console.log(222)
     _activeObj.activeProposer.push(thisObj);
-    _activeObj.activeNumber -= 1;
+    // _activeObj.activeNumber -= 1;
     // 进行数据更新
     newActiveModel.findOneAndUpdate({
       _id: _id,

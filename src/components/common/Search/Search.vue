@@ -37,7 +37,9 @@ export default {
       }else if(this.type === 'nowActive' && this.search){
         searchNewByThema(this.search).then(data => {
           this.obj = data.data
+          console.log(this.type)
           this.obj.type = this.type;
+        
           this.$emit('newSearch', this.obj)
         })
         }

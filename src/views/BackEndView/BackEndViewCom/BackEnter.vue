@@ -46,19 +46,31 @@
           <div v-else-if="key === 'activeProposer'">
             <!-- 搭建状态 更改结构 -->
             <ul class="stu_status">
-              <li v-for="item in currentObj[key]" :key="item">
+              <li v-for="(item, index) in currentObj[key]" :key="index">
                 <div>
-                  <span>姓名:</span><span>{{ handleNameById(item.sId) }}</span>
+                  <span>姓名:</span><span>{{ handleNameById(item.sId, index) }}</span>
                 </div>
                 <div>
                   <span>初始状态:</span>
                   <select v-model="item.status">
-                    <option :selected="item.status === 'pending'"
-                     value="pending">{{hanldeStatus("pending")}}</option>
-                    <option :selected="item.status === 'fulfilled'"
-                    value="fulfilled">{{hanldeStatus("fulfilled")}}</option>
-                    <option :selected="item.status === 'rejected'"
-                    value="rejected">{{hanldeStatus("rejected")}}</option>
+                    <option
+                      :selected="item.status === 'pending'"
+                      value="pending"
+                    >
+                      {{ hanldeStatus("pending") }}
+                    </option>
+                    <option
+                      :selected="item.status === 'fulfilled'"
+                      value="fulfilled"
+                    >
+                      {{ hanldeStatus("fulfilled") }}
+                    </option>
+                    <option
+                      :selected="item.status === 'rejected'"
+                      value="rejected"
+                    >
+                      {{ hanldeStatus("rejected") }}
+                    </option>
                   </select>
                 </div>
               </li>
@@ -81,8 +93,8 @@
 </template>
 
 <script>
-import  {requestPeopleById} from '../../../network/peopleRequest';
-import {deleteNewActive, updateNewActive} from '../../../network/newRequest';
+import { requestPeopleById } from "../../../network/peopleRequest";
+import { deleteNewActive, updateNewActive } from "../../../network/newRequest";
 export default {
   name: "BackEnter",
   props: {
@@ -103,23 +115,23 @@ export default {
       showMt: false,
       isShowTb: false,
       currentObj: {}, // 当前操作的活动
-      name:"", //  志愿者的名字
+      names: [], //  志愿者的名字
     };
   },
   methods: {
     // 通过id 去查找这个人的名字
-    handleNameById(_id){
-      requestPeopleById(_id).then(res => {
-        if(res.status === 200){
-          this.name = res.data.data[0] && res.data.data[0].name;
+     handleNameById(_id, index) {
+      requestPeopleById(_id).then((res) => {
+        if (res.status === 200) {
+          this.names.push(res.data.data[0].name); 
+          return;
         }
-      })
-      // console.log(this.name);
-      return this.name;
+      });
+      return this.names[index]; 
     },
-    hanldeStatus(status){
+    hanldeStatus(status) {
       // 处理状态信息
-      switch (status){
+      switch (status) {
         case "fulfilled":
           return "审核通过";
         case "pending":

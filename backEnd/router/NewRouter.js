@@ -47,7 +47,7 @@ NewRouter.post('/image:id', upload.array('image', 10), (req, res) => {
         if (err) throw err;
         console.log('更改Ok');
       });
-      fileList.push(`http://localhost:3000/static/talks/${id.substr(0, 8)}-${file.originalname}`)
+      fileList.push(`http://localhost:3000/static/news/${id.substr(0, 8)}-${file.originalname}`)
     }
     // 发送事件
     NewActive.AddImageById(fileList, id, data => res.send(JSON.stringify(data)))

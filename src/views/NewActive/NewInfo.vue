@@ -24,7 +24,7 @@
           <span>{{ obj.activeBZ }}</span>
         </div>
       </div>
-      <img v-for="img in obj.activeImage" :key="img" :src="img" title="活动" />
+      <img v-for="img in obj.activeImage" :key="img" :src="img" title="活动"  class="showImg"/>
     </div>
 
     <div class="three">
@@ -255,4 +255,5 @@ export default {
   color: #f00;
   cursor: pointer;
 }
+
 </style>

@@ -9,7 +9,11 @@
       </transition>
     </div>
     <!-- 搜索框 -->
-    <search ref="activeSearch" @activeSearch="activeSearch" @newSearch="newSearch"/>
+    <search
+      ref="activeSearch"
+      @activeSearch="activeSearch"
+      @newSearch="newSearch"
+    />
 
     <!-- 切换活动状态 -->
     <div class="toggleActive">
@@ -41,7 +45,6 @@
       <template v-if="currentType === 2">
         <about-me>
           <!-- 如果没有登陆 -->
-         
         </about-me>
       </template>
 
@@ -72,9 +75,8 @@ import ActiveNavbar from "./ActiveListCom/ActiveNavbar";
 import ActiveItem from "./ActiveListCom/ActiveItem";
 import Error from "./ActiveListCom/Error";
 
-
 import NewItem from "../NewActive/NewItem";
-import AboutMe from '../NewActive/AboutMe';
+import AboutMe from "../NewActive/AboutMe";
 // import NewActive from '../NewActive/NewActive';
 
 export default {
@@ -85,7 +87,7 @@ export default {
     Search,
     Error,
     NewItem, // 新的item组件
-    AboutMe  //  我的活动野蛮
+    AboutMe, //  我的活动野蛮
   },
   data() {
     return {
@@ -140,7 +142,9 @@ export default {
         this.activeList = obj.data.data;
       }
     },
-    newSearch(obj){
+    newSearch(obj) {
+      //
+      console.log(obj);
       // 更改新创建的活动列表
       this.NewActiveList = obj;
     },
@@ -169,8 +173,10 @@ export default {
         // 更改搜索框的搜索路径
         this.$refs.activeSearch.changeType("nowActive");
         this.GetAllNewActive(this.currentPage1, this.currentCount1);
-      } else {
+      } else if (this.currentType == 1) {
         this.RequestActiveList(this.currentPage, this.currentCount);
+        // 更改搜索框的对象
+        this.$refs.activeSearch.changeType("active");
       }
     },
   },
